@@ -66,7 +66,87 @@ html[data-theme="light"]{
   --accent:#6069C9;
   --accent-soft:rgba(96,105,201,.13);
 }
-html[data-theme="light"] .bar-track{background:rgba(20,18,14,.08)}
+/* ============ CONSOLE THEMES (landing is always light — see .login below) ============ */
+/* ambient glow layer; flat themes leave --bg-glow unset */
+body::before{content:'';position:fixed;inset:-30%;z-index:0;pointer-events:none;
+  background:var(--bg-glow,none);filter:blur(60px) saturate(140%);transition:opacity .3s}
+
+/* --- Mono: pure greyscale --- */
+html[data-theme="mono"]{
+  --ink:#0C0C0D;--panel:rgba(23,23,25,.7);--panel-2:rgba(34,34,37,.75);--solid:#151517;
+  --line:rgba(255,255,255,.09);--line-strong:rgba(255,255,255,.17);--glass-hi:rgba(255,255,255,.06);
+  --shadow:0 14px 40px -12px rgba(0,0,0,.55);
+  --text:#EDEDED;--muted:#8C8C90;--faint:#5A5A5E;
+  --accent:#C9C9CE;--accent-soft:rgba(201,201,206,.13);
+}
+/* --- Midnight: deep navy with an indigo wash --- */
+html[data-theme="midnight"]{
+  --ink:#080B18;--panel:rgba(20,26,48,.66);--panel-2:rgba(30,38,66,.72);--solid:#121829;
+  --line:rgba(150,175,255,.11);--line-strong:rgba(150,175,255,.2);--glass-hi:rgba(180,200,255,.07);
+  --shadow:0 14px 44px -12px rgba(0,0,0,.6);
+  --text:#E6EAF7;--muted:#8A93B4;--faint:#5A6285;
+  --accent:#7E86D9;--accent-soft:rgba(126,134,217,.16);
+  --bg-glow:radial-gradient(46% 44% at 12% 10%,rgba(86,104,224,.30),transparent 68%),
+            radial-gradient(42% 40% at 88% 16%,rgba(58,150,214,.22),transparent 68%),
+            radial-gradient(48% 46% at 74% 88%,rgba(120,86,220,.22),transparent 70%);
+}
+/* --- Nebula: violet and magenta --- */
+html[data-theme="nebula"]{
+  --ink:#0D0716;--panel:rgba(31,19,50,.66);--panel-2:rgba(45,28,70,.74);--solid:#1A1029;
+  --line:rgba(214,170,255,.12);--line-strong:rgba(214,170,255,.22);--glass-hi:rgba(226,190,255,.08);
+  --shadow:0 14px 44px -12px rgba(0,0,0,.6);
+  --text:#F0E7FA;--muted:#A28FBE;--faint:#6E5C89;
+  --accent:#C77DFF;--accent-soft:rgba(199,125,255,.16);
+  --bg-glow:radial-gradient(44% 42% at 16% 12%,rgba(168,68,235,.34),transparent 68%),
+            radial-gradient(40% 40% at 86% 22%,rgba(232,72,166,.26),transparent 68%),
+            radial-gradient(50% 48% at 60% 92%,rgba(96,64,224,.28),transparent 70%);
+}
+/* --- Ember: warm charcoal, amber and rose --- */
+html[data-theme="ember"]{
+  --ink:#140C08;--panel:rgba(42,26,19,.66);--panel-2:rgba(58,37,26,.74);--solid:#22150F;
+  --line:rgba(255,190,150,.12);--line-strong:rgba(255,190,150,.22);--glass-hi:rgba(255,205,170,.07);
+  --shadow:0 14px 44px -12px rgba(0,0,0,.6);
+  --text:#FAEDE4;--muted:#BC9B87;--faint:#846654;
+  --accent:#F2913C;--accent-soft:rgba(242,145,60,.16);
+  --bg-glow:radial-gradient(44% 42% at 14% 14%,rgba(232,108,52,.30),transparent 68%),
+            radial-gradient(40% 40% at 88% 20%,rgba(220,60,86,.24),transparent 68%),
+            radial-gradient(48% 46% at 70% 90%,rgba(240,168,58,.22),transparent 70%);
+}
+/* --- Forest: deep green and teal --- */
+html[data-theme="forest"]{
+  --ink:#06120E;--panel:rgba(18,40,32,.66);--panel-2:rgba(26,56,45,.74);--solid:#0E2019;
+  --line:rgba(150,255,206,.11);--line-strong:rgba(150,255,206,.2);--glass-hi:rgba(180,255,220,.07);
+  --shadow:0 14px 44px -12px rgba(0,0,0,.6);
+  --text:#E4F4EC;--muted:#84A99A;--faint:#55786B;
+  --accent:#4FD1A0;--accent-soft:rgba(79,209,160,.15);
+  --bg-glow:radial-gradient(44% 42% at 12% 12%,rgba(28,150,110,.30),transparent 68%),
+            radial-gradient(40% 40% at 88% 24%,rgba(40,170,190,.22),transparent 68%),
+            radial-gradient(48% 46% at 66% 90%,rgba(80,190,120,.22),transparent 70%);
+}
+/* --- Arctic: cool light --- */
+html[data-theme="arctic"]{
+  --ink:#EEF3F8;--panel:rgba(255,255,255,.72);--panel-2:rgba(238,244,251,.85);--solid:#FFFFFF;
+  --line:rgba(20,40,70,.10);--line-strong:rgba(20,40,70,.19);--glass-hi:rgba(255,255,255,.7);
+  --shadow:0 14px 40px -16px rgba(30,60,100,.24);
+  --text:#141B26;--muted:#5E6C80;--faint:#96A3B4;
+  --accent:#2F7FD4;--accent-soft:rgba(47,127,212,.13);
+  --bg-glow:radial-gradient(46% 44% at 10% 8%,rgba(90,170,240,.26),transparent 68%),
+            radial-gradient(42% 42% at 90% 18%,rgba(130,200,255,.22),transparent 68%),
+            radial-gradient(48% 46% at 70% 92%,rgba(90,220,220,.18),transparent 70%);
+}
+/* --- Sand: warm light --- */
+html[data-theme="sand"]{
+  --ink:#F5EDE1;--panel:rgba(255,252,247,.74);--panel-2:rgba(245,238,228,.85);--solid:#FFFDF9;
+  --line:rgba(80,55,30,.11);--line-strong:rgba(80,55,30,.2);--glass-hi:rgba(255,255,255,.72);
+  --shadow:0 14px 40px -16px rgba(90,65,35,.24);
+  --text:#241C13;--muted:#7A6852;--faint:#AC9C86;
+  --accent:#C2703A;--accent-soft:rgba(194,112,58,.14);
+  --bg-glow:radial-gradient(46% 44% at 10% 8%,rgba(240,180,110,.32),transparent 68%),
+            radial-gradient(42% 42% at 90% 16%,rgba(232,150,150,.22),transparent 68%),
+            radial-gradient(48% 46% at 72% 92%,rgba(210,180,120,.24),transparent 70%);
+}
+
+html[data-mode="light"] .bar-track{background:rgba(20,18,14,.08)}
 /* frosted glass surfaces */
 .sidebar,.stat,.card,.acct-card,.task-tbl,.cal-grid,.overdue-banner,
 .filter,.search input,.modal,.drawer,.login-card,.week .day{
@@ -116,8 +196,8 @@ input,select,textarea{font-family:inherit;font-size:14px;color:var(--text)}
 .tp-logo{line-height:0}
 .tp-logo svg{height:100%;width:auto;display:block}
 .tp-word{fill:#414042;transition:fill .2s}
-[data-theme="dark"] .tp-word{fill:#FFFFFF}
-[data-theme="dark"] .tp-logo svg path{fill:#FFFFFF}
+[data-mode="dark"] .app .tp-word,[data-mode="dark"] .onboard .tp-word{fill:#FFFFFF}
+[data-mode="dark"] .app .tp-logo svg path,[data-mode="dark"] .onboard .tp-logo svg path{fill:#FFFFFF}
 .brand .mark{
   font-family:var(--f-display);font-weight:600;font-size:23px;line-height:1;letter-spacing:-.01em;
   letter-spacing:.01em;
@@ -144,7 +224,7 @@ input,select,textarea{font-family:inherit;font-size:14px;color:var(--text)}
 .theme-toggle:hover{background:var(--panel-2)}
 .tt-track{width:34px;height:19px;border-radius:20px;background:var(--panel-2);border:1px solid var(--line-strong);position:relative;flex:none;transition:.2s}
 .tt-knob{position:absolute;top:1.5px;left:1.5px;width:14px;height:14px;border-radius:50%;background:var(--muted);transition:.22s cubic-bezier(.4,0,.1,1)}
-html[data-theme="light"] .tt-knob{transform:translateX(15px);background:var(--javi)}
+html[data-mode="light"] .tt-knob{transform:translateX(15px);background:var(--accent)}
 .tt-label{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;color:var(--muted)}
 .mini-btn.signout{color:var(--faint)}
 .mini-btn.signout:hover{color:var(--blocked);border-color:rgba(218,91,84,.4)}
@@ -196,7 +276,7 @@ html[data-theme="light"] .tt-knob{transform:translateX(15px);background:var(--ja
 
 /* ---------- panels / charts ---------- */
 .grid-2{display:grid;grid-template-columns:1.15fr 1fr;gap:16px;margin-bottom:16px}
-.grid-2b{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.grid-2b{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;align-items:start}
 .card{
   background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
   padding:20px 22px;
@@ -233,6 +313,33 @@ html[data-theme="light"] .tt-knob{transform:translateX(15px);background:var(--ja
   color:var(--muted);transition:.14s;white-space:nowrap}
 .range-chip:hover{color:var(--text);border-color:var(--line-strong)}
 .range-chip.on{background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 42%,transparent);color:var(--accent)}
+/* throughput sparkline */
+.delta{font-family:var(--f-mono);font-size:11px}
+.delta.up{color:var(--done)} .delta.down{color:var(--med)}
+.spark{display:flex;align-items:flex-end;gap:9px;height:176px;padding-top:6px}
+.spark-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px}
+.spark-col .sv{font-family:var(--f-mono);font-size:11px;color:var(--muted);height:14px}
+.spark-col .sb{width:100%;max-width:38px;border-radius:5px 5px 3px 3px;background:var(--line-strong);transition:height .5s cubic-bezier(.4,0,.1,1)}
+.spark-col.now .sb{background:var(--accent)}
+.spark-col.now .sv{color:var(--accent);font-weight:600}
+.spark-col .sl{font-family:var(--f-mono);font-size:9px;color:var(--faint);white-space:nowrap}
+/* attention panel */
+.att-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:6px}
+.att{background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:13px 12px}
+.att-n{font-family:var(--f-display);font-size:26px;font-weight:500;line-height:1;letter-spacing:-.02em;margin-bottom:7px}
+.att-l{font-size:10.5px;color:var(--faint);line-height:1.4}
+.att-sec{margin-top:18px;padding-top:15px;border-top:1px solid var(--line)}
+.att-row{display:flex;align-items:center;gap:9px;padding:7px 0;font-size:12.5px;cursor:pointer;transition:.12s}
+.att-row:hover .nm{color:var(--text)}
+.att-row .sw{width:7px;height:7px;border-radius:2px;flex:none}
+.att-row .nm{flex:1;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.att-row .dy{font-family:var(--f-mono);font-size:11px;color:var(--med)}
+.quiet-tags{display:flex;flex-wrap:wrap;gap:6px}
+.qt{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:10px;letter-spacing:.04em;
+  padding:4px 9px;border-radius:6px;background:var(--panel-2);border:1px solid var(--line);color:var(--muted)}
+.qt .sw{width:6px;height:6px;border-radius:2px}
+.qt.more{color:var(--faint)}
+@media(max-width:900px){ .att-grid{grid-template-columns:1fr} .spark{height:110px;gap:5px} .spark-col .sl{font-size:8px} }
 
 /* week strip */
 .week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
@@ -494,7 +601,15 @@ html[data-theme="light"] .tt-knob{transform:translateX(15px);background:var(--ja
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* ---------- login ---------- */
-.login{position:fixed;inset:0;z-index:100;background:var(--ink);transition:opacity .35s,visibility .35s;overflow:hidden}
+/* the landing page is ALWAYS light, whatever theme the console is set to */
+.login{
+  --ink:#EEEAE2;--panel:rgba(255,255,255,.68);--panel-2:rgba(244,242,236,.8);--solid:#FFFFFF;
+  --line:rgba(20,18,14,.10);--line-strong:rgba(20,18,14,.18);--glass-hi:rgba(255,255,255,.6);
+  --shadow:0 14px 40px -16px rgba(40,35,25,.28);
+  --text:#1B1C1F;--muted:#6A6E76;--faint:#9DA0A8;
+  --accent:#6069C9;--accent-soft:rgba(96,105,201,.13);
+  position:fixed;inset:0;z-index:100;background:#EEEAE2;transition:opacity .35s,visibility .35s;overflow:hidden}
+.login .bar-track{background:rgba(20,18,14,.08)}
 .login.hidden{opacity:0;visibility:hidden;pointer-events:none}
 @keyframes loginRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 /* top nav — floating liquid glass pill */
@@ -507,7 +622,7 @@ html[data-theme="light"] .tt-knob{transform:translateX(15px);background:var(--ja
   box-shadow:0 10px 34px -8px rgba(0,0,0,.4), 0 2px 10px rgba(0,0,0,.16),
              inset 0 1px 0 var(--glass-hi), inset 0 -1px 0 rgba(0,0,0,.05);
 }
-html[data-theme="light"] .lp-nav{
+.lp-nav{
   background:rgba(255,255,255,.6);
   box-shadow:0 10px 34px -10px rgba(40,35,25,.22), 0 2px 8px rgba(40,35,25,.06),
              inset 0 1px 0 rgba(255,255,255,.9);
@@ -601,7 +716,7 @@ html[data-theme="light"] .lp-nav{
 /* ---- product mockups ---- */
 .mk{border-radius:15px;border:1px solid var(--line-strong);background:var(--solid);overflow:hidden;
   box-shadow:0 26px 60px -24px rgba(0,0,0,.6),0 4px 14px rgba(0,0,0,.18)}
-html[data-theme="light"] .mk{box-shadow:0 26px 60px -26px rgba(40,35,25,.34),0 3px 10px rgba(40,35,25,.07)}
+.mk{box-shadow:0 26px 60px -26px rgba(40,35,25,.34),0 3px 10px rgba(40,35,25,.07)}
 .mk-hero{max-width:940px;margin:52px auto 0;text-align:left}
 .mk-bar{height:34px;display:flex;align-items:center;gap:6px;padding:0 13px;border-bottom:1px solid var(--line);background:var(--panel-2)}
 .mk-dot{width:9px;height:9px;border-radius:50%;flex:none;opacity:.85}
@@ -824,6 +939,22 @@ html[data-theme="light"] .mk{box-shadow:0 26px 60px -26px rgba(40,35,25,.34),0 3
 .set-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:15px 0;border-top:1px solid var(--line)}
 .set-row:first-of-type{border-top:none;padding-top:0}
 .set-row-t{font-size:14px;font-weight:500}
+.theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.theme-card{position:relative;border:1px solid var(--line);border-radius:13px;padding:9px;text-align:left;
+  transition:.15s;background:var(--panel-2);overflow:hidden}
+.theme-card:hover{border-color:var(--line-strong);transform:translateY(-2px)}
+.theme-card.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.tc-prev{display:block;position:relative;height:56px;border-radius:8px;overflow:hidden;margin-bottom:10px;
+  padding:9px 9px 9px 30px;border:1px solid rgba(255,255,255,.07)}
+.tc-side{position:absolute;left:0;top:0;bottom:0;width:22px}
+.tc-row{display:block;height:6px;border-radius:3px;margin-bottom:5px}
+.tc-meta{display:block;padding:0 2px 2px}
+.tc-name{display:block;font-size:13px;font-weight:600;margin-bottom:3px}
+.tc-note{display:block;font-size:10.5px;color:var(--faint);line-height:1.35}
+.tc-check{position:absolute;top:16px;right:16px;width:19px;height:19px;border-radius:50%;background:var(--accent);
+  color:#fff;font-size:11px;display:grid;place-items:center;opacity:0;transform:scale(.7);transition:.16s}
+.theme-card.on .tc-check{opacity:1;transform:scale(1)}
+@media(max-width:900px){ .theme-grid{grid-template-columns:repeat(2,1fr)} }
 @media(max-width:900px){
   .set-stats{grid-template-columns:repeat(2,1fr)}
   .set-row{flex-direction:column;align-items:flex-start;gap:12px}
@@ -1574,6 +1705,33 @@ function Dashboard(){
   }
   const pipeTotal = pipeTasks.length;
   const statusData=STATUSES.map(s=>({label:s,value:pipeTasks.filter(x=>effStatus(x)===s).length,color:STATUS_HEX[s]})).filter(d=>d.value>0);
+
+  // ---- metric: throughput (completions per week, last 6 weeks) ----
+  const doneDates=[];
+  t.forEach(x=>{ if(isRecurring(x)){ if(x.lastDone) doneDates.push(x.lastDone); } else if(x.status==='Done'&&x.completed) doneDates.push(x.completed); });
+  const wkStart=(off)=>{ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()-d.getDay()-off*7); return d; };
+  const weeks6=[];
+  for(let i=5;i>=0;i--){
+    const s=wkStart(i), e=new Date(s); e.setDate(s.getDate()+7);
+    const si=s.toISOString().slice(0,10), ei=e.toISOString().slice(0,10);
+    weeks6.push({label:s.toLocaleDateString('en',{month:'short',day:'numeric'}), n:doneDates.filter(d=>d>=si&&d<ei).length});
+  }
+  const thisWk=weeks6[5].n, lastWk=weeks6[4].n;
+  const delta=thisWk-lastWk;
+  const wkMax=Math.max(1,...weeks6.map(w=>w.n));
+
+  // ---- metric: aging work (open, created 14+ days ago) ----
+  const ageCut=new Date(); ageCut.setHours(0,0,0,0); ageCut.setDate(ageCut.getDate()-14);
+  const ageCutISO=ageCut.toISOString().slice(0,10);
+  const stale=open.filter(x=>!isRecurring(x)&&x.created&&x.created<=ageCutISO)
+    .map(x=>({x, days:Math.round((Date.now()-new Date(x.created+'T00:00:00').getTime())/86400000)}))
+    .sort((a,b)=>b.days-a.days);
+
+  // ---- metric: account coverage (brands with nothing open) ----
+  const quiet=DB.accounts.filter(a=>!t.some(x=>x.accountId===a.id&&!taskDone(x)));
+  const covered=DB.accounts.length-quiet.length;
+  const covPct=DB.accounts.length? Math.round(covered/DB.accounts.length*100):0;
+
   const firstName=(DB.user&&DB.user.name)? DB.user.name.split(' ')[0] : 'there';
   const hr=new Date().getHours(); const greet=hr<12?'Good morning':hr<18?'Good afternoon':'Good evening';
 
@@ -1636,6 +1794,52 @@ function Dashboard(){
           ${Object.entries(byCoord).sort((a,b)=>b[1]-a[1]).map(([k,v])=>barRow(k,v,coordMax,coordShade(k),`<span class="sw" style="width:8px;height:8px;border-radius:2px;background:${coordShade(k)}"></span>`)).join('')}
         </div>
       </div>`:''}
+    </div>
+  </div>
+
+  <div class="grid-2b">
+    <div class="card">
+      <div class="eyebrow">Throughput</div>
+      <h3>Finished per week
+        <span class="sm">${thisWk} this week${lastWk||thisWk?` · <span class="delta ${delta>0?'up':delta<0?'down':''}">${delta>0?'▲ +':delta<0?'▼ ':'—'}${delta!==0?Math.abs(delta):''}</span> vs last`:''}</span>
+      </h3>
+      <div class="spark">
+        ${weeks6.map((w,i)=>`<div class="spark-col ${i===5?'now':''}" title="${w.n} finished · week of ${w.label}">
+          <span class="sv">${w.n||''}</span>
+          <span class="sb" style="height:${w.n? Math.max(8,Math.round(w.n/wkMax*100)) : 3}%"></span>
+          <span class="sl">${w.label}</span>
+        </div>`).join('')}
+      </div>
+      ${!doneDates.length? `<div class="empty-note" style="padding-top:14px">Nothing finished yet — this fills in as you check work off.</div>`:''}
+    </div>
+
+    <div class="card">
+      <div class="eyebrow">Attention</div>
+      <h3>Aging &amp; quiet accounts</h3>
+      <div class="att-grid">
+        <div class="att">
+          <div class="att-n" style="color:${stale.length?'#E8935B':'var(--muted)'}">${stale.length}</div>
+          <div class="att-l">open 14+ days</div>
+        </div>
+        <div class="att">
+          <div class="att-n" style="color:${quiet.length?'#7E86D9':'var(--muted)'}">${quiet.length}</div>
+          <div class="att-l">accounts with nothing open</div>
+        </div>
+        <div class="att">
+          <div class="att-n">${covPct}%</div>
+          <div class="att-l">of your book has active work</div>
+        </div>
+      </div>
+      ${stale.length? `<div class="att-sec">
+        <div class="eyebrow" style="margin-bottom:9px">Sitting longest</div>
+        ${stale.slice(0,3).map(({x,days})=>{const a=acct(x.accountId);const col=a?a.color:'#8A8E97';
+          return `<div class="att-row" data-open-task="${x.id}"><span class="sw" style="background:${col}"></span><span class="nm">${esc(x.title)}</span><span class="dy">${days}d</span></div>`;}).join('')}
+      </div>`:''}
+      ${quiet.length? `<div class="att-sec">
+        <div class="eyebrow" style="margin-bottom:9px">Quiet right now</div>
+        <div class="quiet-tags">${quiet.slice(0,8).map(a=>`<span class="qt"><span class="sw" style="background:${a.color}"></span>${esc(a.abbr)}</span>`).join('')}${quiet.length>8?`<span class="qt more">+${quiet.length-8}</span>`:''}</div>
+      </div>`:''}
+      ${!stale.length&&!quiet.length? `<div class="empty-note">Every account has active work and nothing's gone stale. Tidy.</div>`:''}
     </div>
   </div>
 
@@ -2218,12 +2422,20 @@ function Settings(){
 
     <div class="card set-card">
       <div class="eyebrow">Appearance</div>
-      <h3>Theme</h3>
-      <div class="seg" id="st_theme" style="max-width:280px">
-        <button data-t="dark" class="${theme==='dark'?'on':''}">Dark</button>
-        <button data-t="light" class="${theme==='light'?'on':''}">Light</button>
+      <h3>Console theme</h3>
+      <div class="theme-grid" id="st_themes">
+        ${THEMES.map(t=>`<button class="theme-card ${theme===t.id?'on':''}" data-theme-id="${t.id}">
+          <span class="tc-prev" style="background:${t.sw[0]}">
+            <span class="tc-side" style="background:${t.sw[2]};opacity:.16"></span>
+            <span class="tc-row" style="background:${t.sw[1]};width:52%"></span>
+            <span class="tc-row" style="background:${t.sw[2]};width:38%;opacity:.55"></span>
+            <span class="tc-row" style="background:${t.sw[1]};width:30%;opacity:.75"></span>
+          </span>
+          <span class="tc-meta"><span class="tc-name">${t.name}</span><span class="tc-note">${t.note}</span></span>
+          <span class="tc-check">✓</span>
+        </button>`).join('')}
       </div>
-      <div class="set-hint" style="margin-top:10px">Applies instantly and is remembered on this device.</div>
+      <div class="set-hint" style="margin-top:12px">Themes apply to your console only — the sign-in and home page always stay light.</div>
     </div>
 
     <div class="card set-card">
@@ -2269,9 +2481,10 @@ function wireSettings(){
   $('#st_save').onclick=saveName;
   nameInput.onkeydown=e=>{ if(e.key==='Enter'){ e.preventDefault(); saveName(); } };
 
-  $('#st_theme').querySelectorAll('button').forEach(b=>b.onclick=()=>{
-    applyTheme(b.dataset.t);
-    $('#st_theme').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+  $('#st_themes').querySelectorAll('[data-theme-id]').forEach(b=>b.onclick=()=>{
+    applyTheme(b.dataset.themeId);
+    $('#st_themes').querySelectorAll('[data-theme-id]').forEach(x=>x.classList.toggle('on',x===b));
+    toast(themeDef(b.dataset.themeId).name+' applied');
   });
 
   $('#st_export').onclick=()=>$('#exportBtn').click();
@@ -2383,10 +2596,24 @@ function notePlaceholder(k){
 
 /* ============================ THEME ============================ */
 const THEME_KEY='acctConsole_theme';
+const THEMES=[
+  {id:'dark',    name:'Ink',      mode:'dark',  note:'Flat black, periwinkle accent', sw:['#0A0B0E','#7E86D9','#ECEBE6']},
+  {id:'light',   name:'Paper',    mode:'light', note:'Flat warm white',               sw:['#EEEAE2','#6069C9','#1B1C1F']},
+  {id:'mono',    name:'Mono',     mode:'dark',  note:'Pure greyscale, no color',      sw:['#0C0C0D','#C9C9CE','#EDEDED']},
+  {id:'midnight',name:'Midnight', mode:'dark',  note:'Deep navy with an indigo wash', sw:['#080B18','#7E86D9','#3A96D6']},
+  {id:'nebula',  name:'Nebula',   mode:'dark',  note:'Violet and magenta haze',       sw:['#0D0716','#C77DFF','#E848A6']},
+  {id:'ember',   name:'Ember',    mode:'dark',  note:'Warm charcoal, amber and rose', sw:['#140C08','#F2913C','#DC3C56']},
+  {id:'forest',  name:'Forest',   mode:'dark',  note:'Deep green and teal',           sw:['#06120E','#4FD1A0','#28AABE']},
+  {id:'arctic',  name:'Arctic',   mode:'light', note:'Cool light, sky blue',          sw:['#EEF3F8','#2F7FD4','#5ADCDC']},
+  {id:'sand',    name:'Sand',     mode:'light', note:'Warm light, terracotta',        sw:['#F5EDE1','#C2703A','#E89696']}
+];
+function themeDef(id){ return THEMES.find(t=>t.id===id)||THEMES[0]; }
 function applyTheme(t){
-  document.documentElement.setAttribute('data-theme', t);
-  const lbl=$('#themeLabel'); if(lbl) lbl.textContent = t==='light'?'Light':'Dark';
-  try{ localStorage.setItem(THEME_KEY, t); }catch(e){}
+  const def=themeDef(t);
+  document.documentElement.setAttribute('data-theme', def.id);
+  document.documentElement.setAttribute('data-mode', def.mode);
+  const lbl=$('#themeLabel'); if(lbl) lbl.textContent = def.name;
+  try{ localStorage.setItem(THEME_KEY, def.id); }catch(e){}
 }
 function initTheme(){
   let t='dark';
@@ -2395,11 +2622,8 @@ function initTheme(){
 }
 $('#themeToggle').onclick=()=>{
   const cur=document.documentElement.getAttribute('data-theme')||'dark';
-  applyTheme(cur==='light'?'dark':'light');
-};
-const mtt=$('#mThemeToggle'); if(mtt) mtt.onclick=()=>{
-  const cur=document.documentElement.getAttribute('data-theme')||'dark';
-  applyTheme(cur==='light'?'dark':'light');
+  applyTheme(themeDef(cur).mode==='light'?'dark':'light');
+  if(UI.view==='settings') render();
 };
 
 /* ============================ LANDING + AUTH ============================ */
