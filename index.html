@@ -228,6 +228,11 @@ html[data-theme="light"] .tt-knob{transform:translateX(15px);background:var(--ja
 .bar-row .num{font-family:var(--f-mono);font-size:12.5px;text-align:right;color:var(--text)}
 
 .empty-note{color:var(--faint);font-size:14px;padding:8px 0;line-height:1.5}
+.range-row{display:flex;flex-wrap:wrap;gap:6px;margin:-6px 0 18px}
+.range-chip{font-size:11.5px;font-weight:500;padding:6px 12px;border-radius:20px;border:1px solid var(--line);
+  color:var(--muted);transition:.14s;white-space:nowrap}
+.range-chip:hover{color:var(--text);border-color:var(--line-strong)}
+.range-chip.on{background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 42%,transparent);color:var(--accent)}
 
 /* week strip */
 .week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
@@ -746,12 +751,13 @@ html[data-theme="light"] .mk{box-shadow:0 26px 60px -26px rgba(40,35,25,.34),0 3
 .od-chip .dt{color:var(--blocked);font-family:var(--f-mono);font-size:10.5px}
 
 .cal-grid{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
-.cal-dow{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--line)}
+.cal-dow{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--line)}
 .cal-dow span{padding:11px 12px;font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);text-align:left}
-.cal-weeks{display:grid;grid-template-columns:repeat(7,1fr)}
+.cal-weeks{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
 .cal-cell{
   min-height:116px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);
   padding:8px 9px;display:flex;flex-direction:column;gap:5px;position:relative;transition:.12s;cursor:pointer;
+  min-width:0;overflow:hidden;
 }
 .cal-cell:nth-child(7n){border-right:none}
 .cal-cell:hover{background:var(--panel-2)}
@@ -765,7 +771,7 @@ html[data-theme="light"] .mk{box-shadow:0 26px 60px -26px rgba(40,35,25,.34),0 3
 .cal-cell:not(.out):hover .add-hint{opacity:.7}
 .cal-ev{
   font-size:11px;padding:3px 7px;border-radius:5px;background:var(--panel-2);
-  border-left:2px solid var(--muted);overflow:hidden;
+  border-left:2px solid var(--muted);overflow:hidden;min-width:0;max-width:100%;
   cursor:pointer;transition:.12s;line-height:1.3;display:flex;flex-direction:column;gap:1px;
 }
 .cal-ev-t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1493,7 +1499,8 @@ function subProgress(x){
 function completeTask(t){ if(!taskDone(t)) toggleDone(t); }
 function uncompleteTask(t){ if(taskDone(t)) toggleDone(t); }
 
-let UI = { view:'dashboard', filters:{company:'',account:'',coord:'',status:'',fn:'',q:''} };
+let UI = { view:'dashboard', pipeRange:'1m', filters:{company:'',account:'',coord:'',status:'',fn:'',q:''} };
+const PIPE_RANGES = [['1w','1 week',7],['2w','2 weeks',14],['1m','1 month',30],['6m','6 months',182],['all','All',null]];
 
 /* ============================ ROUTER ============================ */
 function go(view){
@@ -1507,7 +1514,10 @@ document.querySelectorAll('#mobilenav button[data-view]').forEach(b=> b.onclick=
 
 function render(){
   const v=$('#view');
-  if(UI.view==='dashboard') { v.innerHTML=Dashboard(); v.querySelectorAll('[data-open-task]').forEach(c=>c.onclick=()=>openTaskModal(c.dataset.openTask)); }
+  if(UI.view==='dashboard') { v.innerHTML=Dashboard();
+    v.querySelectorAll('[data-open-task]').forEach(c=>c.onclick=()=>openTaskModal(c.dataset.openTask));
+    v.querySelectorAll('[data-range]').forEach(c=>c.onclick=()=>{ UI.pipeRange=c.dataset.range; render(); });
+  }
   else if(UI.view==='tasks') { v.innerHTML=Tasks(); wireTasks(); }
   else if(UI.view==='schedule') { v.innerHTML=Schedule(); wireSchedule(); }
   else if(UI.view==='accounts') { v.innerHTML=Accounts(); wireAccounts(); }
@@ -1553,7 +1563,17 @@ function Dashboard(){
   open.forEach(x=>{ const a=acct(x.accountId); if(a&&a.coordinator){ byCoord[a.coordinator]=(byCoord[a.coordinator]||0)+1; } });
   const coordMax=Math.max(1,...Object.values(byCoord),1);
 
-  const statusData=STATUSES.map(s=>({label:s,value:t.filter(x=>effStatus(x)===s).length,color:STATUS_HEX[s]})).filter(d=>d.value>0);
+  // pipeline scoped to a duration window (overdue always counts as in-window)
+  const rangeDef = PIPE_RANGES.find(r=>r[0]===UI.pipeRange) || PIPE_RANGES[2];
+  const rangeDays = rangeDef[2];
+  let pipeTasks = t;
+  if(rangeDays!=null){
+    const endD=new Date(); endD.setHours(0,0,0,0); endD.setDate(endD.getDate()+rangeDays);
+    const end=endD.toISOString().slice(0,10);
+    pipeTasks = t.filter(x=>{ const d=effectiveDue(x); if(!d) return false; return d<=end; });
+  }
+  const pipeTotal = pipeTasks.length;
+  const statusData=STATUSES.map(s=>({label:s,value:pipeTasks.filter(x=>effStatus(x)===s).length,color:STATUS_HEX[s]})).filter(d=>d.value>0);
   const firstName=(DB.user&&DB.user.name)? DB.user.name.split(' ')[0] : 'there';
   const hr=new Date().getHours(); const greet=hr<12?'Good morning':hr<18?'Good afternoon':'Good evening';
 
@@ -1605,8 +1625,11 @@ function Dashboard(){
 
     <div class="card">
       <div class="eyebrow">Status</div>
-      <h3>Pipeline <span class="sm">${total} total</span></h3>
-      ${total? donut(statusData) : `<div class="empty-note">Nothing tracked yet.</div>`}
+      <h3>Pipeline <span class="sm">${pipeTotal} ${rangeDays==null?'total':'due'}</span></h3>
+      <div class="range-row" id="pipeRange">
+        ${PIPE_RANGES.map(([k,lbl])=>`<button class="range-chip ${UI.pipeRange===k?'on':''}" data-range="${k}">${lbl}</button>`).join('')}
+      </div>
+      ${pipeTotal? donut(statusData) : `<div class="empty-note">Nothing ${rangeDays==null?'tracked':'due in this window'} yet.</div>`}
       ${Object.keys(byCoord).length? `<div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--line)">
         <div class="eyebrow" style="margin-bottom:14px">Open work by coordinator</div>
         <div class="bars">
