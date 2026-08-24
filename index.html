@@ -606,9 +606,36 @@ html[data-mode="light"] .tt-knob{transform:translateX(15px);background:var(--acc
   --ink:#EEEAE2;--panel:rgba(255,255,255,.68);--panel-2:rgba(244,242,236,.8);--solid:#FFFFFF;
   --line:rgba(20,18,14,.10);--line-strong:rgba(20,18,14,.18);--glass-hi:rgba(255,255,255,.6);
   --shadow:0 14px 40px -16px rgba(40,35,25,.28);
-  --text:#1B1C1F;--muted:#6A6E76;--faint:#9DA0A8;
-  --accent:#6069C9;--accent-soft:rgba(96,105,201,.13);
-  position:fixed;inset:0;z-index:100;background:#EEEAE2;transition:opacity .35s,visibility .35s;overflow:hidden}
+  --text:#1B1C1F;--muted:#5B606A;--faint:#71767F;
+  --accent:#545DBE;--accent-soft:rgba(84,93,190,.13);
+  position:fixed;inset:0;z-index:100;background:#EEEAE2;color:var(--text);
+  transition:opacity .35s,visibility .35s;overflow:hidden}
+/* headings and any text without an explicit color inherit the landing's dark ink */
+.login h1,.login h2,.login h3,.login h4,.login p,.login li,.login span,.login div,.login a,.login button{color:inherit}
+.login .lp-lead,.login .lp-card p,.login .lp-step p,.login .lp-who-card p,
+.login .lp-ticks li,.login .lp-cmp-col li,.login .lp-foot-brand p,.login .lp-foot-col a,
+.login .btn-ghost,.login .lp-links a,.login .mk-brow .l,.login .mk-trow .co,
+.login .mk-od .chip,.login .mk-legend span{color:var(--muted)}
+.login .lp-eyebrow,.login .lp-note,.login .lp-foot-bot,.login .lp-foot-col h4,
+.login .mk-url,.login .mk-cap,.login .mk-stat .k,.login .mk-thead,.login .mk-dow span,
+.login .mk-cells .c b,.login .login-sub,.login .login-foot,.login .auth-x,
+.login .lp-cmp-col .x{color:var(--faint)}
+.login .lp-h1 em{color:#6A6F79}
+.login .lp-badge,.login .lp-num .n,.login .lp-step .n,
+.login .lp-cmp-col .t,.login .lp-ico,.login .login-foot a{color:var(--accent)}
+.login .lp-ticks li::before{color:var(--accent)}
+.login .mk-stat .v,.login .mk-trow .tt,.login .mk-trow span,.login .lp-card h3,
+.login .lp-who-card h3,.login .lp-step h3,.login .lp-cmp-col .h,.login .lp-h1,.login .lp-h2{color:var(--text)}
+.login .mk-trow s{color:var(--faint)}
+/* mockup status pills + accents: darkened so they read on white */
+.login .mk-trow .st[style*="#9B7BE8"]{color:#7444CE!important}
+.login .mk-trow .st[style*="#4C82C4"]{color:#2A66AD!important}
+.login .mk-trow .st[style*="#7E86D9"]{color:#4F58BC!important}
+.login .mk-trow .st[style*="#D99A3C"]{color:#8F6413!important}
+.login .mk-trow .st[style*="#3DAE6E"]{color:#1B7C4B!important}
+.login .mk-od .tag{color:#BE342C}
+.login .lp-signin,.login .lp-cta .btn-primary,.login .lp-final .btn-primary,
+.login .login-btn,.login .mk-pill{color:#fff}
 .login .bar-track{background:rgba(20,18,14,.08)}
 .login.hidden{opacity:0;visibility:hidden;pointer-events:none}
 @keyframes loginRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
@@ -1134,11 +1161,11 @@ html[data-mode="light"] .tt-knob{transform:translateX(15px);background:var(--acc
               <div class="mk-panel">
                 <span class="mk-cap">Open tasks by account</span>
                 <div class="mk-bars">
-                  <div class="mk-brow"><span class="l">Veteran Ratings</span><span class="t"><i style="width:86%;background:#4C82C4"></i></span></div>
-                  <div class="mk-brow"><span class="l">Oak Meadow</span><span class="t"><i style="width:64%;background:#9B6BD8"></i></span></div>
-                  <div class="mk-brow"><span class="l">Dirty Soda</span><span class="t"><i style="width:52%;background:#E0654E"></i></span></div>
-                  <div class="mk-brow"><span class="l">Bismarck Pav.</span><span class="t"><i style="width:38%;background:#58A6DE"></i></span></div>
-                  <div class="mk-brow"><span class="l">Manifest</span><span class="t"><i style="width:24%;background:#D4A15A"></i></span></div>
+                  <div class="mk-brow"><span class="l">Northwind Coffee</span><span class="t"><i style="width:86%;background:#4C82C4"></i></span></div>
+                  <div class="mk-brow"><span class="l">Larkspur Realty</span><span class="t"><i style="width:64%;background:#9B6BD8"></i></span></div>
+                  <div class="mk-brow"><span class="l">Copperline Bakery</span><span class="t"><i style="width:52%;background:#E0654E"></i></span></div>
+                  <div class="mk-brow"><span class="l">Bright Harbor</span><span class="t"><i style="width:38%;background:#58A6DE"></i></span></div>
+                  <div class="mk-brow"><span class="l">Halcyon Studio</span><span class="t"><i style="width:24%;background:#D4A15A"></i></span></div>
                 </div>
               </div>
               <div class="mk-panel">
@@ -1226,11 +1253,11 @@ html[data-mode="light"] .tt-knob{transform:translateX(15px);background:var(--acc
         <div class="mk-bar"><span class="mk-dot" style="background:#E0654E"></span><span class="mk-dot" style="background:#E8B44E"></span><span class="mk-dot" style="background:#3DAE6E"></span><span class="mk-url">taskport · tasks</span></div>
         <div class="mk-tbl">
           <div class="mk-trow mk-thead"><span>Task</span><span>Account</span><span>Coord.</span><span>Status</span></div>
-          <div class="mk-trow"><span class="tt"><i class="cb"></i>Legacy comment sweep</span><span><i class="sw" style="background:#5B8FF0"></i>LEG</span><span class="co">Tyler</span><span><i class="st" style="color:#9B7BE8;background:rgba(155,123,232,.14)">↻ Daily</i></span></div>
-          <div class="mk-trow"><span class="tt"><i class="cb"></i>Rebuild leasing schedule</span><span><i class="sw" style="background:#B865C8"></i>JLMZ</span><span class="co">Josue</span><span><i class="st" style="color:#4C82C4;background:rgba(76,130,196,.14)">In Progress</i></span></div>
-          <div class="mk-trow"><span class="tt"><i class="cb"></i>Winery spring campaign</span><span><i class="sw" style="background:#9B6BD8"></i>OAK</span><span class="co">Remi</span><span><i class="st" style="color:#7E86D9;background:rgba(126,134,217,.14)">To Do</i></span></div>
-          <div class="mk-trow"><span class="tt"><i class="cb"></i>Soda menu refresh</span><span><i class="sw" style="background:#E0654E"></i>DID</span><span class="co">Liz</span><span><i class="st" style="color:#D99A3C;background:rgba(217,154,60,.14)">Feedback</i></span></div>
-          <div class="mk-trow"><span class="tt"><i class="cb on"></i><s>Pavilion hero swap</s></span><span><i class="sw" style="background:#58A6DE"></i>PAV</span><span class="co">Kai</span><span><i class="st" style="color:#3DAE6E;background:rgba(61,174,110,.14)">Done</i></span></div>
+          <div class="mk-trow"><span class="tt"><i class="cb"></i>Daily comment sweep</span><span><i class="sw" style="background:#5B8FF0"></i>NWC</span><span class="co">Dana</span><span><i class="st" style="color:#9B7BE8;background:rgba(155,123,232,.14)">↻ Daily</i></span></div>
+          <div class="mk-trow"><span class="tt"><i class="cb"></i>Rebuild listings page</span><span><i class="sw" style="background:#B865C8"></i>LRK</span><span class="co">Marco</span><span><i class="st" style="color:#4C82C4;background:rgba(76,130,196,.14)">In Progress</i></span></div>
+          <div class="mk-trow"><span class="tt"><i class="cb"></i>Spring launch campaign</span><span><i class="sw" style="background:#9B6BD8"></i>HAL</span><span class="co">Priya</span><span><i class="st" style="color:#7E86D9;background:rgba(126,134,217,.14)">To Do</i></span></div>
+          <div class="mk-trow"><span class="tt"><i class="cb"></i>Seasonal menu refresh</span><span><i class="sw" style="background:#E0654E"></i>CPR</span><span class="co">Elle</span><span><i class="st" style="color:#D99A3C;background:rgba(217,154,60,.14)">Feedback</i></span></div>
+          <div class="mk-trow"><span class="tt"><i class="cb on"></i><s>Homepage hero swap</s></span><span><i class="sw" style="background:#58A6DE"></i>BHR</span><span class="co">Rowan</span><span><i class="st" style="color:#3DAE6E;background:rgba(61,174,110,.14)">Done</i></span></div>
         </div>
       </div>
     </section>
@@ -1248,7 +1275,7 @@ html[data-mode="light"] .tt-knob{transform:translateX(15px);background:var(--acc
       </div>
       <div class="mk">
         <div class="mk-bar"><span class="mk-dot" style="background:#E0654E"></span><span class="mk-dot" style="background:#E8B44E"></span><span class="mk-dot" style="background:#3DAE6E"></span><span class="mk-url">taskport · schedule</span></div>
-        <div class="mk-od"><span class="tag">2 overdue</span><span class="chip"><i style="background:#3DAE6E"></i>BIN hero</span><span class="chip"><i style="background:#C9A23C"></i>Woody's promo</span></div>
+        <div class="mk-od"><span class="tag">2 overdue</span><span class="chip"><i style="background:#3DAE6E"></i>Harbor hero</span><span class="chip"><i style="background:#C9A23C"></i>Copperline promo</span></div>
         <div class="mk-cal">
           <div class="mk-dow"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
           <div class="mk-cells">
