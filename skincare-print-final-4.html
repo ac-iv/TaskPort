@@ -1,0 +1,8635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>PROTOCOL | Clinical Skincare Architecture</title>
+
+<style>
+
+/* ==========================================================================
+   PROTOCOL
+   Clinical Skincare Architecture
+   --------------------------------------------------------------------------
+   Single-file application
+   --------------------------------------------------------------------------
+   Major systems:
+
+   01. Landing / marketing view
+   02. Studio application
+   03. Routine library
+   04. Routine editor
+   05. Drag-and-drop sequencing
+   06. AM / PM weekly matrix
+   07. Local persistence
+   08. JSON export
+   09. JSON import
+   10. Dedicated print document
+   11. Exact US Letter landscape print geometry
+   12. One-page print composition
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. ROOT VARIABLES
+   ========================================================================== */
+
+:root {
+
+    /* ----------------------------------------------------------------------
+       Base surfaces
+       ---------------------------------------------------------------------- */
+
+    --bg-primary: #FAFAFA;
+    --bg-secondary: #FFFFFF;
+    --bg-tertiary: #F4F4F5;
+
+    /* ----------------------------------------------------------------------
+       Typography
+       ---------------------------------------------------------------------- */
+
+    --text-main: #09090B;
+    --text-secondary: #27272A;
+    --text-muted: #71717A;
+    --text-light: #A1A1AA;
+
+    /* ----------------------------------------------------------------------
+       Borders
+       ---------------------------------------------------------------------- */
+
+    --border-light: #E4E4E7;
+    --border-medium: #D4D4D8;
+    --border-dark: #27272A;
+
+    /* ----------------------------------------------------------------------
+       Black / white
+       ---------------------------------------------------------------------- */
+
+    --black: #000000;
+    --white: #FFFFFF;
+
+    /* ----------------------------------------------------------------------
+       Google-inspired accents
+       ---------------------------------------------------------------------- */
+
+    --red: #EA4335;
+    --yellow: #FBBC05;
+    --green: #34A853;
+    --blue: #4285F4;
+
+    /* ----------------------------------------------------------------------
+       Clinical tags
+       ---------------------------------------------------------------------- */
+
+    --tag-red-bg: #FEE2E2;
+    --tag-red-text: #991B1B;
+
+    --tag-yellow-bg: #FEF3C7;
+    --tag-yellow-text: #92400E;
+
+    --tag-green-bg: #DCFCE7;
+    --tag-green-text: #166534;
+
+    --tag-blue-bg: #DBEAFE;
+    --tag-blue-text: #1E40AF;
+
+    --tag-pink-bg: #FCE7F3;
+    --tag-pink-text: #9D174D;
+
+    --tag-gray-bg: #F4F4F5;
+    --tag-gray-text: #3F3F46;
+
+    /* ----------------------------------------------------------------------
+       Layout
+       ---------------------------------------------------------------------- */
+
+    --max-width: 1440px;
+    --section-pad-x: 40px;
+    --section-pad-y: 110px;
+
+    /* ----------------------------------------------------------------------
+       Radius
+       ---------------------------------------------------------------------- */
+
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+
+    /* ----------------------------------------------------------------------
+       Shadows
+       ---------------------------------------------------------------------- */
+
+    --shadow-sm: 0 4px 16px rgba(0, 0, 0, .04);
+    --shadow-md: 0 12px 30px rgba(0, 0, 0, .08);
+    --shadow-lg: 0 24px 60px rgba(0, 0, 0, .12);
+
+    /* ----------------------------------------------------------------------
+       Typography
+       ---------------------------------------------------------------------- */
+
+    --font-sans:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    --font-mono:
+        "JetBrains Mono",
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        Menlo,
+        monospace;
+
+    /* ----------------------------------------------------------------------
+       Motion
+       ---------------------------------------------------------------------- */
+
+    --transition:
+        all .25s cubic-bezier(.25,.8,.25,1);
+}
+
+
+/* ==========================================================================
+   2. HARD RESET
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+
+    background:
+        radial-gradient(
+            circle at 8% 4%,
+            rgba(234,67,53,.045),
+            transparent 22%
+        ),
+        radial-gradient(
+            circle at 92% 10%,
+            rgba(66,133,244,.045),
+            transparent 22%
+        ),
+        var(--bg-primary);
+
+    color: var(--text-main);
+
+    font-family: var(--font-sans);
+
+    line-height: 1.5;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    overflow-x: hidden;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+button {
+    border: 0;
+    outline: none;
+    background: none;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 2px;
+}
+
+ul,
+ol {
+    margin: 0;
+}
+
+svg {
+    display: block;
+}
+
+
+/* ==========================================================================
+   3. TYPOGRAPHY
+   ========================================================================== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+
+    font-weight: 700;
+    line-height: 1.1;
+
+    letter-spacing: -.025em;
+}
+
+.text-mono {
+    font-family: var(--font-mono);
+    font-size: .8em;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.container {
+    width: 100%;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding-left: var(--section-pad-x);
+    padding-right: var(--section-pad-x);
+}
+
+
+/* ==========================================================================
+   4. BUTTON SYSTEM
+   ========================================================================== */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    min-height: 40px;
+    padding: 0 17px;
+
+    border: 1px solid var(--black);
+    border-radius: var(--radius-sm);
+
+    background: transparent;
+    color: var(--black);
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .05em;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+    transition: var(--transition);
+}
+
+.btn:hover {
+    background: var(--black);
+    color: var(--white);
+
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background: var(--black);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background: transparent;
+    color: var(--black);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--black);
+}
+
+.btn-text {
+    min-height: auto;
+    padding: 0;
+
+    border: 0;
+
+    color: var(--black);
+
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+}
+
+.btn-text:hover {
+    color: var(--text-muted);
+}
+
+
+/* ==========================================================================
+   5. GLOBAL VIEW SYSTEM
+   ========================================================================== */
+
+.view-section {
+    display: block;
+}
+
+.view-section.hidden {
+    display: none !important;
+}
+
+
+/* ==========================================================================
+   6. NAVIGATION
+   ========================================================================== */
+
+nav {
+    position: fixed;
+    z-index: 1000;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+
+    padding: 18px 0;
+
+    background: rgba(247,245,242,.96);
+
+    border-bottom: 1px solid rgba(0,0,0,.04);
+
+    box-shadow: 0 2px 9px rgba(0,0,0,.035);
+
+    backdrop-filter: blur(14px);
+}
+
+.nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    color: var(--black);
+
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -.04em;
+}
+
+.brand svg {
+    width: 27px;
+    height: 27px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.nav-links a {
+    color: var(--text-muted);
+
+    font-size: 11px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    letter-spacing: .06em;
+
+    transition: color .2s ease;
+}
+
+.nav-links a:hover {
+    color: var(--text-main);
+}
+
+
+/* ==========================================================================
+   7. LANDING HERO
+   ========================================================================== */
+
+.hero {
+    min-height: 92vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding-top: 170px;
+    padding-bottom: 100px;
+}
+
+.hero h1 {
+    max-width: 1120px;
+
+    margin-bottom: 28px;
+
+    font-size: clamp(3.2rem, 8vw, 7rem);
+    font-weight: 800;
+
+    line-height: .88;
+    letter-spacing: -.065em;
+
+    text-transform: uppercase;
+}
+
+.hero-subtitle {
+    max-width: 640px;
+
+    margin-bottom: 42px;
+
+    color: var(--text-muted);
+
+    font-size: clamp(1rem, 1.8vw, 1.35rem);
+    font-weight: 300;
+
+    line-height: 1.5;
+}
+
+.hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 55px;
+
+    margin-top: 72px;
+    padding-top: 34px;
+
+    border-top: 1px solid var(--border-light);
+}
+
+.stat-item h4 {
+    margin-bottom: 5px;
+
+    font-size: 1.9rem;
+    font-weight: 800;
+}
+
+.stat-item p {
+    color: var(--text-muted);
+
+    font-size: .78rem;
+    font-weight: 600;
+
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+
+/* ==========================================================================
+   8. LANDING FEATURES
+   ========================================================================== */
+
+.features {
+    padding: var(--section-pad-y) 0;
+
+    background: var(--bg-secondary);
+
+    border-top: 1px solid var(--border-light);
+}
+
+.section-header {
+    margin-bottom: 55px;
+}
+
+.section-header h2 {
+    margin-bottom: 14px;
+
+    font-size: 2.7rem;
+    font-weight: 800;
+
+    text-transform: uppercase;
+}
+
+.section-header p {
+    max-width: 640px;
+
+    color: var(--text-muted);
+
+    font-size: 1.05rem;
+}
+
+.feature-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(
+                270px,
+                1fr
+            )
+        );
+
+    gap: 30px;
+}
+
+.feature-card {
+    padding: 34px;
+
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+
+    background: var(--bg-primary);
+
+    transition: var(--transition);
+}
+
+.feature-card:hover {
+    border-color: var(--border-dark);
+
+    transform: translateY(-4px);
+
+    box-shadow: var(--shadow-md);
+}
+
+.feature-card svg {
+    width: 38px;
+    height: 38px;
+
+    margin-bottom: 22px;
+}
+
+.feature-card h3 {
+    margin-bottom: 13px;
+
+    font-size: 1.35rem;
+}
+
+.feature-card p {
+    color: var(--text-muted);
+
+    font-size: .92rem;
+}
+
+
+/* ==========================================================================
+   9. GLOSSARY
+   ========================================================================== */
+
+.glossary {
+    padding-top: var(--section-pad-y);
+    padding-bottom: var(--section-pad-y);
+}
+
+.glossary-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    margin-top: 35px;
+}
+
+.glossary-table th,
+.glossary-table td {
+    padding: 17px 14px;
+
+    text-align: left;
+
+    border-bottom: 1px solid var(--border-light);
+}
+
+.glossary-table th {
+    color: var(--text-muted);
+
+    font-family: var(--font-mono);
+
+    font-size: .73rem;
+    font-weight: 700;
+
+    letter-spacing: .05em;
+    text-transform: uppercase;
+}
+
+.tag-pill {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 5px 10px;
+
+    border-radius: 999px;
+
+    font-size: .68rem;
+    font-weight: 800;
+
+    text-transform: uppercase;
+}
+
+.pill-conflict {
+    background: var(--tag-red-bg);
+    color: var(--tag-red-text);
+}
+
+.pill-synergy {
+    background: var(--tag-green-bg);
+    color: var(--tag-green-text);
+}
+
+
+/* ==========================================================================
+   10. FAQ
+   ========================================================================== */
+
+.faq {
+    padding: var(--section-pad-y) 0;
+
+    background: var(--bg-secondary);
+}
+
+.faq-item {
+    border-bottom: 1px solid var(--border-light);
+}
+
+.faq-question {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 28px 0;
+
+    color: var(--text-main);
+
+    font-size: 1.15rem;
+    font-weight: 600;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition: color .2s ease;
+}
+
+.faq-question:hover {
+    color: var(--text-muted);
+}
+
+.faq-answer {
+    max-height: 0;
+
+    overflow: hidden;
+
+    color: var(--text-muted);
+
+    transition:
+        max-height .35s ease;
+}
+
+.faq-answer p {
+    padding-bottom: 28px;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 900px;
+}
+
+.faq-icon {
+    font-size: 1.5rem;
+    font-weight: 300;
+
+    transition: transform .25s ease;
+}
+
+.faq-item.active .faq-icon {
+    transform: rotate(45deg);
+}
+
+
+/* ==========================================================================
+   11. LANDING FOOTER
+   ========================================================================== */
+
+footer {
+    padding: 75px 0 35px;
+
+    background: var(--black);
+    color: var(--white);
+}
+
+.footer-grid {
+    display: grid;
+
+    grid-template-columns:
+        2fr
+        1fr
+        1fr;
+
+    gap: 45px;
+
+    margin-bottom: 55px;
+}
+
+.footer-brand {
+    margin-bottom: 17px;
+
+    font-size: 23px;
+    font-weight: 800;
+
+    letter-spacing: -.04em;
+}
+
+.footer-grid h4 {
+    margin-bottom: 17px;
+
+    color: #888;
+
+    font-family: var(--font-mono);
+
+    font-size: .8rem;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 10px;
+
+    color: #CCC;
+
+    font-size: .9rem;
+
+    cursor: pointer;
+
+    transition: color .2s ease;
+}
+
+.footer-links li:hover {
+    color: #FFF;
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #333;
+
+    color: #888;
+
+    font-size: .78rem;
+}
+
+
+/* ==========================================================================
+   12. STUDIO HEADER
+   ========================================================================== */
+
+.studio-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 25px;
+
+    padding:
+        102px
+        var(--section-pad-x)
+        18px;
+
+    background: var(--bg-secondary);
+
+    border-bottom: 1px solid var(--border-light);
+}
+
+.studio-header h1 {
+    font-size: 2rem;
+    text-transform: uppercase;
+}
+
+.studio-controls {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+
+/* ==========================================================================
+   13. STUDIO WORKSPACE
+   ========================================================================== */
+
+.workspace {
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+
+    min-height: 78vh;
+
+    padding:
+        27px
+        var(--section-pad-x)
+        45px;
+}
+
+
+/* ==========================================================================
+   14. ROUTINE LIBRARY
+   ========================================================================== */
+
+.library {
+    position: sticky;
+    top: 90px;
+
+    width: 310px;
+
+    max-height:
+        calc(
+            100vh - 115px
+        );
+
+    flex-shrink: 0;
+
+    padding: 20px;
+
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+
+    background: var(--bg-secondary);
+
+    overflow-y: auto;
+
+    box-shadow: var(--shadow-sm);
+}
+
+.library-title {
+    margin-bottom: 17px;
+    padding-bottom: 10px;
+
+    border-bottom: 1px solid var(--border-light);
+
+    color: var(--text-muted);
+
+    font-family: var(--font-mono);
+
+    font-size: .78rem;
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+.library-search {
+    margin-bottom: 13px;
+}
+
+.library-search input {
+    width: 100%;
+
+    height: 36px;
+
+    padding: 0 10px;
+
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+
+    background: var(--bg-primary);
+
+    color: var(--text-main);
+
+    outline: none;
+
+    font-size: 11px;
+}
+
+.library-search input:focus {
+    border-color: var(--border-dark);
+}
+
+.library-filter-row {
+    display: flex;
+    gap: 5px;
+
+    margin-bottom: 15px;
+}
+
+.library-filter {
+    min-height: 27px;
+
+    padding: 0 9px;
+
+    border: 1px solid transparent;
+    border-radius: 999px;
+
+    color: var(--text-muted);
+
+    font-family: var(--font-mono);
+
+    font-size: 7px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+}
+
+.library-filter.active {
+    border-color: var(--border-light);
+    background: var(--bg-primary);
+    color: var(--text-main);
+}
+
+
+/* ==========================================================================
+   15. ROUTINE CARDS
+   ========================================================================== */
+
+.routine-card {
+    position: relative;
+
+    padding: 15px;
+    margin-bottom: 11px;
+
+    border:
+        1px solid
+        var(--border-light);
+
+    border-radius: var(--radius-sm);
+
+    background: var(--bg-primary);
+
+    cursor: grab;
+
+    transition: var(--transition);
+}
+
+.routine-card:hover {
+    border-color: var(--text-light);
+
+    transform: translateY(-1px);
+
+    box-shadow: var(--shadow-sm);
+}
+
+.routine-card:active {
+    cursor: grabbing;
+}
+
+.routine-card.dragging {
+    opacity: .45;
+}
+
+.card-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 10px;
+}
+
+.routine-card h3 {
+    padding-right: 8px;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    line-height: 1.2;
+
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.card-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.action-icon {
+    color: var(--text-light);
+
+    cursor: pointer;
+
+    transition: color .2s ease;
+}
+
+.action-icon:hover {
+    color: var(--text-main);
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+
+    min-height: 20px;
+
+    margin-bottom: 10px;
+    padding: 0 7px;
+
+    border-radius: 999px;
+
+    font-family: var(--font-mono);
+
+    font-size: 7px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .05em;
+}
+
+.tag.red {
+    background: var(--tag-red-bg);
+    color: var(--tag-red-text);
+}
+
+.tag.yellow {
+    background: var(--tag-yellow-bg);
+    color: var(--tag-yellow-text);
+}
+
+.tag.green {
+    background: var(--tag-green-bg);
+    color: var(--tag-green-text);
+}
+
+.tag.blue {
+    background: var(--tag-blue-bg);
+    color: var(--tag-blue-text);
+}
+
+.tag.pink {
+    background: var(--tag-pink-bg);
+    color: var(--tag-pink-text);
+}
+
+.tag.none {
+    background: var(--tag-gray-bg);
+    color: var(--tag-gray-text);
+}
+
+.steps-list {
+    list-style: decimal;
+
+    margin: 0;
+    padding-left: 18px;
+
+    color: var(--text-main);
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+.steps-list li {
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+
+    border-bottom:
+        1px dashed
+        var(--border-light);
+}
+
+.steps-list li:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.steps-list strong {
+    font-weight: 700;
+}
+
+
+/* ==========================================================================
+   16. SCHEDULE BOARD
+   ========================================================================== */
+
+.schedule-board {
+    min-width: 0;
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 34px;
+}
+
+.row-label {
+    margin-bottom: 12px;
+    padding-bottom: 7px;
+
+    border-bottom: 2px solid var(--black);
+
+    font-family: var(--font-mono);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+.row-label.am {
+    border-color: var(--red);
+}
+
+.row-label.pm {
+    border-color: var(--yellow);
+}
+
+.schedule-row {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            7,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap: 9px;
+
+    min-width: 0;
+}
+
+
+/* ==========================================================================
+   17. DAY SLOTS
+   ========================================================================== */
+
+.day-slot {
+    min-width: 0;
+    min-height: 280px;
+
+    display: flex;
+    flex-direction: column;
+
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+
+    background: var(--bg-secondary);
+
+    overflow: hidden;
+
+    transition: var(--transition);
+}
+
+.day-slot.drag-over {
+    border-color: var(--black);
+
+    background: var(--bg-tertiary);
+
+    box-shadow:
+        inset
+        0 0 0 1px
+        var(--black);
+}
+
+.day-title {
+    flex-shrink: 0;
+
+    padding: 9px;
+
+    border-bottom: 1px solid var(--border-light);
+
+    background: var(--bg-primary);
+
+    color: var(--text-muted);
+
+    font-family: var(--font-mono);
+
+    font-size: 8px;
+    font-weight: 700;
+
+    text-align: center;
+
+    text-transform: uppercase;
+}
+
+.slot-content {
+    flex: 1;
+
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 9px;
+
+    overflow: hidden;
+}
+
+.slot-content .routine-card {
+    padding: 7px;
+
+    margin: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    box-shadow: none;
+}
+
+.slot-content .routine-card:hover {
+    transform: none;
+}
+
+.slot-content .card-actions {
+    display: none;
+}
+
+.slot-content .routine-card h3 {
+    margin-bottom: 7px;
+
+    font-size: 10px;
+}
+
+.slot-content .steps-list {
+    font-size: 8px;
+}
+
+.slot-clear {
+    display: flex;
+
+    justify-content: flex-end;
+
+    padding:
+        5px
+        7px
+        0;
+}
+
+.slot-clear svg {
+    color: var(--text-light);
+
+    cursor: pointer;
+}
+
+.slot-clear svg:hover {
+    color: var(--black);
+}
+
+
+/* ==========================================================================
+   18. LIBRARY EMPTY STATE
+   ========================================================================== */
+
+.library-empty {
+    padding: 22px 8px;
+
+    color: var(--text-muted);
+
+    font-size: 10px;
+    line-height: 1.45;
+
+    text-align: center;
+}
+
+
+/* ==========================================================================
+   19. MODAL SYSTEM
+   ========================================================================== */
+
+.modal-overlay {
+    position: fixed;
+    z-index: 2000;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(9,9,11,.72);
+
+    backdrop-filter: blur(5px);
+
+    opacity: 0;
+
+    transition: opacity .25s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+}
+
+.modal {
+    width: min(650px, 100%);
+
+    max-height:
+        calc(
+            100vh - 40px
+        );
+
+    padding: 30px;
+
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius-md);
+
+    background: var(--bg-secondary);
+
+    overflow-y: auto;
+
+    box-shadow: var(--shadow-lg);
+
+    transform:
+        translateY(15px);
+
+    transition:
+        transform .25s ease;
+}
+
+.modal-overlay.active .modal {
+    transform:
+        translateY(0);
+}
+
+.modal h2 {
+    margin-bottom: 24px;
+
+    padding-bottom: 13px;
+
+    border-bottom:
+        1px solid
+        var(--border-light);
+
+    font-size: 1.15rem;
+
+    text-transform: uppercase;
+}
+
+.form-group {
+    margin-bottom: 19px;
+}
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: var(--text-muted);
+
+    font-family: var(--font-mono);
+
+    font-size: 9px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+.modal input[type="text"],
+.modal select {
+    width: 100%;
+
+    min-height: 39px;
+
+    padding: 0 12px;
+
+    border:
+        1px solid
+        var(--border-light);
+
+    border-radius: var(--radius-sm);
+
+    background:
+        var(--bg-primary);
+
+    color:
+        var(--text-main);
+
+    outline: none;
+
+    font-size: 11px;
+
+    transition: var(--transition);
+}
+
+.modal input[type="text"]:focus,
+.modal select:focus {
+    border-color: var(--black);
+}
+
+.modal-steps-header {
+    display: flex;
+
+    align-items: flex-end;
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+}
+
+.steps-container {
+    max-height: 300px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+
+    margin-bottom: 20px;
+
+    padding-right: 3px;
+
+    overflow-y: auto;
+}
+
+.step-row {
+    display: flex;
+    align-items: center;
+
+    background: var(--bg-primary);
+
+    border:
+        1px solid
+        var(--border-light);
+
+    border-radius:
+        var(--radius-sm);
+
+    transition:
+        var(--transition);
+}
+
+.step-row:focus-within {
+    border-color: var(--black);
+}
+
+.step-row.drag-target {
+    border-color: var(--black);
+}
+
+.step-handle {
+    min-width: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 11px;
+
+    color: var(--text-light);
+
+    cursor: grab;
+}
+
+.step-handle:active {
+    cursor: grabbing;
+}
+
+.step-input-group {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+}
+
+.step-input-group input {
+    width: 50%;
+
+    min-width: 0;
+
+    padding:
+        11px 10px;
+
+    border: none;
+
+    background: transparent;
+
+    color:
+        var(--text-main);
+
+    outline: none;
+
+    font-size: 11px;
+}
+
+.step-divider {
+    width: 1px;
+    height: 19px;
+
+    background: var(--border-light);
+}
+
+.step-delete {
+    min-width: 36px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--text-light);
+
+    cursor: pointer;
+}
+
+.step-delete:hover {
+    color: var(--tag-red-text);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+
+    margin-top: 25px;
+    padding-top: 20px;
+
+    border-top:
+        1px solid
+        var(--border-light);
+}
+
+
+/* ==========================================================================
+   20. PRINT PREVIEW OVERLAY / VIEW
+   ========================================================================== */
+
+#print-preview-view {
+    display: none;
+}
+
+
+/* ==========================================================================
+   21. PRINT DOCUMENT
+   --------------------------------------------------------------------------
+   IMPORTANT:
+   This is the actual paper document.
+
+   The screen Studio is NOT printed directly.
+
+   The print manifest below receives data from the same routines/schedule
+   objects, but has its own dimensions and typography.
+   ========================================================================== */
+
+.print-manifest {
+    display: none;
+}
+
+
+/* ==========================================================================
+   22. TOAST
+   ========================================================================== */
+
+.toast {
+    position: fixed;
+    z-index: 5000;
+
+    right: 20px;
+    bottom: 20px;
+
+    max-width: 340px;
+
+    padding: 11px 14px;
+
+    border-radius: 999px;
+
+    background: var(--black);
+    color: var(--white);
+
+    font-size: 9px;
+    font-weight: 700;
+
+    box-shadow: var(--shadow-md);
+
+    opacity: 0;
+    transform: translateY(8px);
+
+    pointer-events: none;
+
+    transition:
+        opacity .2s ease,
+        transform .2s ease;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* ==========================================================================
+   23. IMPORT MODAL
+   ========================================================================== */
+
+.import-area {
+    width: 100%;
+
+    min-height: 280px;
+
+    padding: 12px;
+
+    border:
+        1px solid
+        var(--border-light);
+
+    border-radius:
+        var(--radius-sm);
+
+    background:
+        var(--bg-primary);
+
+    color:
+        var(--text-main);
+
+    outline: none;
+
+    resize: vertical;
+
+    font-family:
+        var(--font-mono);
+
+    font-size: 9px;
+
+    line-height: 1.45;
+}
+
+.import-area:focus {
+    border-color: var(--black);
+}
+
+.import-help {
+    margin-top: 8px;
+
+    color: var(--text-muted);
+
+    font-size: 9px;
+    line-height: 1.45;
+}
+
+
+/* ==========================================================================
+   24. RESPONSIVE APP
+   ========================================================================== */
+
+@media (max-width: 1150px) {
+
+    .workspace {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .library {
+        width: 260px;
+    }
+
+    .schedule-row {
+        gap: 6px;
+    }
+
+    .day-slot {
+        min-height: 240px;
+    }
+
+}
+
+@media (max-width: 900px) {
+
+    .nav-links a {
+        display: none;
+    }
+
+    .workspace {
+        flex-direction: column;
+    }
+
+    .library {
+        position: static;
+
+        width: 100%;
+
+        max-height: none;
+    }
+
+    .schedule-board {
+        width: 100%;
+    }
+
+    .schedule-row {
+        min-width: 900px;
+        overflow-x: auto;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    :root {
+        --section-pad-x: 18px;
+    }
+
+    .nav-inner {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .nav {
+        position: static;
+    }
+
+    .hero {
+        padding-top: 125px;
+    }
+
+    .hero h1 {
+        font-size: 3.2rem;
+    }
+
+    .hero-stats {
+        gap: 30px;
+    }
+
+    .studio-header {
+        flex-direction: column;
+        align-items: flex-start;
+
+        padding-top: 90px;
+    }
+
+    .studio-controls {
+        flex-wrap: wrap;
+    }
+
+}
+
+
+
+
+/* ==========================================================================\n   24. STUDIO SETUP WIZARD\n   ========================================================================== */
+
+#wizard-modal {
+    z-index: 3000;
+}
+
+#wizard-modal .wizard-shell {
+    width: min(920px, 100%);
+    max-height: calc(100vh - 40px);
+    padding: 0;
+    border: 1px solid var(--border-dark);
+    border-radius: 14px;
+    background: #FFFFFF;
+    overflow: hidden;
+    box-shadow: 0 28px 80px rgba(0,0,0,.22);
+    display: flex;
+    flex-direction: column;
+}
+
+.wizard-top {
+    padding: 22px 26px 18px;
+    border-bottom: 1px solid var(--border-light);
+    background: #FFFFFF;
+}
+
+.wizard-kicker {
+    margin: 0 0 6px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+}
+
+.wizard-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -.045em;
+}
+
+.wizard-subtitle {
+    margin: 8px 0 0;
+    max-width: 680px;
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.wizard-progress {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 5px;
+    margin-top: 18px;
+}
+
+.wizard-progress span {
+    height: 3px;
+    border-radius: 99px;
+    background: #ECECEF;
+    transition: background .2s ease;
+}
+
+.wizard-progress span.active {
+    background: var(--black);
+}
+
+.wizard-progress span.done {
+    background: #A1A1AA;
+}
+
+#wizard-content {
+    padding: 26px;
+    overflow-y: auto;
+}
+
+.wizard-step-label {
+    margin: 0 0 7px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.wizard-question {
+    margin: 0 0 8px;
+    font-size: 24px;
+    line-height: 1.08;
+    letter-spacing: -.035em;
+}
+
+.wizard-help {
+    margin: 0 0 20px;
+    max-width: 700px;
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.wizard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.wizard-grid.three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.wizard-choice {
+    position: relative;
+    display: block;
+    padding: 15px 16px;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    background: #FFFFFF;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.wizard-choice:hover {
+    border-color: #9CA3AF;
+    transform: translateY(-1px);
+}
+
+.wizard-choice.selected {
+    border-color: var(--black);
+    background: #FAFAFA;
+    box-shadow: inset 0 0 0 1px var(--black);
+}
+
+.wizard-choice input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.wizard-choice-title {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text-main);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.wizard-choice-copy {
+    display: block;
+    color: var(--text-muted);
+    font-size: 10px;
+    line-height: 1.45;
+}
+
+.wizard-choice-tag {
+    display: inline-flex;
+    margin-bottom: 9px;
+    padding: 4px 7px;
+    border-radius: 999px;
+    background: #F4F4F5;
+    color: #3F3F46;
+    font-family: var(--font-mono);
+    font-size: 7px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.wizard-choice.selected .wizard-choice-tag {
+    background: var(--black);
+    color: #FFFFFF;
+}
+
+.wizard-inline-note {
+    margin-top: 14px;
+    padding: 11px 13px;
+    border-left: 3px solid var(--black);
+    background: #FAFAFA;
+    color: #52525B;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.wizard-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.wizard-summary-card {
+    padding: 15px;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    background: #FFFFFF;
+}
+
+.wizard-summary-card h4 {
+    margin: 0 0 9px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.wizard-summary-card p,
+.wizard-summary-card li {
+    color: #52525B;
+    font-size: 10px;
+    line-height: 1.45;
+}
+
+.wizard-summary-card ul {
+    margin: 0;
+    padding-left: 17px;
+}
+
+.wizard-rotation {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 15px;
+}
+
+.wizard-night {
+    min-height: 85px;
+    padding: 9px 7px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    background: #FFFFFF;
+    text-align: center;
+}
+
+.wizard-night-day {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 7px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.wizard-night-name {
+    margin-top: 8px;
+    font-size: 8px;
+    font-weight: 800;
+    line-height: 1.15;
+    text-transform: uppercase;
+}
+
+.wizard-night-copy {
+    margin-top: 4px;
+    color: var(--text-muted);
+    font-size: 7px;
+    line-height: 1.25;
+}
+
+.wizard-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 15px 26px;
+    border-top: 1px solid var(--border-light);
+    background: #FAFAFA;
+}
+
+.wizard-footer-left {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.wizard-footer-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.wizard-check-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 13px 15px;
+    margin-top: 14px;
+    border: 1px solid var(--border-light);
+    border-radius: 9px;
+    background: #FAFAFA;
+}
+
+.wizard-check-row input {
+    margin-top: 1px;
+}
+
+.wizard-check-row strong {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 10px;
+}
+
+.wizard-check-row span {
+    color: var(--text-muted);
+    font-size: 9px;
+    line-height: 1.4;
+}
+
+
+.wizard-products {
+    display: grid;
+    gap: 8px;
+}
+
+.wizard-product-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 150px 105px 34px;
+    gap: 7px;
+    align-items: center;
+    padding: 9px;
+    border: 1px solid var(--border-light);
+    border-radius: 9px;
+    background: #FFFFFF;
+}
+
+.wizard-product-row input,
+.wizard-product-row select {
+    width: 100%;
+    min-width: 0;
+    min-height: 34px;
+    padding: 0 9px;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    background: #FFFFFF;
+    color: var(--text-main);
+    font-size: 10px;
+    outline: none;
+}
+
+.wizard-product-row input:focus,
+.wizard-product-row select:focus {
+    border-color: var(--black);
+}
+
+.wizard-product-remove {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.wizard-product-remove:hover {
+    border-color: var(--black);
+    color: var(--black);
+}
+
+.wizard-product-labels {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 150px 105px 34px;
+    gap: 7px;
+    padding: 0 9px 2px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 7px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.wizard-add-product {
+    margin-top: 9px;
+}
+
+.wizard-am-rotation {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 14px;
+}
+
+.wizard-am-card {
+    min-height: 92px;
+    padding: 9px 7px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    background: #FFFFFF;
+    text-align: center;
+}
+
+.wizard-am-card-day {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 7px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.wizard-am-card-name {
+    margin-top: 7px;
+    font-size: 8px;
+    font-weight: 800;
+    line-height: 1.15;
+    text-transform: uppercase;
+}
+
+.wizard-am-card-copy {
+    margin-top: 4px;
+    color: var(--text-muted);
+    font-size: 7px;
+    line-height: 1.25;
+}
+
+.wizard-recommendation-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.wizard-recommendation {
+    padding: 12px 13px;
+    border: 1px solid var(--border-light);
+    border-radius: 9px;
+    background: #FAFAFA;
+}
+
+.wizard-recommendation h4 {
+    margin: 0 0 5px;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.wizard-recommendation p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 9px;
+    line-height: 1.45;
+}
+
+@media (max-width: 900px) {
+    .wizard-product-row,
+    .wizard-product-labels {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .wizard-product-row button {
+        grid-column: 2;
+        justify-self: end;
+    }
+}
+
+@media (max-width: 720px) {
+    #wizard-modal .wizard-shell {
+        max-height: calc(100vh - 20px);
+    }
+
+    .wizard-grid,
+    .wizard-grid.three,
+    .wizard-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wizard-rotation {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+
+/* ==========================================================================\n   GUIDED PRODUCT COLLECTOR\n   ========================================================================== */
+
+.wizard-product-collector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 320px;
+    padding: 10px 10px 22px;
+    text-align: center;
+}
+
+.wizard-product-progress {
+    width: min(430px, 100%);
+    margin: 0 auto 22px;
+}
+
+.wizard-product-progress-track {
+    width: 100%;
+    height: 5px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #F0F0F1;
+}
+
+.wizard-product-progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: #111111;
+    transition: width .25s ease;
+}
+
+.wizard-product-count {
+    margin-top: 7px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 7px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.wizard-product-emoji {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 15px;
+    border-radius: 18px;
+    background: #F7F7F7;
+    font-size: 28px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.05);
+}
+
+.wizard-product-question {
+    max-width: 600px;
+    margin: 0 auto 8px;
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+    line-height: 1;
+    letter-spacing: -.04em;
+}
+
+.wizard-product-subtitle {
+    max-width: 500px;
+    margin: 0 auto 20px;
+    color: var(--text-muted);
+    font-size: 10px;
+    line-height: 1.45;
+}
+
+.wizard-product-fields {
+    width: min(560px, 100%);
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 9px;
+    margin-top: 4px;
+}
+
+.wizard-product-field {
+    position: relative;
+}
+
+.wizard-product-field label {
+    position: absolute;
+    left: 12px;
+    top: 8px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 6.5px;
+    font-weight: 800;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    pointer-events: none;
+}
+
+.wizard-product-field input {
+    width: 100%;
+    min-height: 58px;
+    padding: 21px 12px 7px;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    background: #FFFFFF;
+    color: var(--text-main);
+    font-size: 11px;
+    outline: none;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.wizard-product-field input:focus {
+    border-color: #111111;
+    box-shadow: 0 0 0 3px rgba(0,0,0,.05);
+}
+
+.wizard-product-skip {
+    margin-top: 12px;
+    color: var(--text-muted);
+    font-size: 9px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+
+.wizard-product-skip:hover {
+    color: var(--text-main);
+}
+
+.wizard-product-dots {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.wizard-product-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: #E4E4E7;
+    transition: all .2s ease;
+}
+
+.wizard-product-dot.done {
+    background: #111111;
+}
+
+.wizard-product-dot.active {
+    width: 18px;
+    background: #111111;
+}
+
+.wizard-finish-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 4000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(255,255,255,.94);
+    backdrop-filter: blur(12px);
+}
+
+.wizard-finish-overlay.active {
+    display: flex;
+}
+
+.wizard-finish-card {
+    width: min(440px, 100%);
+    padding: 34px 30px 30px;
+    border: 1px solid var(--border-light);
+    border-radius: 20px;
+    background: #FFFFFF;
+    text-align: center;
+    box-shadow: 0 24px 70px rgba(0,0,0,.12);
+}
+
+.wizard-finish-orbit {
+    width: 74px;
+    height: 74px;
+    position: relative;
+    margin: 0 auto 18px;
+}
+
+.wizard-finish-orbit::before,
+.wizard-finish-orbit::after {
+    content: "";
+    position: absolute;
+    inset: 7px;
+    border: 2px solid #111111;
+    border-left-color: transparent;
+    border-radius: 50%;
+    animation: protocolSpin 1.2s linear infinite;
+}
+
+.wizard-finish-orbit::after {
+    inset: 18px;
+    border-color: #D4D4D8;
+    border-right-color: transparent;
+    animation-direction: reverse;
+    animation-duration: .9s;
+}
+
+.wizard-finish-spark {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+}
+
+.wizard-finish-card h3 {
+    margin: 0 0 7px;
+    font-size: 24px;
+    letter-spacing: -.04em;
+}
+
+.wizard-finish-card p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.wizard-finish-caption {
+    margin-top: 15px !important;
+    font-family: var(--font-mono);
+    font-size: 7px !important;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+@keyframes protocolSpin {
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 720px) {
+    .wizard-product-fields {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ==========================================================================
+   25. PRINT ENGINE
+   ========================================================================== */
+
+@media print {
+
+    /* ----------------------------------------------------------------------
+       Exact physical sheet
+       ---------------------------------------------------------------------- */
+
+    @page {
+
+        size:
+            11in
+            8.5in;
+
+        margin:
+            0;
+
+    }
+
+
+    /* ----------------------------------------------------------------------
+       Hard body dimensions
+       ---------------------------------------------------------------------- */
+
+    html,
+    body {
+
+        width:
+            11in !important;
+
+        height:
+            8.5in !important;
+
+        min-width:
+            11in !important;
+
+        max-width:
+            11in !important;
+
+        min-height:
+            8.5in !important;
+
+        max-height:
+            8.5in !important;
+
+        margin:
+            0 !important;
+
+        padding:
+            0 !important;
+
+        background:
+            #FFFFFF !important;
+
+        overflow:
+            hidden !important;
+
+        -webkit-print-color-adjust:
+            exact !important;
+
+        print-color-adjust:
+            exact !important;
+    }
+
+
+    .print-manifest,
+    .print-footer,
+    html,
+    body {
+
+        background:
+            #FFFFFF !important;
+
+        box-shadow:
+            none !important;
+    }
+
+
+    /* ----------------------------------------------------------------------
+       Hide EVERY piece of UI
+       ---------------------------------------------------------------------- */
+
+    body > nav,
+    #landing-view,
+    #app-view,
+    .modal-overlay,
+    .toast {
+
+        display:
+            none !important;
+    }
+
+
+    /* ----------------------------------------------------------------------
+       Show actual print document
+       ---------------------------------------------------------------------- */
+
+    .print-manifest {
+
+        display:
+            flex !important;
+
+        width:
+            11in !important;
+
+        height:
+            8.5in !important;
+
+        min-width:
+            11in !important;
+
+        min-height:
+            8.5in !important;
+
+        max-width:
+            11in !important;
+
+        max-height:
+            8.5in !important;
+
+        margin:
+            0 !important;
+
+        padding:
+            0.22in
+            0.25in
+            0.16in !important;
+
+        flex-direction:
+            column !important;
+
+        background:
+            #FFFFFF !important;
+
+        color:
+            #111111 !important;
+
+        overflow:
+            hidden !important;
+
+        page-break-after:
+            avoid !important;
+
+        page-break-before:
+            avoid !important;
+    }
+
+
+    /* ----------------------------------------------------------------------
+       PRINT HEADER
+       ---------------------------------------------------------------------- */
+
+    .print-header {
+
+        width:
+            100% !important;
+
+        height:
+            0.56in !important;
+
+        min-height:
+            0.56in !important;
+
+        max-height:
+            0.56in !important;
+
+        flex:
+            0 0
+            0.56in !important;
+
+        display:
+            flex !important;
+
+        align-items:
+            flex-end !important;
+
+        justify-content:
+            space-between !important;
+
+        gap:
+            20px !important;
+
+        padding:
+            0
+            0
+            0.075in !important;
+
+        margin:
+            0 !important;
+
+        border-bottom:
+            1.5px
+            solid
+            #111111 !important;
+
+        background:
+            #FFFFFF !important;
+    }
+
+    .print-brand-lockup {
+
+        min-width:
+            0 !important;
+    }
+
+    .print-kicker {
+
+        margin:
+            0
+            0
+            3px !important;
+
+        color:
+            #777777 !important;
+
+        font-family:
+            Helvetica,
+            Arial,
+            sans-serif !important;
+
+        font-size:
+            6.5pt !important;
+
+        line-height:
+            1 !important;
+
+        font-weight:
+            800 !important;
+
+        letter-spacing:
+            .15em !important;
+
+        text-transform:
+            uppercase !important;
+    }
+
+    .print-title {
+
+        margin:
+            0 !important;
+
+        color:
+            #111111 !important;
+
+        font-family:
+            Helvetica,
+            Arial,
+            sans-serif !important;
+
+        font-size:
+            22pt !important;
+
+        line-height:
+            .9 !important;
+
+        font-weight:
+            800 !important;
+
+        letter-spacing:
+            -.055em !important;
+    }
+
+    .print-week {
+
+        padding-bottom:
+            2px !important;
+
+        color:
+            #777777 !important;
+
+        font-family:
+            Helvetica,
+            Arial,
+            sans-serif !important;
+
+        font-size:
+            6.5pt !important;
+
+        line-height:
+            1 !important;
+
+        font-weight:
+            700 !important;
+
+        letter-spacing:
+            .08em !important;
+
+        text-transform:
+            uppercase !important;
+    }
+
+
+    /* ----------------------------------------------------------------------
+       Print sections
+       ---------------------------------------------------------------------- */
+
+    .print-section {
+
+        width:
+            100% !important;
+
+        min-width:
+            0 !important;
+
+        min-height:
+            0 !important;
+
+        display:
+            flex !important;
+
+        flex-direction:
+            column !important;
+
+        margin:
+            0.075in
+            0
+            0 !important;
+
+        overflow:
+            hidden !important;
+    }
+
+    .print-section.am {
+
+        flex:
+            0.93 1 0 !important;
+    }
+
+    .print-section.pm {
+
+        flex:
+            1.07 1 0 !important;
+    }
+
+
+    /* ----------------------------------------------------------------------
+       Print section heading
+       ---------------------------------------------------------------------- */
+
+    .print-section-heading {
+
+        width:
+            100% !important;
+
+        height:
+            0.24in !important;
+
+        min-height:
+            0.24in !important;
+
+        max-height:
+            0.24in !important;
+
+        flex:
+            0 0
+            0.24in !important;
+
+        display:
+            flex !important;
+
+        align-items:
+            center !important;
+
+        gap:
+            7px !important;
+
+        overflow:
+            hidden !important;
+    }
+
+    .print-accent {
+
+        width:
+            4px !important;
+
+        height:
+            16px !important;
+
+        min-width:
+            4px !important;
+
+        flex:
+            0 0
+            4px !important;
+    }
+
+    .print-accent.red {
+
+        background:
+            #EA4335 !important;
+    }
+
+    .print-accent.yellow {
+
+        background:
+            #FBBC05 !important;
+    }
+
+    .print-section-title {
+
+        color:
+            #111111 !important;
+
+        font-family:
+            Helvetica,
+            Arial,
+            sans-serif !important;
+
+        font-size:
+            9.5pt !important;
+
+        line-height:
+            1 !important;
+
+        font-weight:
+            800 !important;
+
+        letter-spacing:
+            -.015em !important;
+    }
+
+    .print-section-meta {
+
+        margin-left:
+            auto !important;
+
+        color:
+            #777777 !important;
+
+        font-family:
+            Helvetica,
+            Arial,
+            sans-serif !important;
+
+        font-size:
+            5.7pt !important;
+
+        line-height:
+            1 !important;
+
+        font-weight:
+            700 !important;
+
+        letter-spacing:
+            .08em !important;
+
+        text-transform:
+            uppercase !important;
+    }
+
+
+    /* ----------------------------------------------------------------------
+       Print 7-column grid
+       ---------------------------------------------------------------------- */
+
+    .print-grid {
+
+        width:
+            100% !important;
+
+        min-width:
+            0 !important;
+
+        min-height:
+            0 !important;
+
+        flex:
+            1 1 auto !important;
+
+        display:
+            grid !important;
+
+        grid-template-columns:
+            repeat(
+                7,
+                minmax(
+                    0,
+                    1fr
+                )
+            ) !important;
+
+        grid-template-rows:
+            1fr !important;
+
+        gap:
+            0.045in !important;
+
+        border-top:
+            1px
+            solid
+            #111111 !important;
+
+        border-left:
+            1px
+            solid
+            #D4D4D8 !important;
+
+        overflow:
+            hidden !important;
+    }
+
+
+    /* ----------------------------------------------------------------------
+       Print day cell
+       ---------------------------------------------------------------------- */
+
+    .print-day {
+
+        position:
+            relative !important;
+
+        min-width:
+            0 !important;
+
+        min-height:
+            0 !important;
+
+        height:
+            100% !important;
+
+        display:
+            flex !important;
+
+        flex-direction:
+            column !important;
+
+        border-right:
+            1px
+            solid
+            #D4D4D8 !important;
+
+        border-bottom:
+            1px
+            solid
+            #D4D4D8 !important;
+
+        background:
+            #FFFFFF !important;
+
+        overflow:
+            hidden !important;
+    }
+
+
+    /* ----------------------------------------------------------------------
+       Day header
+       ---------------------------------------------------------------------- */
+
+    .print-day-header {
+
+        display:
+            none !important;
+    }
+
+
+    .print-day-title-row,
+    .print-day-name,
+    .print-day-type {
+
+        display:
+            none !important;
+    }
+
+
+    /* ----------------------------------------------------------------------
+       Routine area
+       ---------------------------------------------------------------------- */
+
+    .print-day-body {
+
+        width:
+            100% !important;
+
+        flex:
+            1 1 auto !important;
+
+        min-height:
+            0 !important;
+
+        padding:
+            0.12in
+            0.10in
+            0.06in !important;
+
+        background:
+            #FFFFFF !important;
+
+        overflow:
+            hidden !important;
+    }
+
+
+    /* ----------------------------------------------------------------------
+       Routine name / tag
+       ---------------------------------------------------------------------- */
+
+    .print-routine {
+
+        margin:
+            0 !important;
+
+        padding:
+            0 !important;
+
+        overflow:
+            hidden !important;
+    }
+
+    .print-routine:last-child {
+
+        margin-bottom:
+            0 !important;
+    }
+
+    .print-routine-title {
+
+        display:
+            block !important;
+
+        max-width:
+            100% !important;
+
+        margin:
+            0
+            0
+            0.09in !important;
+
+        padding:
+            0 !important;
+
+        color:
+            #111111 !important;
+
+        background:
+            transparent !important;
+
+        font-family:
+            Helvetica,
+            Arial,
+            sans-serif !important;
+
+        font-size:
+            9pt !important;
+
+        line-height:
+            0.96 !important;
+
+        font-weight:
+            800 !important;
+
+        letter-spacing:
+            -.045em !important;
+
+        text-transform:
+            uppercase !important;
+
+        white-space:
+            normal !important;
+
+        overflow:
+            visible !important;
+
+        text-overflow:
+            clip !important;
+    }
+
+    .print-routine-name {
+
+        display:
+            inline-flex !important;
+
+        align-items:
+            center !important;
+
+        max-width:
+            max-content !important;
+
+        margin:
+            0
+            0
+            0.15in !important;
+
+        padding:
+            4px 9px 3px !important;
+
+        border-radius:
+            999px !important;
+
+        color:
+            #3F3F46 !important;
+
+        background:
+            #F4F4F5 !important;
+
+        font-family:
+            Helvetica,
+            Arial,
+            sans-serif !important;
+
+        font-size:
+            6pt !important;
+
+        line-height:
+            1 !important;
+
+        font-weight:
+            800 !important;
+
+        letter-spacing:
+            .08em !important;
+
+        text-transform:
+            uppercase !important;
+
+        white-space:
+            nowrap !important;
+
+        overflow:
+            visible !important;
+
+        text-overflow:
+            clip !important;
+    }
+
+    .print-routine-name.red {
+
+        background:
+            #FEE2E2 !important;
+
+        color:
+            #991B1B !important;
+    }
+
+    .print-routine-name.yellow {
+
+        background:
+            #FEF3C7 !important;
+
+        color:
+            #92400E !important;
+    }
+
+    .print-routine-name.green {
+
+        background:
+            #DCFCE7 !important;
+
+        color:
+            #166534 !important;
+    }
+
+    .print-routine-name.blue {
+
+        background:
+            #DBEAFE !important;
+
+        color:
+            #1E40AF !important;
+    }
+
+    .print-routine-name.pink {
+
+        background:
+            #FCE7F3 !important;
+
+        color:
+            #9D174D !important;
+    }
+
+    .print-routine-name.none {
+
+        background:
+            #F4F4F5 !important;
+
+        color:
+            #3F3F46 !important;
+    }
+
+
+    /* ----------------------------------------------------------------------
+       Print step list
+       ---------------------------------------------------------------------- */
+
+    .print-step-list {
+
+        margin:
+            0 !important;
+
+        padding:
+            0
+            0
+            0
+            0.16in !important;
+
+        font-family:
+            Helvetica,
+            Arial,
+            sans-serif !important;
+
+        font-size:
+            7pt !important;
+
+        line-height:
+            1.28 !important;
+
+        color:
+            #444444 !important;
+
+        overflow:
+            hidden !important;
+    }
+
+    .print-step {
+
+        margin:
+            0
+            0
+            0.055in !important;
+
+        padding:
+            0
+            0
+            0.045in !important;
+
+        border-bottom:
+            1px
+            dashed
+            #D4D4D8 !important;
+
+        color:
+            #444444 !important;
+
+        overflow-wrap:
+            normal !important;
+
+        word-break:
+            normal !important;
+
+        white-space:
+            normal !important;
+    }
+
+    .print-step:last-child {
+
+        margin-bottom:
+            0 !important;
+
+        padding-bottom:
+            0 !important;
+
+        border-bottom:
+            none !important;
+    }
+
+    .print-brand {
+
+        color:
+            #111111 !important;
+
+        font-weight:
+            800 !important;
+    }
+
+    .print-product {
+
+        color:
+            #444444 !important;
+
+        font-weight:
+            400 !important;
+    }
+
+
+    /* ----------------------------------------------------------------------
+       Empty state
+       ---------------------------------------------------------------------- */
+
+    .print-empty {
+
+        height:
+            100% !important;
+
+        display:
+            flex !important;
+
+        align-items:
+            center !important;
+
+        justify-content:
+            center !important;
+
+        color:
+            #AAAAAA !important;
+
+        font-family:
+            Helvetica,
+            Arial,
+            sans-serif !important;
+
+        font-size:
+            6pt !important;
+
+        text-align:
+            center !important;
+    }
+
+
+    /* ----------------------------------------------------------------------
+       Print footer
+       ---------------------------------------------------------------------- */
+
+    .print-footer {
+
+        width:
+            100% !important;
+
+        height:
+            0.26in !important;
+
+        min-height:
+            0.26in !important;
+
+        max-height:
+            0.26in !important;
+
+        flex:
+            0 0
+            0.26in !important;
+
+        display:
+            flex !important;
+
+        align-items:
+            flex-end !important;
+
+        justify-content:
+            center !important;
+
+        padding:
+            0.035in
+            0
+            0 !important;
+
+        margin:
+            0.05in
+            0
+            0 !important;
+
+        border-top:
+            1px
+            solid
+            #D4D4D8 !important;
+
+        background:
+            #FFFFFF !important;
+
+        box-shadow:
+            none !important;
+
+        color:
+            #666666 !important;
+
+        font-family:
+            Helvetica,
+            Arial,
+            sans-serif !important;
+
+        font-size:
+            5.2pt !important;
+
+        line-height:
+            1.15 !important;
+
+        text-align:
+            center !important;
+
+        overflow:
+            hidden !important;
+    }
+
+    .print-footer strong {
+
+        color:
+            #444444 !important;
+
+        font-weight:
+            800 !important;
+    }
+}
+
+
+/* ==========================================================================
+   END CSS
+   ========================================================================== */
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================================================================
+     NAVIGATION
+     ========================================================================= -->
+
+<nav>
+
+    <div class="container nav-inner">
+
+        <div class="brand">
+
+            <svg
+                viewBox="0 0 100 100"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+
+                <rect
+                    width="100"
+                    height="100"
+                    fill="black"/>
+
+                <path
+                    d="M30 30H70V50H30V30Z"
+                    fill="white"/>
+
+                <path
+                    d="M30 50H50V90H30V50Z"
+                    fill="white"/>
+
+                <circle
+                    cx="70"
+                    cy="70"
+                    r="10"
+                    fill="white"/>
+
+            </svg>
+
+            PROTOCOL
+
+        </div>
+
+
+        <div class="nav-links">
+
+            <a href="#philosophy">
+                Philosophy
+            </a>
+
+            <a href="#science">
+                Science
+            </a>
+
+            <a href="#faq">
+                FAQ
+            </a>
+
+            <button
+                class="btn btn-primary"
+                onclick="launchApp()">
+                Launch Studio
+            </button>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================================================================
+     LANDING PAGE
+     ========================================================================= -->
+
+<div
+    id="landing-view"
+    class="view-section">
+
+
+    <header class="hero container">
+
+        <h1>
+            Stop Guessing.<br>
+            Start Architecting.
+        </h1>
+
+
+        <p class="hero-subtitle">
+
+            A highly visual, fiercely structural workspace designed to build,
+            manage, and print clinical-grade AM/PM skincare protocols.
+
+        </p>
+
+
+        <div>
+
+            <button
+                class="btn btn-primary"
+                onclick="launchApp()">
+
+                Enter The Studio
+                &rarr;
+
+            </button>
+
+        </div>
+
+
+        <div class="hero-stats">
+
+            <div class="stat-item">
+
+                <h4>
+                    7
+                </h4>
+
+                <p>
+                    Day Grids
+                </p>
+
+            </div>
+
+
+            <div class="stat-item">
+
+                <h4>
+                    AM/PM
+                </h4>
+
+                <p>
+                    Split Cycles
+                </p>
+
+            </div>
+
+
+            <div class="stat-item">
+
+                <h4>
+                    ∞
+                </h4>
+
+                <p>
+                    Custom Protocols
+                </p>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================================
+         FEATURES
+         ===================================================================== -->
+
+    <section
+        id="philosophy"
+        class="features">
+
+        <div class="container">
+
+            <div class="section-header">
+
+                <h2>
+                    The System
+                </h2>
+
+                <p>
+
+                    Skincare is a science of compatibility and frequency.
+                    Protocol replaces messy notes with a rigid, visual
+                    architecture.
+
+                </p>
+
+            </div>
+
+
+            <div class="feature-grid">
+
+
+                <div class="feature-card">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2">
+
+                        <path
+                            d="M21 3H3v18h18V3zM10 21V3M3 10h18M3 14h18"/>
+
+                    </svg>
+
+                    <h3>
+                        Visual Grid
+                    </h3>
+
+                    <p>
+
+                        Drag and drop routines into a strict 7-day matrix.
+                        Instantly see your entire week's chemical exposure
+                        at a glance.
+
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2">
+
+                        <path
+                            d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+
+                    </svg>
+
+                    <h3>
+                        Cycle Management
+                    </h3>
+
+                    <p>
+
+                        Safely manage active ingredient cycles and tag routines
+                        by intent to visualize your weekly strategy.
+
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2">
+
+                        <path
+                            d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/>
+
+                    </svg>
+
+                    <h3>
+                        Editorial Print
+                    </h3>
+
+                    <p>
+
+                        Export your digital grid directly to a properly
+                        scaled 11 × 8.5 inch landscape physical manifest.
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================================
+         SCIENCE
+         ===================================================================== -->
+
+    <section
+        id="science"
+        class="glossary container">
+
+        <div class="section-header">
+
+            <h2>
+                Active Interactions
+            </h2>
+
+            <p>
+
+                Understanding which compounds are separated and which
+                can complement each other.
+
+            </p>
+
+        </div>
+
+
+        <table class="glossary-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Primary Active
+                    </th>
+
+                    <th>
+                        Secondary Active
+                    </th>
+
+                    <th>
+                        Interaction Status
+                    </th>
+
+                    <th>
+                        Rationale
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            Retinoids
+                        </strong>
+                    </td>
+
+                    <td>
+                        AHA/BHA Acids
+                    </td>
+
+                    <td>
+                        <span
+                            class="tag-pill pill-conflict">
+                            Conflict
+                        </span>
+                    </td>
+
+                    <td>
+
+                        Combined use can increase irritation.
+                        Separate direct acids and retinoids when
+                        your routine calls for alternating nights.
+
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            Vitamin C
+                        </strong>
+                    </td>
+
+                    <td>
+                        Niacinamide
+                    </td>
+
+                    <td>
+                        <span
+                            class="tag-pill pill-synergy">
+                            Synergy
+                        </span>
+                    </td>
+
+                    <td>
+
+                        Modern formulations can be designed for
+                        concurrent use depending on the formulas involved.
+
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            Peptides
+                        </strong>
+                    </td>
+
+                    <td>
+                        Direct Acids
+                    </td>
+
+                    <td>
+                        <span
+                            class="tag-pill pill-conflict">
+                            Conflict
+                        </span>
+                    </td>
+
+                    <td>
+
+                        Product-specific formulation instructions should
+                        determine whether these are used together.
+
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            Hyaluronic Acid
+                        </strong>
+                    </td>
+
+                    <td>
+                        Squalane / Oils
+                    </td>
+
+                    <td>
+                        <span
+                            class="tag-pill pill-synergy">
+                            Synergy
+                        </span>
+                    </td>
+
+                    <td>
+
+                        Humectant and emollient/occlusive layers can often
+                        complement one another.
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+
+    <!-- =====================================================================
+         FAQ
+         ===================================================================== -->
+
+    <section
+        id="faq"
+        class="faq">
+
+        <div class="container">
+
+            <div class="section-header">
+
+                <h2>
+                    System FAQ
+                </h2>
+
+            </div>
+
+
+            <div class="faq-item">
+
+                <button
+                    class="faq-question"
+                    onclick="toggleFaq(this)">
+
+                    <span>
+                        How do I handle LED Light Therapy modes?
+                    </span>
+
+                    <span class="faq-icon">
+                        +
+                    </span>
+
+                </button>
+
+
+                <div class="faq-answer">
+
+                    <p>
+
+                        LED therapy should be documented directly inside
+                        the relevant protocol step. Use the routine builder
+                        to identify the specific device mode alongside the
+                        rest of the application sequence.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="faq-item">
+
+                <button
+                    class="faq-question"
+                    onclick="toggleFaq(this)">
+
+                    <span>
+                        Why alternate AM routines?
+                    </span>
+
+                    <span class="faq-icon">
+                        +
+                    </span>
+
+                </button>
+
+
+                <div class="faq-answer">
+
+                    <p>
+
+                        Alternating AM cycles allows different objectives
+                        to occupy different mornings without forcing every
+                        product into every daily sequence.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="faq-item">
+
+                <button
+                    class="faq-question"
+                    onclick="toggleFaq(this)">
+
+                    <span>
+                        Is the print format truly 11 × 8.5?
+                    </span>
+
+                    <span class="faq-icon">
+                        +
+                    </span>
+
+                </button>
+
+
+                <div class="faq-answer">
+
+                    <p>
+
+                        Yes. The print system uses a dedicated print-only
+                        composition, explicitly defines US Letter landscape,
+                        removes browser page margins, and builds the sheet
+                        from the current routine data rather than printing
+                        the interactive Studio itself.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================================
+         LANDING FOOTER
+         ===================================================================== -->
+
+    <footer>
+
+        <div class="container">
+
+            <div class="footer-grid">
+
+
+                <div>
+
+                    <div class="footer-brand">
+                        PROTOCOL
+                    </div>
+
+                    <p
+                        style="
+                            color:#888;
+                            max-width:320px;
+                        ">
+
+                        The definitive workspace for architecting
+                        highly visual skincare regimens.
+
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <h4>
+                        SYSTEM
+                    </h4>
+
+                    <ul class="footer-links">
+
+                        <li onclick="launchApp()">
+                            Launch Studio
+                        </li>
+
+                        <li>
+                            Component Library
+                        </li>
+
+                        <li>
+                            Print Formatting
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div>
+
+                    <h4>
+                        EDUCATION
+                    </h4>
+
+                    <ul class="footer-links">
+
+                        <li>
+                            Interaction Matrices
+                        </li>
+
+                        <li>
+                            Skin Cycling
+                        </li>
+
+                        <li>
+                            Barrier Repair
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="footer-bottom">
+
+                <p>
+                    &copy; 2026 Protocol Systems.
+                </p>
+
+                <p>
+                    Designed for precision.
+                </p>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+</div>
+
+
+<!-- =========================================================================
+     STUDIO VIEW
+     ========================================================================= -->
+
+<div
+    id="app-view"
+    class="view-section hidden">
+
+
+    <!-- =====================================================================
+         STUDIO HEADER
+         ===================================================================== -->
+
+    <header class="studio-header">
+
+        <div>
+
+            <p
+                class="text-mono"
+                style="
+                    color:var(--text-muted);
+                    margin-bottom:5px;
+                ">
+
+                Workspace
+
+            </p>
+
+            <h1>
+                Regimen Architect
+            </h1>
+
+        </div>
+
+
+        <div class="studio-controls">
+
+            <button
+                class="btn btn-outline"
+                onclick="exitApp()">
+
+                &larr;
+                Exit
+
+            </button>
+
+
+            <button
+                class="btn btn-outline"
+                onclick="openModal()">
+
+                + Add Protocol
+
+            </button>
+
+
+            <button
+                class="btn btn-outline"
+                onclick="openPrintPreview()">
+
+                Print Preview
+
+            </button>
+
+
+            <button
+                class="btn btn-primary"
+                onclick="window.print()">
+
+                <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2">
+
+                    <path
+                        d="M6 9V2h12v7"/>
+
+                    <path
+                        d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+
+                    <path
+                        d="M6 14h12v8H6z"/>
+
+                </svg>
+
+                Print Manifest
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================================
+         STUDIO WORKSPACE
+         ===================================================================== -->
+
+    <main class="workspace">
+
+
+        <!-- =================================================================
+             LIBRARY
+             ================================================================= -->
+
+        <aside class="library">
+
+            <div class="library-title">
+                Master Protocols
+            </div>
+
+
+            <div class="library-search">
+
+                <input
+                    id="library-search"
+                    type="search"
+                    placeholder="Search protocols..."
+                    autocomplete="off">
+
+            </div>
+
+
+            <div class="library-filter-row">
+
+                <button
+                    class="library-filter active"
+                    data-filter="all"
+                    onclick="setLibraryFilter('all')">
+                    All
+                </button>
+
+                <button
+                    class="library-filter"
+                    data-filter="am"
+                    onclick="setLibraryFilter('am')">
+                    AM
+                </button>
+
+                <button
+                    class="library-filter"
+                    data-filter="pm"
+                    onclick="setLibraryFilter('pm')">
+                    PM
+                </button>
+
+            </div>
+
+
+            <div id="library-container">
+                <!-- Injected by JavaScript -->
+            </div>
+
+
+            <div
+                id="library-empty"
+                class="library-empty"
+                style="display:none;">
+
+                No protocols match the current filter.
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================================
+             SCHEDULE BOARD
+             ================================================================= -->
+
+        <section class="schedule-board">
+
+
+            <!-- =============================================================
+                 AM
+                 ============================================================= -->
+
+            <div>
+
+                <div class="row-label am">
+                    Morning Cycle (AM)
+                </div>
+
+                <div
+                    class="schedule-row"
+                    id="am-row">
+                </div>
+
+            </div>
+
+
+            <!-- =============================================================
+                 PM
+                 ============================================================= -->
+
+            <div>
+
+                <div class="row-label pm">
+                    Evening Cycle (PM)
+                </div>
+
+                <div
+                    class="schedule-row"
+                    id="pm-row">
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+
+
+
+<!-- =========================================================================
+     STUDIO SETUP WIZARD
+     ========================================================================= -->
+
+<div class="wizard-finish-overlay" id="wizard-finish-overlay" aria-hidden="true">
+    <div class="wizard-finish-card">
+        <div class="wizard-finish-orbit">
+            <div class="wizard-finish-spark">✦</div>
+        </div>
+        <h3>Creating your routine</h3>
+        <p>We're turning your products and preferences into a clean weekly rhythm.</p>
+        <p class="wizard-finish-caption" id="wizard-finish-caption">Reading your product shelf…</p>
+    </div>
+</div>
+
+
+<div
+    class="modal-overlay"
+    id="wizard-modal"
+    aria-hidden="true">
+
+    <div class="wizard-shell" role="dialog" aria-modal="true" aria-labelledby="wizard-title">
+
+        <div class="wizard-top">
+
+            <p class="wizard-kicker">Protocol Setup / Guided Build</p>
+
+            <h2 class="wizard-title" id="wizard-title">Build your week before you enter the grid.</h2>
+
+            <p class="wizard-subtitle">
+                Answer a few questions and Protocol will turn your answers into a practical AM structure,
+                a PM treatment rotation, product-type suggestions, and a ready-to-edit 7-day schedule.
+            </p>
+
+            <div class="wizard-progress" id="wizard-progress" aria-hidden="true"></div>
+
+        </div>
+
+        <div id="wizard-content"></div>
+
+        <div class="wizard-footer">
+            <div class="wizard-footer-left" id="wizard-step-indicator">Step 1 of 8</div>
+            <div class="wizard-footer-actions">
+                <button class="btn btn-outline" id="wizard-back" type="button" onclick="wizardBack()">Back</button>
+                <button class="btn btn-primary" id="wizard-next" type="button" onclick="wizardNext()">Continue</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================================
+     ROUTINE MODAL
+     ========================================================================= -->
+
+<div
+    class="modal-overlay"
+    id="modal">
+
+    <div class="modal">
+
+
+        <h2 id="modal-title">
+            Define Protocol
+        </h2>
+
+
+        <input
+            type="hidden"
+            id="edit-id">
+
+
+        <!-- ================================================================
+             NAME
+             ================================================================ -->
+
+        <div class="form-group">
+
+            <label for="edit-name">
+                Nomenclature
+            </label>
+
+            <input
+                type="text"
+                id="edit-name"
+                placeholder="e.g. Cellular Regeneration Cycle">
+
+        </div>
+
+
+        <!-- ================================================================
+             TYPE
+             ================================================================ -->
+
+        <div class="form-group">
+
+            <label for="edit-type">
+                Routine Type
+            </label>
+
+            <select id="edit-type">
+
+                <option value="AM">
+                    Morning / AM
+                </option>
+
+                <option value="PM">
+                    Evening / PM
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- ================================================================
+             TAG
+             ================================================================ -->
+
+        <div class="form-group">
+
+            <label for="edit-color">
+                Classification Tag
+            </label>
+
+            <select id="edit-color">
+
+                <option value="none">
+                    Hydrate
+                </option>
+
+                <option value="red">
+                    Stimulate
+                </option>
+
+                <option value="yellow">
+                    Brighten
+                </option>
+
+                <option value="green">
+                    Detoxify
+                </option>
+
+                <option value="blue">
+                    Regenerate
+                </option>
+
+                <option value="pink">
+                    Exfoliate
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- ================================================================
+             STEPS
+             ================================================================ -->
+
+        <div
+            class="form-group modal-steps-header">
+
+            <label>
+                Sequential Application Steps
+            </label>
+
+            <button
+                type="button"
+                class="btn-text"
+                onclick="addStepRow()">
+
+                + Add Step
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="steps-container"
+            class="steps-container">
+        </div>
+
+
+        <!-- ================================================================
+             ACTIONS
+             ================================================================ -->
+
+        <div class="modal-actions">
+
+            <button
+                class="btn btn-outline"
+                onclick="closeModal()">
+
+                Discard
+
+            </button>
+
+
+            <button
+                class="btn btn-primary"
+                onclick="saveRoutine()">
+
+                Commit Changes
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================================
+     IMPORT MODAL
+     ========================================================================= -->
+
+<div
+    class="modal-overlay"
+    id="import-modal">
+
+    <div class="modal">
+
+        <h2>
+            Import System
+        </h2>
+
+
+        <div class="form-group">
+
+            <label for="import-data">
+                JSON Backup
+            </label>
+
+            <textarea
+                id="import-data"
+                class="import-area"
+                placeholder="Paste your exported JSON here..."></textarea>
+
+            <div class="import-help">
+
+                Importing replaces the current library and week.
+                Export a backup first if you want to preserve your
+                current configuration.
+
+            </div>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                class="btn btn-outline"
+                onclick="closeImportModal()">
+
+                Cancel
+
+            </button>
+
+
+            <button
+                class="btn btn-primary"
+                onclick="importSystem()">
+
+                Import
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================================
+     TOAST
+     ========================================================================= -->
+
+<div
+    id="toast"
+    class="toast">
+</div>
+
+
+<!-- =========================================================================
+     PRINT MANIFEST
+     -------------------------------------------------------------------------
+     This is the only structure that is intended to be printed.
+
+     It is deliberately NOT part of the screen application.
+
+     JavaScript fills it from the live schedule state.
+     ========================================================================= -->
+
+<div
+    id="print-manifest"
+    class="print-manifest">
+
+
+    <!-- =====================================================================
+         PRINT HEADER
+         ===================================================================== -->
+
+    <header class="print-header">
+
+        <div class="print-brand-lockup">
+
+            <div class="print-kicker">
+                PROTOCOL · WEEKLY MANIFEST
+            </div>
+
+            <h1 class="print-title">
+                Skincare Routine
+            </h1>
+
+        </div>
+
+
+        <div class="print-week">
+            Monday — Sunday
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================================
+         PRINT AM SECTION
+         ===================================================================== -->
+
+    <section class="print-section am">
+
+        <div class="print-section-heading">
+
+            <span
+                class="print-accent red">
+            </span>
+
+            <span class="print-section-title">
+                Morning (AM) Routine
+            </span>
+
+            <span class="print-section-meta">
+                Alternating
+            </span>
+
+        </div>
+
+
+        <div
+            id="print-am-grid"
+            class="print-grid">
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================================
+         PRINT PM SECTION
+         ===================================================================== -->
+
+    <section class="print-section pm">
+
+        <div class="print-section-heading">
+
+            <span
+                class="print-accent yellow">
+            </span>
+
+            <span class="print-section-title">
+                Evening (PM) Routine — Actives &amp; Treatments
+            </span>
+
+            <span class="print-section-meta">
+                Weekly Sequence
+            </span>
+
+        </div>
+
+
+        <div
+            id="print-pm-grid"
+            class="print-grid">
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================================
+         PRINT FOOTER
+         ===================================================================== -->
+
+    <footer class="print-footer">
+
+        <strong>
+            Usage Note:
+        </strong>
+
+        &nbsp;
+
+        The Ordinary explicitly advises against using direct acids and
+        Retinoids in the same routine. Glycolic Toner is scheduled on
+        non-Retinoid nights. Apply SPF daily.
+
+    </footer>
+
+
+</div>
+
+
+<!-- =========================================================================
+     JAVASCRIPT
+     ========================================================================= -->
+
+<script>
+
+/* ==========================================================================
+   26. APP DATA
+   ========================================================================== */
+
+const STORAGE_KEY =
+    "protocol-clinical-skincare-v6";
+
+
+const days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+];
+
+
+const tagLabels = {
+
+    none:
+        "Hydrate",
+
+    red:
+        "Stimulate",
+
+    yellow:
+        "Brighten",
+
+    green:
+        "Detoxify",
+
+    blue:
+        "Regenerate",
+
+    pink:
+        "Exfoliate"
+
+};
+
+
+/* ==========================================================================
+   27. DEFAULT ROUTINES
+   ========================================================================== */
+
+function createDefaultRoutines() {
+
+    return {
+
+        r1: {
+
+            name:
+                "Ocular Stimulus & Hydration",
+
+            type:
+                "AM",
+
+            color:
+                "red",
+
+            steps: [
+
+                {
+                    brand:
+                        "iNNBEAUTY Project",
+
+                    product:
+                        "Keep It Clean"
+                },
+
+                {
+                    brand:
+                        "Shark Beauty",
+
+                    product:
+                        "LED (Mode 4: Revive/Depuff)"
+                },
+
+                {
+                    brand:
+                        "The Ordinary",
+
+                    product:
+                        "Caffeine Sol."
+                },
+
+                {
+                    brand:
+                        "The Ordinary",
+
+                    product:
+                        "Hyaluronic Acid"
+                },
+
+                {
+                    brand:
+                        "Laneige",
+
+                    product:
+                        "Water Bank"
+                }
+
+            ]
+
+        },
+
+
+        r2: {
+
+            name:
+                "Luminosity & Hydration",
+
+            type:
+                "AM",
+
+            color:
+                "yellow",
+
+            steps: [
+
+                {
+                    brand:
+                        "iNNBEAUTY Project",
+
+                    product:
+                        "Keep It Clean"
+                },
+
+                {
+                    brand:
+                        "Shark Beauty",
+
+                    product:
+                        "LED (Mode 3: Brighten)"
+                },
+
+                {
+                    brand:
+                        "The Ordinary",
+
+                    product:
+                        "Caffeine Sol."
+                },
+
+                {
+                    brand:
+                        "The Ordinary",
+
+                    product:
+                        "Hyaluronic Acid"
+                },
+
+                {
+                    brand:
+                        "Laneige",
+
+                    product:
+                        "Water Bank"
+                }
+
+            ]
+
+        },
+
+
+        r3: {
+
+            name:
+                "Clarifying Sebum Matrix",
+
+            type:
+                "PM",
+
+            color:
+                "green",
+
+            steps: [
+
+                {
+                    brand:
+                        "iNNBEAUTY Project",
+
+                    product:
+                        "Keep It Clean"
+                },
+
+                {
+                    brand:
+                        "Innisfree",
+
+                    product:
+                        "Volcanic Clay Mask"
+                },
+
+                {
+                    brand:
+                        "Shark Beauty",
+
+                    product:
+                        "LED (Mode 2: Blemish)"
+                },
+
+                {
+                    brand:
+                        "The Ordinary",
+
+                    product:
+                        "Glycolic Toner"
+                },
+
+                {
+                    brand:
+                        "The Ordinary",
+
+                    product:
+                        "Hyaluronic Acid"
+                },
+
+                {
+                    brand:
+                        "Laneige",
+
+                    product:
+                        "Water Bank"
+                }
+
+            ]
+
+        },
+
+
+        r4: {
+
+            name:
+                "Cellular Regeneration Cycle",
+
+            type:
+                "PM",
+
+            color:
+                "blue",
+
+            steps: [
+
+                {
+                    brand:
+                        "iNNBEAUTY Project",
+
+                    product:
+                        "Keep It Clean"
+                },
+
+                {
+                    brand:
+                        "Shark Beauty",
+
+                    product:
+                        "LED (Mode 1: Aging)"
+                },
+
+                {
+                    brand:
+                        "The Ordinary",
+
+                    product:
+                        "Granactive Retinoid"
+                },
+
+                {
+                    brand:
+                        "The Ordinary",
+
+                    product:
+                        "Hyaluronic Acid"
+                },
+
+                {
+                    brand:
+                        "Laneige",
+
+                    product:
+                        "Water Bank"
+                }
+
+            ]
+
+        },
+
+
+        r5: {
+
+            name:
+                "AHA Resurfacing & Plumping",
+
+            type:
+                "PM",
+
+            color:
+                "pink",
+
+            steps: [
+
+                {
+                    brand:
+                        "iNNBEAUTY Project",
+
+                    product:
+                        "Keep It Clean"
+                },
+
+                {
+                    brand:
+                        "Shark Beauty",
+
+                    product:
+                        "LED (Mode 1: Aging)"
+                },
+
+                {
+                    brand:
+                        "The Ordinary",
+
+                    product:
+                        "Glycolic Toner"
+                },
+
+                {
+                    brand:
+                        "The Ordinary",
+
+                    product:
+                        "Hyaluronic Acid"
+                },
+
+                {
+                    brand:
+                        "Laneige",
+
+                    product:
+                        "Bouncy & Firm Mask"
+                }
+
+            ]
+
+        }
+
+    };
+
+}
+
+
+/* ==========================================================================
+   28. DEFAULT SCHEDULE
+   ========================================================================== */
+
+function createDefaultSchedule() {
+
+    return {
+
+        am: {
+
+            Monday:
+                "r1",
+
+            Tuesday:
+                "r2",
+
+            Wednesday:
+                "r1",
+
+            Thursday:
+                "r2",
+
+            Friday:
+                "r1",
+
+            Saturday:
+                "r2",
+
+            Sunday:
+                "r1"
+
+        },
+
+        pm: {
+
+            Monday:
+                "r3",
+
+            Tuesday:
+                "r4",
+
+            Wednesday:
+                "r5",
+
+            Thursday:
+                "r3",
+
+            Friday:
+                "r4",
+
+            Saturday:
+                "r5",
+
+            Sunday:
+                "r5"
+
+        }
+
+    };
+
+}
+
+
+/* ==========================================================================
+   29. STATE
+   ========================================================================== */
+
+let routines = {};
+
+let schedule =
+    createDefaultSchedule();
+
+let draggedId = null;
+
+let draggedStepRow = null;
+
+let libraryFilter = "all";
+
+let librarySearch = "";
+
+
+/* ==========================================================================
+   30. UTILITIES
+   ========================================================================== */
+
+function generateRoutineId() {
+
+    return (
+        "r" +
+        Date.now().toString(36) +
+        Math.random()
+            .toString(36)
+            .slice(2,7)
+    );
+
+}
+
+
+function cloneObject(value) {
+
+    return JSON.parse(
+        JSON.stringify(value)
+    );
+
+}
+
+
+function escapeHtml(value) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+function escapeAttribute(value) {
+
+    return escapeHtml(
+        value
+    );
+
+}
+
+
+/* ==========================================================================
+   31. LOCAL STORAGE
+   ========================================================================== */
+
+function saveState() {
+
+    const payload = {
+
+        routines:
+            routines,
+
+        schedule:
+            schedule
+
+    };
+
+
+    try {
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(
+                payload
+            )
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Unable to save local state.",
+            error
+        );
+
+    }
+
+}
+
+
+function loadState() {
+
+    try {
+
+        const raw =
+            localStorage.getItem(
+                STORAGE_KEY
+            );
+
+
+        if (!raw) {
+
+            routines =
+                createDefaultRoutines();
+
+            schedule =
+                createDefaultSchedule();
+
+            saveState();
+
+            return;
+
+        }
+
+
+        const parsed =
+            JSON.parse(
+                raw
+            );
+
+
+        if (
+            parsed &&
+            parsed.routines &&
+            parsed.schedule
+        ) {
+
+            routines =
+                parsed.routines;
+
+            schedule =
+                parsed.schedule;
+
+        } else {
+
+            routines =
+                createDefaultRoutines();
+
+            schedule =
+                createDefaultSchedule();
+
+            saveState();
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Saved state could not be read. Loading defaults.",
+            error
+        );
+
+        routines =
+            createDefaultRoutines();
+
+        schedule =
+            createDefaultSchedule();
+
+        saveState();
+
+    }
+
+}
+
+
+/* ==========================================================================
+   32. ROUTINE COLORS
+   ========================================================================== */
+
+function colorToken(
+    color
+) {
+
+    const colors = {
+
+        red: {
+            background:
+                "#FEE2E2",
+
+            text:
+                "#991B1B"
+        },
+
+        yellow: {
+            background:
+                "#FEF3C7",
+
+            text:
+                "#92400E"
+        },
+
+        green: {
+            background:
+                "#DCFCE7",
+
+            text:
+                "#166534"
+        },
+
+        blue: {
+            background:
+                "#DBEAFE",
+
+            text:
+                "#1E40AF"
+        },
+
+        pink: {
+            background:
+                "#FCE7F3",
+
+            text:
+                "#9D174D"
+        },
+
+        none: {
+            background:
+                "#F4F4F5",
+
+            text:
+                "#3F3F46"
+        }
+
+    };
+
+
+    return (
+        colors[color] ||
+        colors.none
+    );
+
+}
+
+
+
+/* ==========================================================================\n   33. STUDIO SETUP WIZARD\n   ========================================================================== */
+
+const WIZARD_STORAGE_KEY =
+    "protocol-studio-wizard-v2";
+
+let wizardStep = 1;
+
+let wizardState = {
+    skinType: "combination",
+    sensitivity: "medium",
+    amGoals: ["hydration"],
+    pmGoals: ["texture"],
+    amStructure: ["cleanse", "serum", "moisturizer", "spf"],
+    treatmentTypes: ["retinoid", "exfoliant"],
+    amAlternation: "alternating",
+    products: [],
+    productCollectorIndex: 0,
+    preserveExisting: true
+};
+
+const wizardDays = [
+    "Monday", "Tuesday", "Wednesday", "Thursday",
+    "Friday", "Saturday", "Sunday"
+];
+
+function openWizard() {
+
+    try {
+        const raw = localStorage.getItem(WIZARD_STORAGE_KEY);
+        if (raw) {
+            const saved = JSON.parse(raw);
+            wizardState = {
+                ...wizardState,
+                ...saved
+            };
+        }
+    } catch (error) {
+        console.warn("Wizard state could not be read.", error);
+    }
+
+    wizardStep = 1;
+    renderWizard();
+
+    const overlay = document.getElementById("wizard-modal");
+    overlay.style.display = "flex";
+    overlay.setAttribute("aria-hidden", "false");
+
+    setTimeout(() => overlay.classList.add("active"), 10);
+}
+
+function closeWizard() {
+
+    const overlay = document.getElementById("wizard-modal");
+    overlay.classList.remove("active");
+    overlay.setAttribute("aria-hidden", "true");
+
+    setTimeout(() => {
+        overlay.style.display = "none";
+    }, 250);
+}
+
+function saveWizardState() {
+
+    try {
+        localStorage.setItem(
+            WIZARD_STORAGE_KEY,
+            JSON.stringify(wizardState)
+        );
+    } catch (error) {
+        console.warn("Unable to save wizard state.", error);
+    }
+}
+
+function wizardEscape(text) {
+    return escapeHtml(text);
+}
+
+function wizardRadio(name, value, title, copy, tag = "") {
+
+    const selected = wizardState[name] === value;
+
+    return `
+        <label class="wizard-choice ${selected ? "selected" : ""}">
+            <input
+                type="radio"
+                name="${wizardEscape(name)}"
+                value="${wizardEscape(value)}"
+                ${selected ? "checked" : ""}
+                onchange="wizardSetRadio('${wizardEscape(name)}', '${wizardEscape(value)}')">
+            ${tag ? `<span class="wizard-choice-tag">${wizardEscape(tag)}</span>` : ""}
+            <span class="wizard-choice-title">${wizardEscape(title)}</span>
+            <span class="wizard-choice-copy">${wizardEscape(copy)}</span>
+        </label>
+    `;
+}
+
+function wizardCheck(name, value, title, copy, tag = "") {
+
+    const selected =
+        Array.isArray(wizardState[name]) &&
+        wizardState[name].includes(value);
+
+    return `
+        <label class="wizard-choice ${selected ? "selected" : ""}">
+            <input
+                type="checkbox"
+                ${selected ? "checked" : ""}
+                onchange="wizardToggle('${wizardEscape(name)}', '${wizardEscape(value)}')">
+            ${tag ? `<span class="wizard-choice-tag">${wizardEscape(tag)}</span>` : ""}
+            <span class="wizard-choice-title">${wizardEscape(title)}</span>
+            <span class="wizard-choice-copy">${wizardEscape(copy)}</span>
+        </label>
+    `;
+}
+
+function wizardSetRadio(name, value) {
+    wizardState[name] = value;
+    saveWizardState();
+    renderWizard();
+}
+
+function wizardToggle(name, value) {
+
+    if (!Array.isArray(wizardState[name])) {
+        wizardState[name] = [];
+    }
+
+    if (wizardState[name].includes(value)) {
+        wizardState[name] = wizardState[name].filter(item => item !== value);
+    } else {
+        wizardState[name].push(value);
+    }
+
+    saveWizardState();
+    renderWizard();
+}
+
+const WIZARD_PRODUCT_QUESTIONS = [
+    { key: "cleanser", label: "Cleanser", emoji: "🫧", question: "What cleanser do you use?", copy: "Your everyday face wash, cleansing balm, oil cleanser, or whatever you use to cleanse." },
+    { key: "device", label: "Device / LED", emoji: "✨", question: "Do you use a skincare device?", copy: "LED mask, light panel, microcurrent, or another at-home treatment device. Skip this if you don't use one." },
+    { key: "serum", label: "Targeted serum", emoji: "💧", question: "What serum do you use for your main skin goals?", copy: "Vitamin C, niacinamide, antioxidants, brightening serum, or another targeted serum." },
+    { key: "hydrate", label: "Hydrating serum", emoji: "💦", question: "What do you use for extra hydration?", copy: "Hyaluronic acid, essence, glycerin serum, milky toner, or another hydrating layer." },
+    { key: "moisturizer", label: "Moisturizer", emoji: "🧴", question: "What moisturizer do you use?", copy: "Your everyday cream, lotion, gel-cream, or barrier moisturizer." },
+    { key: "spf", label: "SPF", emoji: "☀️", question: "What sunscreen do you use?", copy: "Your daily facial SPF. Protocol will always keep SPF at the end of AM skincare." },
+    { key: "retinoid", label: "Retinoid / renewal", emoji: "🌙", question: "Do you use a retinoid or renewal treatment?", copy: "Retinol, retinal, adapalene, tretinoin, or another renewal treatment. Skip if you don't use one." },
+    { key: "exfoliant", label: "Exfoliant / acid", emoji: "🫧", question: "Do you use an exfoliating treatment?", copy: "AHA, BHA, PHA, glycolic, lactic, salicylic, or another exfoliating product. Skip if you don't use one." },
+    { key: "clarify", label: "Clarifying treatment", emoji: "🎯", question: "Do you use a blemish or clarifying treatment?", copy: "A targeted acne, pore, blemish, or clarifying treatment. Skip if you don't use one." }
+];
+
+function addWizardProduct(category, brand, name) {
+    if (!Array.isArray(wizardState.products)) {
+        wizardState.products = [];
+    }
+    const existingIndex = wizardState.products.findIndex(product => product.category === category);
+    const product = { brand: (brand || "").trim(), name: (name || "").trim(), category, slot: "BOTH" };
+    if (existingIndex >= 0) {
+        wizardState.products[existingIndex] = product;
+    } else if (product.brand || product.name) {
+        wizardState.products.push(product);
+    }
+    saveWizardState();
+}
+
+function getWizardProduct(category) {
+    const products = Array.isArray(wizardState.products) ? wizardState.products : [];
+    return products.find(product => product.category === category) || { brand: "", name: "", category };
+}
+
+function wizardProductQuestion() {
+    const index = Math.min(wizardState.productCollectorIndex || 0, WIZARD_PRODUCT_QUESTIONS.length - 1);
+    return WIZARD_PRODUCT_QUESTIONS[index];
+}
+
+function wizardSaveCurrentProduct() {
+    const question = wizardProductQuestion();
+    const brand = document.getElementById("wizard-product-brand")?.value || "";
+    const name = document.getElementById("wizard-product-name")?.value || "";
+    addWizardProduct(question.key, brand, name);
+}
+
+function wizardSkipCurrentProduct() {
+    const question = wizardProductQuestion();
+    const existing = (wizardState.products || []).find(product => product.category === question.key);
+    if (existing) {
+        existing.brand = "";
+        existing.name = "";
+    }
+    wizardAdvanceProductCollector();
+}
+
+function wizardAdvanceProductCollector() {
+    wizardSaveCurrentProduct();
+    if ((wizardState.productCollectorIndex || 0) < WIZARD_PRODUCT_QUESTIONS.length - 1) {
+        wizardState.productCollectorIndex = (wizardState.productCollectorIndex || 0) + 1;
+        saveWizardState();
+        renderWizard();
+    } else {
+        wizardState.productCollectorIndex = 0;
+        saveWizardState();
+        wizardStep = 7;
+        renderWizard();
+    }
+}
+
+function wizardRemoveProductCategory(category) {
+    if (!Array.isArray(wizardState.products)) return;
+    wizardState.products = wizardState.products.filter(product => product.category !== category);
+    saveWizardState();
+}
+
+function updateWizardProduct(index, field, value) {
+    if (!Array.isArray(wizardState.products)) return;
+    if (!wizardState.products[index]) {
+        wizardState.products[index] = { brand: "", name: "", category: "other", slot: "BOTH" };
+    }
+    wizardState.products[index][field] = value;
+    saveWizardState();
+}
+
+function renderWizardProductCollector() {
+    const question = wizardProductQuestion();
+    const product = getWizardProduct(question.key);
+    const index = wizardState.productCollectorIndex || 0;
+    const progress = ((index + 1) / WIZARD_PRODUCT_QUESTIONS.length) * 100;
+    const dots = WIZARD_PRODUCT_QUESTIONS.map((item, i) => {
+        const state = i < index ? "done" : i === index ? "active" : "";
+        return `<span class="wizard-product-dot ${state}"></span>`;
+    }).join("");
+
+    return `
+        <div class="wizard-product-collector">
+            <div class="wizard-product-progress">
+                <div class="wizard-product-progress-track">
+                    <div class="wizard-product-progress-fill" style="width:${progress}%"></div>
+                </div>
+                <div class="wizard-product-count">Product ${index + 1} of ${WIZARD_PRODUCT_QUESTIONS.length} · ${wizardEscape(question.label)}</div>
+            </div>
+
+            <div class="wizard-product-emoji" aria-hidden="true">${question.emoji}</div>
+            <h3 class="wizard-product-question">${wizardEscape(question.question)}</h3>
+            <p class="wizard-product-subtitle">${wizardEscape(question.copy)}</p>
+
+            <div class="wizard-product-fields">
+                <div class="wizard-product-field">
+                    <label for="wizard-product-brand">Brand name</label>
+                    <input id="wizard-product-brand" type="text" autocomplete="organization" placeholder="e.g. The Ordinary" value="${wizardEscape(product.brand || "")}">
+                </div>
+                <div class="wizard-product-field">
+                    <label for="wizard-product-name">Product name</label>
+                    <input id="wizard-product-name" type="text" autocomplete="off" placeholder="e.g. Hyaluronic Acid 2% + B5" value="${wizardEscape(product.name || "")}">
+                </div>
+            </div>
+
+            <button class="wizard-product-skip" type="button" onclick="wizardSkipCurrentProduct()">I don't use one / skip</button>
+            <div class="wizard-product-dots" aria-hidden="true">${dots}</div>
+        </div>
+    `;
+}
+
+function renderWizardProducts() {
+    return renderWizardProductCollector();
+}
+
+function ensureWizardDefaults() {
+
+    if (!Number.isInteger(wizardState.productCollectorIndex) || wizardState.productCollectorIndex < 0 || wizardState.productCollectorIndex >= WIZARD_PRODUCT_QUESTIONS.length) {
+        wizardState.productCollectorIndex = 0;
+    }
+
+    if (!Array.isArray(wizardState.products)) {
+        wizardState.products = [];
+    }
+
+    if (!wizardState.amGoals.length) {
+        wizardState.amGoals = ["hydration"];
+    }
+
+    if (!wizardState.pmGoals.length) {
+        wizardState.pmGoals = ["texture"];
+    }
+
+    if (!wizardState.amStructure.length) {
+        wizardState.amStructure = ["cleanse", "serum", "moisturizer", "spf"];
+    }
+
+    if (!wizardState.treatmentTypes.length) {
+        wizardState.treatmentTypes = ["retinoid"];
+    }
+}
+
+function renderWizard() {
+    ensureWizardDefaults();
+    const progress = document.getElementById("wizard-progress");
+    const content = document.getElementById("wizard-content");
+    const back = document.getElementById("wizard-back");
+    const next = document.getElementById("wizard-next");
+    const indicator = document.getElementById("wizard-step-indicator");
+
+    if (!progress || !content || !back || !next || !indicator) {
+        return;
+    }
+
+    progress.innerHTML = Array.from({ length: 8 }, (_, i) => {
+        const n = i + 1;
+        const state = n < wizardStep ? "done" : n === wizardStep ? "active" : "";
+        return `<span class="${state}"></span>`;
+    }).join("");
+
+    indicator.textContent = `Step ${wizardStep} of 8`;
+    back.style.visibility = wizardStep === 1 ? "hidden" : "visible";
+    next.textContent = wizardStep === 8 ? "Build My Studio" : "Continue";
+
+    if (wizardStep === 1) {
+        content.innerHTML = `
+            <div class="wizard-step-label">01 / Skin profile</div>
+            <h3 class="wizard-question">What kind of skin are we building around?</h3>
+            <p class="wizard-help">This sets the baseline for cleanser texture, hydration level, treatment frequency, and how aggressive the weekly rotation should be.</p>
+            <div class="wizard-grid">
+                ${wizardRadio("skinType", "dry", "Dry", "Prioritize comfort, barrier support, and richer hydration.", "Comfort")}
+                ${wizardRadio("skinType", "oily", "Oily", "Favor lighter layers, gel textures, and oil-control support.", "Balance")}
+                ${wizardRadio("skinType", "combination", "Combination", "Use a balanced base with targeted treatment where needed.", "Flexible")}
+                ${wizardRadio("skinType", "normal", "Normal", "Keep the routine straightforward and let treatment frequency do the work.", "Baseline")}
+            </div>
+            <div class="wizard-inline-note">This is a routine-design profile, not a diagnosis. Your products should still follow their own directions and patch-testing guidance.</div>
+        `;
+    }
+
+    if (wizardStep === 2) {
+        content.innerHTML = `
+            <div class="wizard-step-label">02 / Tolerance</div>
+            <h3 class="wizard-question">How much active-ingredient tolerance should the plan assume?</h3>
+            <p class="wizard-help">This controls how many treatment nights get built into the week and how much recovery protects the rest of the schedule.</p>
+            <div class="wizard-grid three">
+                ${wizardRadio("sensitivity", "low", "Low sensitivity", "Comfortable with a more active weekly rotation.", "More active")}
+                ${wizardRadio("sensitivity", "medium", "Medium sensitivity", "A balanced active / recovery split.", "Balanced")}
+                ${wizardRadio("sensitivity", "high", "High sensitivity", "Fewer treatment nights and more barrier-focused recovery.", "Gentler")}
+            </div>
+            <div class="wizard-inline-note">The planner deliberately keeps strong treatment categories separated rather than stacking every active into one routine.</div>
+        `;
+    }
+
+    if (wizardStep === 3) {
+        content.innerHTML = `
+            <div class="wizard-step-label">03 / Morning intent</div>
+            <h3 class="wizard-question">What should the AM routine accomplish?</h3>
+            <p class="wizard-help">Pick as many as make sense. Protocol will turn them into a simple layer order and can alternate those focuses across the week.</p>
+            <div class="wizard-grid">
+                ${wizardCheck("amGoals", "hydration", "Hydration", "Water-binding serum, moisturizer, and a comfortable finish.", "Core")}
+                ${wizardCheck("amGoals", "brightening", "Brightening", "Antioxidant / tone-support serum before moisturizer and SPF.", "AM focus")}
+                ${wizardCheck("amGoals", "oilControl", "Oil control", "Light hydration with optional niacinamide or balancing serum.", "Balance")}
+                ${wizardCheck("amGoals", "barrier", "Barrier support", "Gentle cleansing, soothing layers, moisturizer, and strict SPF.", "Recovery")}
+            </div>
+        `;
+    }
+
+    if (wizardStep === 4) {
+        content.innerHTML = `
+            <div class="wizard-step-label">04 / Treatment nights</div>
+            <h3 class="wizard-question">Which treatment categories should the PM rotation use?</h3>
+            <p class="wizard-help">These are categories, not brand recommendations. The builder spaces them across the week based on your tolerance level.</p>
+            <div class="wizard-grid">
+                ${wizardCheck("pmGoals", "acne", "Clarifying / acne support", "Think salicylic acid, benzoyl peroxide, or a targeted blemish product.", "Target")}
+                ${wizardCheck("pmGoals", "texture", "Texture / resurfacing", "Think AHA or other exfoliating products used on dedicated nights.", "Exfoliate")}
+                ${wizardCheck("pmGoals", "aging", "Retinoid / renewal", "Think retinoid-family treatment on separated treatment nights.", "Renew")}
+                ${wizardCheck("pmGoals", "barrier", "Barrier recovery", "Think ceramide-rich moisturizer, soothing serum, and occlusive support as needed.", "Recover")}
+            </div>
+        `;
+    }
+
+    if (wizardStep === 5) {
+        content.innerHTML = `
+            <div class="wizard-step-label">05 / Routine architecture</div>
+            <h3 class="wizard-question">What should the AM layer order look like?</h3>
+            <p class="wizard-help">Choose the generic building blocks you want in the plan. Protocol keeps the order simple: thin / water-based steps first, moisturizer next, SPF last in the morning.</p>
+            <div class="wizard-grid three">
+                ${wizardCheck("amStructure", "cleanse", "Cleanse", "Gentle gel, cream, or low-foam cleanser depending on your skin type.", "1")}
+                ${wizardCheck("amStructure", "device", "Device / treatment", "Optional LED or other at-home device used exactly as directed.", "2")}
+                ${wizardCheck("amStructure", "serum", "Targeted serum", "Vitamin C, niacinamide, or another goal-specific water-based treatment.", "3")}
+                ${wizardCheck("amStructure", "hydrate", "Hydrating serum", "Hyaluronic acid, glycerin, essence, or another humectant layer.", "4")}
+                ${wizardCheck("amStructure", "moisturizer", "Moisturizer", "Gel, lotion, or cream chosen for your skin type.", "5")}
+                ${wizardCheck("amStructure", "spf", "SPF", "Broad-spectrum sunscreen; always the final AM skincare step.", "6")}
+            </div>
+        `;
+    }
+
+    if (wizardStep === 6) {
+        content.innerHTML = `
+            <div class="wizard-step-label">06 / Your products</div>
+            ${renderWizardProducts()}
+        `;
+    }
+
+    if (wizardStep === 7) {
+        const rec = skinTypeRecommendations();
+        const alternation = amAlternationRecommendation();
+        content.innerHTML = `
+            <div class="wizard-step-label">07 / AM alternation</div>
+            <h3 class="wizard-question">How should the morning routine alternate?</h3>
+            <p class="wizard-help">AM can alternate too. Protocol keeps the base order consistent while rotating the focus, device days, or recovery emphasis.</p>
+            <div class="wizard-grid">
+                ${wizardRadio("amAlternation", "same", "Same AM every day", "One stable morning routine repeated all week.", "Simple")}
+                ${wizardRadio("amAlternation", "alternating", "Alternate AM focuses", alternation.copy, "Recommended")}
+                ${wizardRadio("amAlternation", "device", "Device / no-device days", "Alternate an optional device day with a simpler serum + hydration morning.", "Device cycle")}
+            </div>
+            <div class="wizard-recommendation-grid">
+                <div class="wizard-recommendation">
+                    <h4>${wizardEscape(formatSkinType(wizardState.skinType))} recommendation</h4>
+                    <p>${wizardEscape(alternation.skinCopy)}</p>
+                </div>
+                <div class="wizard-recommendation">
+                    <h4>Product categories</h4>
+                    <p>${wizardEscape(rec.serum)} · ${wizardEscape(rec.moisturizer)} · SPF every AM. Stronger actives stay in the dedicated PM rotation unless a product's own instructions say otherwise.</p>
+                </div>
+            </div>
+        `;
+    }
+
+    if (wizardStep === 8) {
+        const plan = buildWizardPlan();
+        content.innerHTML = renderWizardSummary(plan);
+    }
+}
+
+
+function wizardBack() {
+    if (wizardStep > 1) {
+        wizardStep -= 1;
+        saveWizardState();
+        renderWizard();
+    }
+}
+
+function wizardNext() {
+
+    ensureWizardDefaults();
+
+    if (wizardStep === 6) {
+        wizardAdvanceProductCollector();
+        return;
+    }
+
+    if (wizardStep < 8) {
+        wizardStep += 1;
+        saveWizardState();
+        renderWizard();
+        return;
+    }
+
+    showRoutineBuildAnimation();
+}
+
+function showRoutineBuildAnimation() {
+    const overlay = document.getElementById("wizard-finish-overlay");
+    const caption = document.getElementById("wizard-finish-caption");
+    if (!overlay) {
+        applyWizardPlan();
+        return;
+    }
+
+    overlay.classList.add("active");
+    overlay.setAttribute("aria-hidden", "false");
+
+    const captions = [
+        "Reading your product shelf…",
+        "Pairing your AM layers…",
+        "Separating treatment nights…",
+        "Building your weekly alternation…",
+        "Finishing your protocol…"
+    ];
+    let index = 0;
+    caption.textContent = captions[index];
+
+    const timer = setInterval(() => {
+        index += 1;
+        if (index < captions.length) {
+            caption.textContent = captions[index];
+        }
+    }, 420);
+
+    setTimeout(() => {
+        clearInterval(timer);
+        applyWizardPlan();
+    }, 2200);
+}
+
+function formatSkinType(value) {
+    const labels = { dry: "Dry skin", oily: "Oily skin", combination: "Combination skin", normal: "Normal skin" };
+    return labels[value] || "Combination skin";
+}
+
+function amAlternationRecommendation() {
+    const map = {
+        dry: { copy: "Alternate a goal-focused serum morning with a hydration + barrier morning so the week stays comfortable.", skinCopy: "Best default: target / hydrate / target / hydrate, with Sunday as the simplest recovery-style AM." },
+        oily: { copy: "Alternate balancing / brightening serum mornings with lighter hydration mornings rather than adding more layers every day.", skinCopy: "Best default: balance / hydrate / balance / hydrate, while keeping moisturizer and SPF consistent." },
+        combination: { copy: "Alternate a targeted serum morning with a lighter hydration morning, keeping SPF and the basic base steps constant.", skinCopy: "Best default: target / support / target / support, with room to use different products on oilier or drier areas." },
+        normal: { copy: "Alternate your primary goal with a simple hydration / protection morning so the routine stays efficient.", skinCopy: "Best default: goal / simple / goal / simple, with SPF every morning." }
+    };
+    return map[wizardState.skinType] || map.combination;
+}
+
+function getWizardProducts(category, slot) {
+    const products = Array.isArray(wizardState.products) ? wizardState.products : [];
+    return products.filter(product => {
+        const named = (product.brand || "").trim() || (product.name || "").trim();
+        return product.category === category && named;
+    });
+}
+
+function pickWizardProduct(category, slot) {
+    return getWizardProducts(category, slot)[0] || null;
+}
+
+function wizardProductStep(category, slot, genericBrand, genericProduct) {
+    const match = pickWizardProduct(category, slot);
+    return match
+        ? { brand: match.brand || "", product: match.name || genericProduct }
+        : { brand: genericBrand, product: genericProduct };
+}
+
+function amFocusName(focus) {
+    return { focus: "FOCUS + PROTECT", hydrate: "HYDRATE + PROTECT", device: "DEVICE + PROTECT", simple: "SIMPLE + PROTECT" }[focus] || "HYDRATE + PROTECT";
+}
+
+function amFocusCopy(focus) {
+    return { focus: "Goal-focused serum morning", hydrate: "Hydration + barrier emphasis", device: "Optional device + simple serum", simple: "Minimal base + SPF" }[focus] || "Hydration + SPF";
+}
+
+function buildAMRotation() {
+    const mode = wizardState.amAlternation || "alternating";
+    const goals = wizardState.amGoals || [];
+    const focusAvailable = goals.includes("brightening") || goals.includes("oilControl") || goals.includes("barrier");
+    let primaryFocus = focusAvailable ? "focus" : "hydrate";
+    const supportFocus = "hydrate";
+
+    if (goals.includes("barrier") && !goals.includes("brightening") && !goals.includes("oilControl")) {
+        primaryFocus = "hydrate";
+    }
+
+    if (mode === "device") {
+        return wizardDays.map((day, index) => ({ day, kind: ["device", "hydrate", "device", "hydrate", "device", "hydrate", "simple"][index] }));
+    }
+
+    if (mode === "same") {
+        return wizardDays.map(day => ({ day, kind: primaryFocus }));
+    }
+
+    return wizardDays.map((day, index) => ({ day, kind: [primaryFocus, supportFocus, primaryFocus, supportFocus, primaryFocus, supportFocus, "simple"][index] }));
+}
+
+function skinTypeRecommendations() {
+
+    const map = {
+        dry: {
+            cleanser: "cream or low-foam cleanser",
+            serum: "glycerin / hyaluronic-acid hydrating serum",
+            moisturizer: "ceramide-rich cream",
+            exfoliation: "gentle AHA, used sparingly"
+        },
+        oily: {
+            cleanser: "gentle gel cleanser",
+            serum: "niacinamide or lightweight balancing serum",
+            moisturizer: "light gel-cream",
+            exfoliation: "salicylic acid or a controlled AHA/BHA schedule"
+        },
+        combination: {
+            cleanser: "gentle gel or balanced low-foam cleanser",
+            serum: "lightweight hydrating or niacinamide serum",
+            moisturizer: "lotion or gel-cream",
+            exfoliation: "targeted AHA/BHA nights rather than daily exfoliation"
+        },
+        normal: {
+            cleanser: "gentle cleanser",
+            serum: "hydrating or antioxidant serum",
+            moisturizer: "light-to-medium cream or lotion",
+            exfoliation: "one or two planned exfoliation nights"
+        }
+    };
+
+    return map[wizardState.skinType] || map.combination;
+}
+
+function buildWizardPlan() {
+    const rec = skinTypeRecommendations();
+    const sensitivity = wizardState.sensitivity;
+    const treatments = wizardState.pmGoals;
+
+    let activeSlots = sensitivity === "high" ? 2 : sensitivity === "medium" ? 3 : 4;
+    const chosenTreatment = [];
+    if (treatments.includes("aging")) chosenTreatment.push("renewal");
+    if (treatments.includes("texture")) chosenTreatment.push("exfoliate");
+    if (treatments.includes("acne")) chosenTreatment.push("clarify");
+    if (!chosenTreatment.length) chosenTreatment.push("recovery");
+
+    const patterns = {
+        low: ["renewal", "recovery", "exfoliate", "recovery", "renewal", "clarify", "recovery"],
+        medium: ["renewal", "recovery", "exfoliate", "recovery", "clarify", "recovery", "renewal"],
+        high: ["recovery", "renewal", "recovery", "exfoliate", "recovery", "recovery", "recovery"]
+    };
+    let treatmentIndex = 0;
+    const rotation = patterns[sensitivity].map((slot, index) => {
+        let planned = slot;
+        if (!chosenTreatment.includes(slot) && ["renewal", "exfoliate", "clarify"].includes(slot)) {
+            planned = chosenTreatment[treatmentIndex % chosenTreatment.length];
+            treatmentIndex += 1;
+        }
+        return { day: wizardDays[index], kind: planned };
+    });
+
+    let count = 0;
+    rotation.forEach(night => {
+        if (night.kind !== "recovery") {
+            if (count >= activeSlots) night.kind = "recovery";
+            else count += 1;
+        }
+    });
+
+    return {
+        rec,
+        activeSlots,
+        rotation,
+        amRotation: buildAMRotation(),
+        amGoals: wizardState.amGoals.slice(),
+        pmGoals: wizardState.pmGoals.slice(),
+        amStructure: wizardState.amStructure.slice(),
+        skinType: wizardState.skinType,
+        sensitivity,
+        amAlternation: wizardState.amAlternation || "alternating"
+    };
+}
+
+function rotationName(kind) {
+    return {
+        renewal: "RETINOID / RENEWAL",
+        exfoliate: "EXFOLIATE",
+        clarify: "CLARIFY",
+        recovery: "RECOVERY"
+    }[kind] || "RECOVERY";
+}
+
+function rotationCopy(kind) {
+    return {
+        renewal: "Retinoid + hydration + moisturizer",
+        exfoliate: "Acid treatment + hydration + moisturizer",
+        clarify: "Blemish-targeted treatment + recovery",
+        recovery: "Hydrating serum + barrier moisturizer"
+    }[kind] || "Hydration + barrier support";
+}
+
+function renderWizardSummary(plan) {
+    const amGoalCopy = plan.amGoals.map(goal => ({ hydration: "Hydration", brightening: "Brightening", oilControl: "Oil control", barrier: "Barrier support" }[goal] || goal));
+    const pmGoalCopy = plan.pmGoals.map(goal => ({ acne: "Clarifying / acne support", texture: "Texture / resurfacing", aging: "Retinoid / renewal", barrier: "Barrier recovery" }[goal] || goal));
+    const productCount = (wizardState.products || []).filter(product => (product.brand || "").trim() || (product.name || "").trim()).length;
+
+    return `
+        <div class="wizard-step-label">08 / Recommended architecture</div>
+        <h3 class="wizard-question">Here is the week Protocol would build.</h3>
+        <p class="wizard-help">Your actual products are used anywhere their category matches. You only tell Protocol what you own; the builder decides where those products fit in the week.</p>
+
+        <div class="wizard-summary-grid">
+            <div class="wizard-summary-card">
+                <h4>AM foundation + alternation</h4>
+                <ul>
+                    <li>Skin profile: ${wizardEscape(formatSkinType(plan.skinType))}</li>
+                    <li>Focus: ${wizardEscape(amGoalCopy.join(", "))}</li>
+                    <li>AM strategy: ${wizardEscape(plan.amAlternation === "same" ? "Same routine daily" : plan.amAlternation === "device" ? "Device / no-device cycle" : "Alternating AM focuses")}</li>
+                    <li>Products added: ${wizardEscape(String(productCount))}</li>
+                    <li>SPF remains the final AM skincare step.</li>
+                </ul>
+            </div>
+            <div class="wizard-summary-card">
+                <h4>PM alternation strategy</h4>
+                <ul>
+                    <li>Treatment interests: ${wizardEscape(pmGoalCopy.join(", "))}</li>
+                    <li>Tolerance: ${wizardEscape(plan.sensitivity)}</li>
+                    <li>Planned treatment nights: ${wizardEscape(String(plan.activeSlots))}</li>
+                    <li>Recovery nights fill the gaps so active categories stay separated.</li>
+                    <li>Direct acids and retinoids are never stacked into the same generated night.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="wizard-am-rotation">
+            ${plan.amRotation.map(morning => `
+                <div class="wizard-am-card">
+                    <div class="wizard-am-card-day">${wizardEscape(morning.day)}</div>
+                    <div class="wizard-am-card-name">${wizardEscape(amFocusName(morning.kind))}</div>
+                    <div class="wizard-am-card-copy">${wizardEscape(amFocusCopy(morning.kind))}</div>
+                </div>
+            `).join("")}
+        </div>
+
+        <div class="wizard-rotation">
+            ${plan.rotation.map(night => `
+                <div class="wizard-night">
+                    <div class="wizard-night-day">${wizardEscape(night.day)}</div>
+                    <div class="wizard-night-name">${wizardEscape(rotationName(night.kind))}</div>
+                    <div class="wizard-night-copy">${wizardEscape(rotationCopy(night.kind))}</div>
+                </div>
+            `).join("")}
+        </div>
+
+        <label class="wizard-check-row">
+            <input type="checkbox" ${wizardState.preserveExisting ? "checked" : ""} onchange="wizardState.preserveExisting = this.checked; saveWizardState();">
+            <span>
+                <strong>Keep my existing protocols in the library.</strong>
+                <span>The generated routines will be added alongside them. The 7-day grid will be rebuilt around the plan above.</span>
+            </span>
+        </label>
+    `;
+}
+
+function genericRoutine(name, type, color, steps) {
+    return {
+        name,
+        type,
+        color,
+        steps: steps.map(step => ({
+            brand: step.brand || "",
+            product: step.product || ""
+        }))
+    };
+}
+
+function applyWizardPlan() {
+    const finishOverlay = document.getElementById("wizard-finish-overlay");
+    if (finishOverlay) {
+        finishOverlay.classList.remove("active");
+        finishOverlay.setAttribute("aria-hidden", "true");
+    }
+    const plan = buildWizardPlan();
+    const generated = [];
+    const rec = plan.rec;
+
+    const getAMSteps = (focus) => {
+        let steps = [];
+        if (wizardState.amStructure.includes("cleanse")) steps.push(wizardProductStep("cleanser", "AM", "CLEANSER", rec.cleanser));
+
+        if (focus === "device") {
+            steps.push(wizardProductStep("device", "AM", "DEVICE", "Optional LED / at-home treatment"));
+        }
+
+        if (wizardState.amStructure.includes("serum") && focus !== "simple") {
+            const serumType = wizardState.amGoals.includes("brightening")
+                ? "antioxidant / brightening serum"
+                : wizardState.amGoals.includes("oilControl")
+                    ? "niacinamide / balancing serum"
+                    : "hydrating or goal-specific serum";
+            const serumProduct = pickWizardProduct("serum", "AM");
+            steps.push(serumProduct ? { brand: serumProduct.brand || "", product: serumProduct.name || serumType } : { brand: "SERUM", product: serumType });
+        }
+
+        if (wizardState.amStructure.includes("hydrate") && (focus === "hydrate" || focus === "simple" || !wizardState.amStructure.includes("serum"))) {
+            steps.push(wizardProductStep("hydrate", "AM", "HYDRATOR", "Hyaluronic acid / glycerin / essence"));
+        } else if (wizardState.amStructure.includes("hydrate") && focus === "focus") {
+            const hydrate = pickWizardProduct("hydrate", "AM");
+            if (hydrate) steps.push({ brand: hydrate.brand || "", product: hydrate.name || "Hydrating serum / essence" });
+        }
+
+        if (wizardState.amStructure.includes("moisturizer")) steps.push(wizardProductStep("moisturizer", "AM", "MOISTURIZER", rec.moisturizer));
+        if (wizardState.amStructure.includes("spf")) steps.push(wizardProductStep("spf", "AM", "SPF", "Broad-spectrum sunscreen"));
+
+        return steps;
+    };
+
+    const amNames = {
+        focus: wizardState.amGoals.includes("brightening")
+            ? "Guided AM / Brighten + Protect"
+            : wizardState.amGoals.includes("oilControl")
+                ? "Guided AM / Balance + Protect"
+                : "Guided AM / Focus + Protect",
+        hydrate: wizardState.amGoals.includes("barrier") ? "Guided AM / Barrier + Hydration" : "Guided AM / Hydration + Protect",
+        device: "Guided AM / Device + Protect",
+        simple: "Guided AM / Simple + Protect"
+    };
+
+    const amIds = {};
+    ["focus", "hydrate", "device", "simple"].forEach(kind => {
+        const id = generateRoutineId();
+        routines[id] = genericRoutine(amNames[kind], "AM", kind === "focus" ? "yellow" : kind === "device" ? "blue" : "none", getAMSteps(kind));
+        amIds[kind] = id;
+        generated.push(id);
+    });
+
+    const recoveryId = generateRoutineId();
+    routines[recoveryId] = genericRoutine("Guided PM / Recovery", "PM", "none", [
+        wizardProductStep("cleanser", "PM", "CLEANSE", rec.cleanser),
+        wizardProductStep("hydrate", "PM", "HYDRATION", rec.serum),
+        wizardProductStep("moisturizer", "PM", "MOISTURIZER", rec.moisturizer)
+    ]);
+    generated.push(recoveryId);
+
+    const renewalId = generateRoutineId();
+    routines[renewalId] = genericRoutine("Guided PM / Renewal", "PM", "blue", [
+        wizardProductStep("cleanser", "PM", "CLEANSE", rec.cleanser),
+        wizardProductStep("retinoid", "PM", "RETINOID", "Use product-specific strength and frequency"),
+        wizardProductStep("hydrate", "PM", "HYDRATION", rec.serum),
+        wizardProductStep("moisturizer", "PM", "MOISTURIZER", rec.moisturizer)
+    ]);
+    generated.push(renewalId);
+
+    const exfoliateId = generateRoutineId();
+    routines[exfoliateId] = genericRoutine("Guided PM / Exfoliate", "PM", "pink", [
+        wizardProductStep("cleanser", "PM", "CLEANSE", rec.cleanser),
+        wizardProductStep("exfoliant", "PM", "EXFOLIANT", rec.exfoliation),
+        wizardProductStep("hydrate", "PM", "HYDRATION", rec.serum),
+        wizardProductStep("moisturizer", "PM", "MOISTURIZER", rec.moisturizer)
+    ]);
+    generated.push(exfoliateId);
+
+    const clarifyId = generateRoutineId();
+    routines[clarifyId] = genericRoutine("Guided PM / Clarify", "PM", "green", [
+        wizardProductStep("cleanser", "PM", "CLEANSE", rec.cleanser),
+        wizardProductStep("clarify", "PM", "TARGETED", "Blemish / pore treatment"),
+        wizardProductStep("hydrate", "PM", "HYDRATION", rec.serum),
+        wizardProductStep("moisturizer", "PM", "MOISTURIZER", rec.moisturizer)
+    ]);
+    generated.push(clarifyId);
+
+    const generatedMap = { recovery: recoveryId, renewal: renewalId, exfoliate: exfoliateId, clarify: clarifyId };
+
+    if (!wizardState.preserveExisting) {
+        Object.keys(routines).forEach(id => { if (!generated.includes(id)) delete routines[id]; });
+    }
+
+    plan.amRotation.forEach(morning => { schedule.am[morning.day] = amIds[morning.kind] || amIds.hydrate; });
+    plan.rotation.forEach(night => { schedule.pm[night.day] = generatedMap[night.kind] || recoveryId; });
+
+    saveWizardState();
+    saveState();
+    closeWizard();
+
+    document.getElementById("landing-view").classList.add("hidden");
+    document.getElementById("app-view").classList.remove("hidden");
+    window.scrollTo(0, 0);
+    renderApp();
+    showToast("Guided weekly protocol built with your products and AM/PM alternation.");
+}
+
+
+/* ==========================================================================
+   33. VIEW SYSTEM
+   ========================================================================== */
+
+function launchApp() {
+
+    openWizard();
+
+}
+
+
+function exitApp() {
+
+    document
+        .getElementById(
+            "app-view"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+
+    document
+        .getElementById(
+            "landing-view"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+
+    window.scrollTo(
+        0,
+        0
+    );
+
+}
+
+
+function openPrintPreview() {
+
+    renderPrintManifest();
+
+    /*
+       The browser's print dialog remains the final output.
+       This simply prepares the print-only document.
+    */
+
+    window.print();
+
+}
+
+
+/* ==========================================================================
+   34. FAQ
+   ========================================================================== */
+
+function toggleFaq(
+    element
+) {
+
+    const item =
+        element.closest(
+            ".faq-item"
+        );
+
+
+    if (!item) {
+
+        return;
+
+    }
+
+
+    item.classList.toggle(
+        "active"
+    );
+
+}
+
+
+/* ==========================================================================
+   35. LIBRARY FILTER
+   ========================================================================== */
+
+function setLibraryFilter(
+    filter
+) {
+
+    libraryFilter =
+        filter;
+
+
+    document
+        .querySelectorAll(
+            ".library-filter"
+        )
+        .forEach(
+            button => {
+
+                button.classList.toggle(
+                    "active",
+                    button.dataset.filter ===
+                        filter
+                );
+
+            }
+        );
+
+
+    renderLibrary();
+
+}
+
+
+/* ==========================================================================
+   36. LIBRARY SEARCH
+   ========================================================================== */
+
+document
+    .getElementById(
+        "library-search"
+    )
+    .addEventListener(
+        "input",
+        event => {
+
+            librarySearch =
+                event.target.value
+                    .trim()
+                    .toLowerCase();
+
+
+            renderLibrary();
+
+        }
+    );
+
+
+/* ==========================================================================
+   37. FILTERED ROUTINES
+   ========================================================================== */
+
+function getFilteredRoutineIds() {
+
+    return Object.keys(
+        routines
+    ).filter(
+        id => {
+
+            const routine =
+                routines[id];
+
+
+            const matchesType =
+                libraryFilter === "all" ||
+                (
+                    libraryFilter === "am" &&
+                    routine.type === "AM"
+                ) ||
+                (
+                    libraryFilter === "pm" &&
+                    routine.type === "PM"
+                );
+
+
+            if (!matchesType) {
+
+                return false;
+
+            }
+
+
+            if (!librarySearch) {
+
+                return true;
+
+            }
+
+
+            const text = [
+
+                routine.name,
+                routine.type,
+                routine.color,
+
+                ...routine.steps.flatMap(
+                    step => [
+                        step.brand,
+                        step.product
+                    ]
+                )
+
+            ]
+                .join(" ")
+                .toLowerCase();
+
+
+            return text.includes(
+                librarySearch
+            );
+
+        }
+    );
+
+}
+
+
+/* ==========================================================================
+   38. CARD HTML
+   ========================================================================== */
+
+function generateCardHTML(
+    id,
+    routine,
+    isGrid = false
+) {
+
+    const listItems =
+        routine.steps
+            .map(
+                step => {
+
+                    const boldBrand =
+                        step.brand
+                            ? `<strong>${escapeHtml(step.brand)}</strong> `
+                            : "";
+
+                    const product =
+                        step.product
+                            ? escapeHtml(
+                                step.product
+                            )
+                            : "";
+
+                    return `
+                        <li>
+                            ${boldBrand}
+                            ${product}
+                        </li>
+                    `;
+
+                }
+            )
+            .join("");
+
+
+    const tagText =
+        tagLabels[
+            routine.color
+        ] ||
+        "Hydrate";
+
+
+    const editIcon = `
+
+        <svg
+            class="action-icon"
+            onclick="openModal('${id}')"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-label="Edit protocol">
+
+            <path
+                d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+
+            <path
+                d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+
+        </svg>
+    `;
+
+
+    const deleteIcon = `
+
+        <svg
+            class="action-icon"
+            onclick="deleteRoutine('${id}')"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-label="Delete protocol">
+
+            <polyline
+                points="3 6 5 6 21 6"/>
+
+            <path
+                d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+
+        </svg>
+    `;
+
+
+    const dragAttribute =
+        isGrid
+            ? ""
+            : `draggable="true" ondragstart="drag(event)"`;
+
+
+    return `
+
+        <div
+            class="routine-card"
+            data-id="${escapeAttribute(id)}"
+            ${dragAttribute}>
+
+            <div class="card-header">
+
+                <h3>
+                    ${escapeHtml(
+                        routine.name
+                    )}
+                </h3>
+
+
+                <div class="card-actions">
+
+                    ${editIcon}
+
+                    ${deleteIcon}
+
+                </div>
+
+            </div>
+
+
+            <span
+                class="tag ${escapeAttribute(routine.color)}">
+
+                ${escapeHtml(
+                    tagText
+                )}
+
+            </span>
+
+
+            <ol class="steps-list">
+
+                ${listItems}
+
+            </ol>
+
+        </div>
+
+    `;
+
+}
+
+
+/* ==========================================================================
+   39. RENDER ENTIRE APP
+   ========================================================================== */
+
+function renderApp() {
+
+    renderLibrary();
+
+    renderRow(
+        "am-row",
+        "am"
+    );
+
+    renderRow(
+        "pm-row",
+        "pm"
+    );
+
+    renderPrintManifest();
+
+}
+
+
+/* ==========================================================================
+   40. RENDER LIBRARY
+   ========================================================================== */
+
+function renderLibrary() {
+
+    const library =
+        document.getElementById(
+            "library-container"
+        );
+
+
+    const empty =
+        document.getElementById(
+            "library-empty"
+        );
+
+
+    if (!library) {
+
+        return;
+
+    }
+
+
+    library.innerHTML = "";
+
+
+    const ids =
+        getFilteredRoutineIds();
+
+
+    empty.style.display =
+        ids.length
+            ? "none"
+            : "block";
+
+
+    ids.forEach(
+        id => {
+
+            library.innerHTML +=
+                generateCardHTML(
+                    id,
+                    routines[id],
+                    false
+                );
+
+        }
+    );
+
+
+    bindLibraryDragEvents();
+
+}
+
+
+/* ==========================================================================
+   41. LIBRARY DRAG EVENTS
+   ========================================================================== */
+
+function bindLibraryDragEvents() {
+
+    document
+        .querySelectorAll(
+            "#library-container .routine-card"
+        )
+        .forEach(
+            card => {
+
+                card.addEventListener(
+                    "dragstart",
+                    event => {
+
+                        draggedId =
+                            card.dataset.id;
+
+
+                        event.dataTransfer.effectAllowed =
+                            "copy";
+
+
+                        setTimeout(
+                            () => {
+
+                                card.style.opacity =
+                                    ".45";
+
+                            },
+                            0
+                        );
+
+                    }
+                );
+
+
+                card.addEventListener(
+                    "dragend",
+                    () => {
+
+                        card.style.opacity =
+                            "1";
+
+                        draggedId =
+                            null;
+
+                        clearDragVisuals();
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* ==========================================================================
+   42. RENDER MATRIX ROW
+   ========================================================================== */
+
+function renderRow(
+    containerId,
+    timeOfDay
+) {
+
+    const container =
+        document.getElementById(
+            containerId
+        );
+
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    days.forEach(
+        day => {
+
+            const routineId =
+                schedule[
+                    timeOfDay
+                ][day];
+
+
+            const routine =
+                routineId &&
+                routines[
+                    routineId
+                ]
+                    ? routines[
+                        routineId
+                    ]
+                    : null;
+
+
+            let clearButton =
+                "";
+
+
+            if (routineId && routine) {
+
+                clearButton = `
+
+                    <div
+                        class="slot-clear">
+
+                        <svg
+                            onclick="clearSlot('${day}','${timeOfDay}')"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            aria-label="Clear slot">
+
+                            <line
+                                x1="18"
+                                y1="6"
+                                x2="6"
+                                y2="18"/>
+
+                            <line
+                                x1="6"
+                                y1="6"
+                                x2="18"
+                                y2="18"/>
+
+                        </svg>
+
+                    </div>
+
+                `;
+
+            }
+
+
+            const cardHTML =
+                routine
+                    ? generateCardHTML(
+                        routineId,
+                        routine,
+                        true
+                    )
+                    : "";
+
+
+            container.innerHTML += `
+
+                <div
+                    class="day-slot"
+                    data-day="${day}"
+                    data-type="${timeOfDay}"
+                    ondrop="drop(event,'${day}','${timeOfDay}')"
+                    ondragover="allowDrop(event)"
+                    ondragleave="dragLeave(event)">
+
+                    <div class="day-title">
+
+                        ${day}
+
+                    </div>
+
+                    ${clearButton}
+
+                    <div class="slot-content">
+
+                        ${
+                            cardHTML ||
+                            `
+                                <div
+                                    style="
+                                        height:100%;
+                                        display:flex;
+                                        align-items:center;
+                                        justify-content:center;
+                                        color:#A1A1AA;
+                                        font-size:9px;
+                                        text-align:center;
+                                    ">
+
+                                    Drop a protocol here
+
+                                </div>
+                            `
+                        }
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+}
+
+
+/* ==========================================================================
+   43. DRAG / DROP
+   ========================================================================== */
+
+function drag(
+    event
+) {
+
+    draggedId =
+        event.currentTarget
+            .getAttribute(
+                "data-id"
+            );
+
+
+    event.dataTransfer.effectAllowed =
+        "copy";
+
+}
+
+
+function allowDrop(
+    event
+) {
+
+    event.preventDefault();
+
+
+    const slot =
+        event.target.closest(
+            ".day-slot"
+        );
+
+
+    if (slot) {
+
+        slot.classList.add(
+            "drag-over"
+        );
+
+    }
+
+}
+
+
+function dragLeave(
+    event
+) {
+
+    const slot =
+        event.target.closest(
+            ".day-slot"
+        );
+
+
+    if (!slot) {
+
+        return;
+
+    }
+
+
+    if (
+        event.relatedTarget &&
+        slot.contains(
+            event.relatedTarget
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    slot.classList.remove(
+        "drag-over"
+    );
+
+}
+
+
+function drop(
+    event,
+    day,
+    timeOfDay
+) {
+
+    event.preventDefault();
+
+
+    const slot =
+        event.target.closest(
+            ".day-slot"
+        );
+
+
+    if (slot) {
+
+        slot.classList.remove(
+            "drag-over"
+        );
+
+    }
+
+
+    if (!draggedId) {
+
+        return;
+
+    }
+
+
+    if (
+        !routines[
+            draggedId
+        ]
+    ) {
+
+        return;
+
+    }
+
+
+    schedule[
+        timeOfDay
+    ][day] =
+        draggedId;
+
+
+    saveState();
+
+    renderApp();
+
+    showToast(
+        "Protocol assigned."
+    );
+
+
+    draggedId =
+        null;
+
+}
+
+
+function clearDragVisuals() {
+
+    document
+        .querySelectorAll(
+            ".drag-over"
+        )
+        .forEach(
+            element =>
+                element.classList.remove(
+                    "drag-over"
+                )
+        );
+
+}
+
+
+/* ==========================================================================
+   44. CLEAR SLOT
+   ========================================================================== */
+
+function clearSlot(
+    day,
+    timeOfDay
+) {
+
+    schedule[
+        timeOfDay
+    ][day] =
+        null;
+
+
+    saveState();
+
+    renderApp();
+
+    showToast(
+        `${day} ${timeOfDay.toUpperCase()} cleared.`
+    );
+
+}
+
+
+/* ==========================================================================
+   45. DELETE ROUTINE
+   ========================================================================== */
+
+function deleteRoutine(
+    id
+) {
+
+    const routine =
+        routines[id];
+
+
+    if (!routine) {
+
+        return;
+
+    }
+
+
+    const confirmed =
+        window.confirm(
+            `Purge "${routine.name}"? It will be removed from the master library and all scheduled days.`
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    delete routines[id];
+
+
+    days.forEach(
+        day => {
+
+            if (
+                schedule.am[day] ===
+                id
+            ) {
+
+                schedule.am[day] =
+                    null;
+
+            }
+
+            if (
+                schedule.pm[day] ===
+                id
+            ) {
+
+                schedule.pm[day] =
+                    null;
+
+            }
+
+        }
+    );
+
+
+    saveState();
+
+    renderApp();
+
+    showToast(
+        "Protocol removed."
+    );
+
+}
+
+
+/* ==========================================================================
+   46. MODAL
+   ========================================================================== */
+
+const modalOverlay =
+    document.getElementById(
+        "modal"
+    );
+
+
+function openModal(
+    id = null
+) {
+
+    const stepsContainer =
+        document.getElementById(
+            "steps-container"
+        );
+
+
+    stepsContainer.innerHTML =
+        "";
+
+
+    if (
+        id &&
+        routines[id]
+    ) {
+
+        document.getElementById(
+            "modal-title"
+        ).innerText =
+            "Modify Protocol";
+
+
+        document.getElementById(
+            "edit-id"
+        ).value =
+            id;
+
+
+        document.getElementById(
+            "edit-name"
+        ).value =
+            routines[id].name;
+
+
+        document.getElementById(
+            "edit-type"
+        ).value =
+            routines[id].type;
+
+
+        document.getElementById(
+            "edit-color"
+        ).value =
+            routines[id].color;
+
+
+        routines[
+            id
+        ].steps.forEach(
+            step => {
+
+                addStepRow(
+                    step.brand,
+                    step.product
+                );
+
+            }
+        );
+
+    } else {
+
+        document.getElementById(
+            "modal-title"
+        ).innerText =
+            "Initialize Sequence";
+
+
+        document.getElementById(
+            "edit-id"
+        ).value =
+            generateRoutineId();
+
+
+        document.getElementById(
+            "edit-name"
+        ).value =
+            "";
+
+
+        document.getElementById(
+            "edit-type"
+        ).value =
+            "PM";
+
+
+        document.getElementById(
+            "edit-color"
+        ).value =
+            "none";
+
+
+        addStepRow();
+
+    }
+
+
+    modalOverlay.style.display =
+        "flex";
+
+
+    setTimeout(
+        () => {
+
+            modalOverlay.classList.add(
+                "active"
+            );
+
+        },
+        10
+    );
+
+}
+
+
+function closeModal() {
+
+    modalOverlay.classList.remove(
+        "active"
+    );
+
+
+    setTimeout(
+        () => {
+
+            modalOverlay.style.display =
+                "none";
+
+        },
+        250
+    );
+
+}
+
+
+/* ==========================================================================
+   47. STEP ROW
+   ========================================================================== */
+
+function addStepRow(
+    brandVal = "",
+    productVal = ""
+) {
+
+    const container =
+        document.getElementById(
+            "steps-container"
+        );
+
+
+    const row =
+        document.createElement(
+            "div"
+        );
+
+
+    row.className =
+        "step-row";
+
+    row.draggable =
+        true;
+
+
+    row.addEventListener(
+        "dragstart",
+        handleStepDragStart
+    );
+
+    row.addEventListener(
+        "dragover",
+        handleStepDragOver
+    );
+
+    row.addEventListener(
+        "dragleave",
+        handleStepDragLeave
+    );
+
+    row.addEventListener(
+        "drop",
+        handleStepDrop
+    );
+
+
+    row.innerHTML = `
+
+        <div
+            class="step-handle"
+            draggable="false">
+
+            <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2">
+
+                <circle
+                    cx="9"
+                    cy="5"
+                    r="1"/>
+
+                <circle
+                    cx="9"
+                    cy="12"
+                    r="1"/>
+
+                <circle
+                    cx="9"
+                    cy="19"
+                    r="1"/>
+
+                <circle
+                    cx="15"
+                    cy="5"
+                    r="1"/>
+
+                <circle
+                    cx="15"
+                    cy="12"
+                    r="1"/>
+
+                <circle
+                    cx="15"
+                    cy="19"
+                    r="1"/>
+
+            </svg>
+
+        </div>
+
+
+        <div class="step-input-group">
+
+            <input
+                type="text"
+                class="step-brand"
+                placeholder="Brand Name"
+                value="${escapeAttribute(brandVal)}">
+
+
+            <div class="step-divider"></div>
+
+
+            <input
+                type="text"
+                class="step-product"
+                placeholder="Product Details"
+                value="${escapeAttribute(productVal)}">
+
+        </div>
+
+
+        <button
+            type="button"
+            class="step-delete"
+            onclick="
+                this.closest('.step-row').remove()
+            "
+            aria-label="Delete step">
+
+            <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2">
+
+                <line
+                    x1="18"
+                    y1="6"
+                    x2="6"
+                    y2="18"/>
+
+                <line
+                    x1="6"
+                    y1="6"
+                    x2="18"
+                    y2="18"/>
+
+            </svg>
+
+        </button>
+
+    `;
+
+
+    container.appendChild(
+        row
+    );
+
+}
+
+
+/* ==========================================================================
+   48. STEP DRAG
+   ========================================================================== */
+
+function handleStepDragStart(
+    event
+) {
+
+    draggedStepRow =
+        this;
+
+
+    this.style.opacity =
+        ".45";
+
+}
+
+
+function handleStepDragOver(
+    event
+) {
+
+    event.preventDefault();
+
+
+    if (
+        draggedStepRow !==
+        this
+    ) {
+
+        this.classList.add(
+            "drag-target"
+        );
+
+    }
+
+}
+
+
+function handleStepDragLeave() {
+
+    this.classList.remove(
+        "drag-target"
+    );
+
+}
+
+
+function handleStepDrop(
+    event
+) {
+
+    event.preventDefault();
+
+
+    this.classList.remove(
+        "drag-target"
+    );
+
+
+    if (
+        !draggedStepRow ||
+        draggedStepRow === this
+    ) {
+
+        return;
+
+    }
+
+
+    const container =
+        document.getElementById(
+            "steps-container"
+        );
+
+
+    const allSteps =
+        [
+            ...container.querySelectorAll(
+                ".step-row"
+            )
+        ];
+
+
+    const draggedIndex =
+        allSteps.indexOf(
+            draggedStepRow
+        );
+
+
+    const targetIndex =
+        allSteps.indexOf(
+            this
+        );
+
+
+    if (
+        draggedIndex <
+        targetIndex
+    ) {
+
+        this.after(
+            draggedStepRow
+        );
+
+    } else {
+
+        this.before(
+            draggedStepRow
+        );
+
+    }
+
+}
+
+
+/* ==========================================================================
+   49. STEP DRAG END
+   ========================================================================== */
+
+document.addEventListener(
+    "dragend",
+    event => {
+
+        if (
+            event.target.classList &&
+            event.target.classList.contains(
+                "step-row"
+            )
+        ) {
+
+            event.target.style.opacity =
+                "1";
+
+        }
+
+
+        document
+            .querySelectorAll(
+                ".step-row.drag-target"
+            )
+            .forEach(
+                row =>
+                    row.classList.remove(
+                        "drag-target"
+                    )
+            );
+
+    }
+);
+
+
+/* ==========================================================================
+   50. SAVE ROUTINE
+   ========================================================================== */
+
+function saveRoutine() {
+
+    const id =
+        document.getElementById(
+            "edit-id"
+        ).value;
+
+
+    const name =
+        document.getElementById(
+            "edit-name"
+        ).value
+            .trim() ||
+        "Unnamed Protocol";
+
+
+    const color =
+        document.getElementById(
+            "edit-color"
+        ).value;
+
+
+    const type =
+        document.getElementById(
+            "edit-type"
+        ).value;
+
+
+    const stepRows =
+        document.querySelectorAll(
+            "#steps-container .step-row"
+        );
+
+
+    const steps =
+        [];
+
+
+    stepRows.forEach(
+        row => {
+
+            const brand =
+                row
+                    .querySelector(
+                        ".step-brand"
+                    )
+                    .value
+                    .trim();
+
+
+            const product =
+                row
+                    .querySelector(
+                        ".step-product"
+                    )
+                    .value
+                    .trim();
+
+
+            if (
+                brand ||
+                product
+            ) {
+
+                steps.push({
+
+                    brand,
+                    product
+
+                });
+
+            }
+
+        }
+    );
+
+
+    routines[id] = {
+
+        name,
+        type,
+        color,
+
+        steps:
+            steps.length
+                ? steps
+                : [
+                    {
+                        brand:
+                            "",
+                        product:
+                            ""
+                    }
+                ]
+
+    };
+
+
+    saveState();
+
+    closeModal();
+
+    renderApp();
+
+    showToast(
+        "Protocol committed."
+    );
+
+}
+
+
+/* ==========================================================================
+   51. CREATE ROUTINE ALIAS
+   ========================================================================== */
+
+function createRoutine() {
+
+    openModal();
+
+}
+
+
+/* ==========================================================================
+   52. RESET SYSTEM
+   ========================================================================== */
+
+function resetSystem() {
+
+    const confirmed =
+        window.confirm(
+            "Reset the Protocol system to the original example?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    routines =
+        createDefaultRoutines();
+
+    schedule =
+        createDefaultSchedule();
+
+
+    saveState();
+
+    renderApp();
+
+    showToast(
+        "System reset."
+    );
+
+}
+
+
+/* ==========================================================================
+   53. EXPORT
+   ========================================================================== */
+
+function exportSystem() {
+
+    const payload = {
+
+        version:
+            6,
+
+        exportedAt:
+            new Date().toISOString(),
+
+        routines:
+            routines,
+
+        schedule:
+            schedule
+
+    };
+
+
+    const json =
+        JSON.stringify(
+            payload,
+            null,
+            2
+        );
+
+
+    const blob =
+        new Blob(
+            [json],
+            {
+                type:
+                    "application/json"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const anchor =
+        document.createElement(
+            "a"
+        );
+
+
+    anchor.href =
+        url;
+
+    anchor.download =
+        "protocol-skincare-system.json";
+
+
+    document.body.appendChild(
+        anchor
+    );
+
+
+    anchor.click();
+
+    anchor.remove();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+
+    showToast(
+        "System exported."
+    );
+
+}
+
+
+/* ==========================================================================
+   54. IMPORT MODAL
+   ========================================================================== */
+
+function openImportModal() {
+
+    const modal =
+        document.getElementById(
+            "import-modal"
+        );
+
+
+    modal.style.display =
+        "flex";
+
+
+    setTimeout(
+        () => {
+
+            modal.classList.add(
+                "active"
+            );
+
+        },
+        10
+    );
+
+}
+
+
+function closeImportModal() {
+
+    const modal =
+        document.getElementById(
+            "import-modal"
+        );
+
+
+    modal.classList.remove(
+        "active"
+    );
+
+
+    setTimeout(
+        () => {
+
+            modal.style.display =
+                "none";
+
+        },
+        250
+    );
+
+}
+
+
+/* ==========================================================================
+   55. IMPORT
+   ========================================================================== */
+
+function importSystem() {
+
+    const raw =
+        document.getElementById(
+            "import-data"
+        ).value
+        .trim();
+
+
+    if (!raw) {
+
+        showToast(
+            "Paste a JSON backup first."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const parsed =
+            JSON.parse(
+                raw
+            );
+
+
+        if (
+            !parsed ||
+            !parsed.routines ||
+            !parsed.schedule
+        ) {
+
+            throw new Error(
+                "Invalid format."
+            );
+
+        }
+
+
+        routines =
+            parsed.routines;
+
+        schedule =
+            parsed.schedule;
+
+
+        saveState();
+
+        renderApp();
+
+        closeImportModal();
+
+        showToast(
+            "System imported."
+        );
+
+    } catch (
+        error
+    ) {
+
+        console.error(
+            error
+        );
+
+        showToast(
+            "Import failed."
+        );
+
+    }
+
+}
+
+
+/* ==========================================================================
+   56. TOAST
+   ========================================================================== */
+
+function showToast(
+    message
+) {
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        showToast.timer
+    );
+
+
+    showToast.timer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            1800
+        );
+
+}
+
+
+/* ==========================================================================
+   57. PRINT MANIFEST GENERATION
+   --------------------------------------------------------------------------
+   This is the critical piece.
+
+   The print DOM is separate from the interactive application.
+
+   No sidebar gets printed.
+   No browser UI gets printed.
+   No modal gets printed.
+   No screen-sized layout gets printed.
+
+   Everything is generated into the physical 11 × 8.5 design.
+   ========================================================================== */
+
+function renderPrintManifest() {
+
+    renderPrintGrid(
+        "print-am-grid",
+        "am"
+    );
+
+
+    renderPrintGrid(
+        "print-pm-grid",
+        "pm"
+    );
+
+}
+
+
+/* ==========================================================================
+   58. PRINT GRID
+   ========================================================================== */
+
+function renderPrintGrid(
+    containerId,
+    timeOfDay
+) {
+
+    const container =
+        document.getElementById(
+            containerId
+        );
+
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    days.forEach(
+        day => {
+
+            const cell =
+                buildPrintDayCell(
+                    day,
+                    timeOfDay
+                );
+
+
+            container.appendChild(
+                cell
+            );
+
+        }
+    );
+
+}
+
+
+/* ==========================================================================
+   59. PRINT DAY CELL
+   ========================================================================== */
+
+function buildPrintDayCell(
+    day,
+    timeOfDay
+) {
+
+    const cell =
+        document.createElement(
+            "div"
+        );
+
+
+    cell.className =
+        "print-day";
+
+
+    const routineId =
+        schedule[
+            timeOfDay
+        ][day];
+
+
+    const routine =
+        routineId &&
+        routines[
+            routineId
+        ]
+            ? routines[
+                routineId
+            ]
+            : null;
+
+
+    cell.innerHTML = `
+
+        <div class="print-day-header">
+
+            <div class="print-day-title-row">
+
+                <span
+                    class="print-day-name">
+
+                    ${escapeHtml(day)}
+
+                </span>
+
+
+                <span
+                    class="print-day-type">
+
+                    ${timeOfDay === "am"
+                        ? "AM"
+                        : "PM"}
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="print-day-body">
+
+            ${
+                routine
+                    ? buildPrintRoutineHTML(
+                        routine
+                    )
+                    : `
+                        <div class="print-empty">
+                            No routine scheduled
+                        </div>
+                    `
+            }
+
+        </div>
+
+    `;
+
+
+    return cell;
+
+}
+
+
+/* ==========================================================================
+   60. PRINT ROUTINE
+   ========================================================================== */
+
+function buildPrintRoutineHTML(
+    routine
+) {
+
+    const steps =
+        routine.steps || [];
+
+
+    const visibleSteps =
+        steps.slice(
+            0,
+            10
+        );
+
+
+    let stepsMarkup =
+        "";
+
+
+    visibleSteps.forEach(
+        step => {
+
+            const brand =
+                step.brand
+                    ? `
+                        <span class="print-brand">
+                            ${escapeHtml(
+                                step.brand
+                            )}
+                        </span>
+                    `
+                    : "";
+
+
+            const separator =
+                step.brand &&
+                step.product
+                    ? " "
+                    : "";
+
+
+            const product =
+                step.product
+                    ? `
+                        <span class="print-product">
+                            ${escapeHtml(
+                                step.product
+                            )}
+                        </span>
+                    `
+                    : "";
+
+
+            stepsMarkup += `
+
+                <li class="print-step">
+
+                    ${brand}
+
+                    ${separator}
+
+                    ${product}
+
+                </li>
+
+            `;
+
+        }
+    );
+
+
+    const overflow =
+        steps.length > 10
+            ? `
+                <div
+                    style="
+                        margin-top:4px;
+                        color:#999;
+                        font-family:Helvetica,Arial,sans-serif;
+                        font-size:5.1pt;
+                        line-height:1.1;
+                        font-weight:700;
+                    ">
+
+                    +
+                    ${steps.length - 10}
+                    additional steps
+
+                </div>
+            `
+            : "";
+
+
+    return `
+
+        <div class="print-routine">
+
+            <div class="print-routine-title">
+
+                ${escapeHtml(
+                    routine.name
+                )}
+
+            </div>
+
+
+            <span
+                class="
+                    print-routine-name
+                    ${escapeAttribute(routine.color)}
+                ">
+
+                ${escapeHtml(
+                    tagLabels[
+                        routine.color
+                    ] ||
+                    routine.name
+                )}
+
+            </span>
+
+
+            ${
+                stepsMarkup
+                    ? `
+                        <ol class="print-step-list">
+                            ${stepsMarkup}
+                        </ol>
+                    `
+                    : ""
+            }
+
+
+            ${overflow}
+
+        </div>
+
+    `;
+
+}
+
+
+/* ==========================================================================
+   61. PRINT PREPARATION
+   ========================================================================== */
+
+function preparePrintDocument() {
+
+    renderPrintManifest();
+
+}
+
+
+/* ==========================================================================
+   62. BEFORE PRINT
+   ========================================================================== */
+
+window.addEventListener(
+    "beforeprint",
+    () => {
+
+        preparePrintDocument();
+
+    }
+);
+
+
+/* ==========================================================================
+   63. AFTER PRINT
+   ========================================================================== */
+
+window.addEventListener(
+    "afterprint",
+    () => {
+
+        renderPrintManifest();
+
+    }
+);
+
+
+/* ==========================================================================
+   64. KEYBOARD SHORTCUTS
+   ========================================================================== */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            (
+                event.metaKey ||
+                event.ctrlKey
+            ) &&
+            event.key.toLowerCase() === "p"
+        ) {
+
+            event.preventDefault();
+
+            renderPrintManifest();
+
+            window.print();
+
+        }
+
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closeWizard();
+
+            closeModal();
+
+            closeImportModal();
+
+        }
+
+    }
+);
+
+
+/* ==========================================================================
+   65. OUTSIDE CLICK FOR IMPORT MODAL
+   ========================================================================== */
+
+document
+    .getElementById(
+        "import-modal"
+    )
+    .addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.id ===
+                "import-modal"
+            ) {
+
+                closeImportModal();
+
+            }
+
+        }
+    );
+
+
+/* ==========================================================================
+   65B. OUTSIDE CLICK FOR WIZARD
+   ========================================================================== */
+
+document
+    .getElementById(
+        "wizard-modal"
+    )
+    .addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.id ===
+                "wizard-modal"
+            ) {
+
+                closeWizard();
+
+            }
+
+        }
+    );
+
+
+/* ==========================================================================
+   66. OUTSIDE CLICK FOR MAIN MODAL
+   ========================================================================== */
+
+document
+    .getElementById(
+        "modal"
+    )
+    .addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.id ===
+                "modal"
+            ) {
+
+                closeModal();
+
+            }
+
+        }
+    );
+
+
+/* ==========================================================================
+   67. INITIALIZE
+   ========================================================================== */
+
+loadState();
+
+renderApp();
+
+
+/* ==========================================================================
+   68. OPTIONAL RESET SHORTCUT
+   ========================================================================== */
+
+window.resetProtocol =
+    resetSystem;
+
+
+/* ==========================================================================
+   69. OPTIONAL EXPORT SHORTCUT
+   ========================================================================== */
+
+window.exportProtocolSystem =
+    exportSystem;
+
+
+/* ==========================================================================
+   70. OPTIONAL IMPORT SHORTCUT
+   ========================================================================== */
+
+window.importProtocolSystem =
+    importSystem;
+
+
+/* ==========================================================================
+   END APPLICATION
+   ========================================================================== */
+
+</script>
+
+</body>
+</html>
