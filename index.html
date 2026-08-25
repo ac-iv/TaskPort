@@ -263,10 +263,10 @@ html[data-mode="light"] .tt-knob{transform:translateX(15px);background:var(--acc
 .btn-ghost:hover{color:var(--text);border-color:var(--muted)}
 
 /* ---------- stat row ---------- */
-.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:16px}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-bottom:16px}
 .stat{
   background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
-  padding:18px 18px 16px;position:relative;overflow:hidden;
+  padding:18px 18px 16px;position:relative;overflow:hidden;min-width:0;
 }
 .stat .k{margin-bottom:14px}
 .stat .v{font-family:var(--f-display);font-weight:500;font-size:42px;line-height:.9;letter-spacing:-.02em}
@@ -275,8 +275,8 @@ html[data-mode="light"] .tt-knob{transform:translateX(15px);background:var(--acc
 .dot{width:7px;height:7px;border-radius:50%;flex:none;display:inline-block}
 
 /* ---------- panels / charts ---------- */
-.grid-2{display:grid;grid-template-columns:1.15fr 1fr;gap:16px;margin-bottom:16px}
-.grid-2b{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;align-items:start}
+.grid-2{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;margin-bottom:16px}
+.grid-2b{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-bottom:16px;align-items:start}
 .card{
   background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
   padding:20px 22px;
@@ -324,7 +324,7 @@ html[data-mode="light"] .tt-knob{transform:translateX(15px);background:var(--acc
 .spark-col.now .sv{color:var(--accent);font-weight:600}
 .spark-col .sl{font-family:var(--f-mono);font-size:9px;color:var(--faint);white-space:nowrap}
 /* attention panel */
-.att-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:6px}
+.att-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:6px}
 .att{background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:13px 12px}
 .att-n{font-family:var(--f-display);font-size:26px;font-weight:500;line-height:1;letter-spacing:-.02em;margin-bottom:7px}
 .att-l{font-size:10.5px;color:var(--faint);line-height:1.4}
@@ -342,10 +342,11 @@ html[data-mode="light"] .tt-knob{transform:translateX(15px);background:var(--acc
 @media(max-width:900px){ .att-grid{grid-template-columns:1fr} .spark{height:110px;gap:5px} .spark-col .sl{font-size:8px} }
 
 /* week strip */
-.week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
 .day{
   background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
   padding:11px 10px;min-height:92px;display:flex;flex-direction:column;gap:7px;
+  min-width:0;overflow:hidden;
 }
 .day.today{border-color:var(--gtm)}
 .day .d-top{display:flex;justify-content:space-between;align-items:baseline}
@@ -356,6 +357,7 @@ html[data-mode="light"] .tt-knob{transform:translateX(15px);background:var(--acc
   font-size:10.5px;padding:3px 6px;border-radius:5px;line-height:1.2;
   background:var(--panel);border-left:2px solid var(--muted);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  min-width:0;max-width:100%;
 }
 
 /* ---------- tasks ---------- */
@@ -452,7 +454,7 @@ html[data-mode="light"] .tt-knob{transform:translateX(15px);background:var(--acc
 .acct-group-head .bar{width:3px;height:26px;border-radius:2px}
 .acct-group-head h2{font-family:var(--f-display);font-weight:600;font-size:23px;letter-spacing:-.01em}
 .acct-group-head .ct{font-family:var(--f-mono);font-size:12px;color:var(--faint);margin-left:2px}
-.acct-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.acct-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .acct-card{
   background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
   padding:18px;cursor:pointer;transition:.16s;position:relative;overflow:hidden;
@@ -763,7 +765,7 @@ html[data-mode="light"] .tt-knob{transform:translateX(15px);background:var(--acc
 .mk-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .mk-h .mk-ln{width:120px}
 .mk-pill{font-size:9.5px;font-weight:600;background:var(--accent);color:#fff;padding:5px 11px;border-radius:20px}
-.mk-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:14px}
+.mk-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:14px}
 .mk-stat{border:1px solid var(--line);border-radius:9px;padding:9px 10px;position:relative;overflow:hidden;background:var(--panel)}
 .mk-stat::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2.5px;background:var(--c)}
 .mk-stat .k{display:block;font-family:var(--f-mono);font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:5px}
@@ -800,16 +802,16 @@ html[data-mode="light"] .tt-knob{transform:translateX(15px);background:var(--acc
 .mk-od .chip{display:flex;align-items:center;gap:6px;font-size:9.5px;padding:3px 8px;border-radius:6px;background:var(--panel);border:1px solid var(--line);color:var(--muted)}
 .mk-od .chip i{width:6px;height:6px;border-radius:2px}
 .mk-cal{padding:0 14px 14px}
-.mk-dow{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:5px}
+.mk-dow{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));margin-bottom:5px}
 .mk-dow span{font-family:var(--f-mono);font-size:8px;color:var(--faint);text-align:center}
-.mk-cells{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.mk-cells{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
 .mk-cells .c{min-height:44px;border:1px solid var(--line);border-radius:7px;padding:5px 5px 4px;display:flex;flex-direction:column;gap:3px;background:var(--panel)}
 .mk-cells .c.today{border-color:var(--accent);background:var(--accent-soft)}
 .mk-cells .c b{font-family:var(--f-mono);font-size:8.5px;color:var(--muted);font-weight:500}
 .mk-cells .c i{height:5px;border-radius:2px;display:block}
 /* number band */
 .lp-band{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--panel)}
-.lp-band-in{max-width:1080px;margin:0 auto;padding:34px;display:grid;grid-template-columns:repeat(4,1fr);gap:22px;text-align:center}
+.lp-band-in{max-width:1080px;margin:0 auto;padding:34px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;text-align:center}
 .lp-num .n{display:block;font-family:var(--f-display);font-size:38px;font-weight:500;line-height:1;letter-spacing:-.03em;margin-bottom:9px;color:var(--accent)}
 .lp-num .l{display:block;font-size:12.5px;color:var(--muted);line-height:1.4}
 /* split feature sections */
@@ -959,14 +961,14 @@ html[data-mode="light"] .tt-knob{transform:translateX(15px);background:var(--acc
 .set-hint{font-size:12px;color:var(--faint);margin-top:6px;line-height:1.5}
 .set-static{background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:10px 13px;font-size:13.5px;color:var(--muted)}
 .set-actions{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);display:flex;justify-content:flex-end}
-.set-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.set-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:20px}
 .set-stats > div{background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:14px;text-align:center}
 .set-stats .n{display:block;font-family:var(--f-display);font-size:26px;font-weight:500;line-height:1;letter-spacing:-.02em}
 .set-stats .l{display:block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-top:7px}
 .set-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:15px 0;border-top:1px solid var(--line)}
 .set-row:first-of-type{border-top:none;padding-top:0}
 .set-row-t{font-size:14px;font-weight:500}
-.theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.theme-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
 .theme-card{position:relative;border:1px solid var(--line);border-radius:13px;padding:9px;text-align:left;
   transition:.15s;background:var(--panel-2);overflow:hidden}
 .theme-card:hover{border-color:var(--line-strong);transform:translateY(-2px)}
@@ -986,6 +988,87 @@ html[data-mode="light"] .tt-knob{transform:translateX(15px);background:var(--acc
   .set-stats{grid-template-columns:repeat(2,1fr)}
   .set-row{flex-direction:column;align-items:flex-start;gap:12px}
 }
+
+/* ---------- join requests / browse ---------- */
+.req-banner{border:1px solid color-mix(in srgb,var(--accent) 34%,var(--line));background:var(--accent-soft);
+  border-radius:13px;padding:14px 16px;margin-bottom:16px}
+.rb-head{display:flex;align-items:center;gap:11px;margin-bottom:10px;flex-wrap:wrap}
+.rb-head .tag{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.rb-sub{font-size:11.5px;color:var(--muted)}
+.rb-row{display:flex;align-items:center;gap:11px;padding:9px 0;border-top:1px solid var(--line)}
+.rb-mid{flex:1;font-size:13px;color:var(--muted);min-width:0}
+.rb-mid b{color:var(--text);font-weight:600}
+.rb-act{display:flex;gap:7px;flex:none}
+.btn-primary.sm,.btn-ghost.sm{padding:6px 13px;font-size:12px;border-radius:8px}
+.pend-banner{display:flex;align-items:center;gap:13px;flex-wrap:wrap;border:1px dashed var(--line-strong);
+  border-radius:12px;padding:11px 15px;margin-bottom:16px}
+.pend-banner .tag{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.pend-banner .items{display:flex;gap:7px;flex-wrap:wrap}
+.browse-list{display:flex;flex-direction:column;gap:2px;max-height:320px;overflow-y:auto;margin-top:4px}
+.br-row{display:flex;align-items:center;gap:11px;padding:10px 6px;border-bottom:1px solid var(--line)}
+.br-row:last-child{border-bottom:none}
+.br-row .sw{width:9px;height:9px;border-radius:3px;flex:none}
+.br-mid{flex:1;min-width:0}
+.br-nm{font-size:13.5px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.br-sub{font-size:11px;color:var(--faint);margin-top:2px}
+.br-tag{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);
+  border:1px solid var(--line);padding:4px 9px;border-radius:6px;flex:none}
+.br-tag.on{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,transparent);background:var(--accent-soft)}
+
+.br-row.pick{cursor:pointer;border-radius:9px;padding:10px 10px;transition:.12s;border-bottom:1px solid var(--line)}
+.br-row.pick:hover{background:var(--panel-2)}
+.br-row.pick.dis{opacity:.55;cursor:default}
+.br-row.pick.dis:hover{background:none}
+.pick-box{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--line-strong);flex:none;
+  display:grid;place-items:center;font-size:11px;color:#fff;transition:.14s}
+.pick-box.on{background:var(--accent);border-color:var(--accent)}
+
+/* ---------- shared account view ---------- */
+.acct-hero{border-left:3px solid var(--brand);padding:2px 0 2px 18px;margin-bottom:22px}
+.back-btn{font-size:12.5px;color:var(--muted);margin-bottom:12px;transition:.15s}
+.back-btn:hover{color:var(--text)}
+.ah-top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.ah-top h1{font-family:var(--f-display);font-weight:600;font-size:38px;line-height:1;letter-spacing:-.02em;margin:8px 0 9px}
+.ah-sub{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.ah-co{display:inline-flex;align-items:center;gap:7px}
+.ah-dot{color:var(--faint)}
+.ph-tag{font-style:normal;font-family:var(--f-mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--faint);border:1px solid var(--line);padding:2px 6px;border-radius:5px;margin-left:6px}
+.code-chip{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;padding:4px 10px;border-radius:6px;
+  background:var(--accent-soft);color:var(--accent);cursor:pointer;transition:.15s}
+.code-chip:hover{filter:brightness(1.15)}
+.roster{display:flex;flex-direction:column;gap:2px;margin-bottom:6px}
+.rost{display:flex;align-items:center;gap:11px;padding:10px 8px;border-radius:9px;transition:.12s}
+.rost:hover{background:var(--panel-2)}
+.rost.me{background:var(--accent-soft)}
+.rav{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;flex:none;
+  color:#fff;font-size:12px;font-weight:600;text-transform:uppercase}
+.rmid{flex:1;min-width:0}
+.rname{font-size:13.5px;font-weight:500;margin-bottom:4px}
+.you{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-left:4px}
+.cotag{font-family:var(--f-mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  border:1px solid var(--line-strong);padding:2px 6px;border-radius:5px;margin-left:5px}
+.rfns{display:flex;flex-wrap:wrap;gap:4px}
+.rnone{font-size:11px;color:var(--faint);font-style:italic}
+.rload{text-align:right;flex:none}
+.rl-n{display:block;font-family:var(--f-mono);font-size:15px;font-weight:500}
+.rl-late{display:block;font-family:var(--f-mono);font-size:9.5px;color:var(--blocked)}
+.rm-x{opacity:0;color:var(--faint);font-size:17px;line-height:1;padding:0 2px 0 8px;flex:none;transition:.14s}
+.rost:hover .rm-x{opacity:.65}
+.rm-x:hover{color:var(--blocked);opacity:1}
+@media(hover:none){ .rm-x{opacity:.55} }
+.role-edit{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.sugg{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.sugg-row{display:flex;align-items:center;gap:10px;padding:5px 0}
+.sugg-p{font-size:12px;color:var(--muted)}
+.ac-cal-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.assignees{display:flex;flex-wrap:wrap;gap:7px}
+.asg{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:20px;
+  border:1px solid var(--line);font-size:12.5px;color:var(--muted);transition:.15s}
+.asg:hover{border-color:var(--line-strong);color:var(--text)}
+.asg.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.asg .rav{width:22px;height:22px;font-size:10px}
+@media(max-width:900px){ .ah-top h1{font-size:29px} .ah-top{align-items:flex-start} }
 
 /* ---------- account editor ---------- */
 .acct-modal .modal-foot{display:flex;justify-content:space-between;align-items:center}
@@ -1374,7 +1457,7 @@ const LOGO_WIDE='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 734.93 125
 const LOGO_MARK='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660.66 634.38" fill="none"><g><g><path fill="#f8bb27" d="M367.56,471.27h-226.01c-16.48,0-29.84-13.36-29.84-29.84V175.8c0-16.48,13.36-29.84,29.84-29.84s29.84,13.36,29.84,29.84v235.79h196.16c16.48,0,29.84,13.36,29.84,29.84s-13.36,29.84-29.84,29.84Z"/><path fill="#eb4631" d="M520.18,471.27h-152.63c-16.48,0-29.84-13.36-29.84-29.84s13.36-29.84,29.84-29.84h122.78v-196.17c0-16.48,13.36-29.84,29.84-29.84s29.84,13.36,29.84,29.84v226.01c0,16.48-13.36,29.84-29.84,29.84Z"/><path fill="#4b70b6" d="M141.63,299.83c-16.48,0-29.84-13.36-29.84-29.84V43.98c0-16.48,13.36-29.84,29.84-29.84h265.63c16.48,0,29.84,13.36,29.84,29.84s-13.36,29.84-29.84,29.84h-235.79v196.16c0,16.48-13.36,29.84-29.84,29.84Z"/><path fill="#3ba14b" d="M338.4,329.11c-7.9,0-15.5-3.14-21.1-8.74l-83.85-83.85c-11.65-11.65-11.65-30.55,0-42.2,11.65-11.66,30.55-11.66,42.2,0l61.74,61.74L561.89,9.74c11.1-12.18,29.98-13.06,42.16-1.95,12.18,11.1,13.06,29.98,1.95,42.16l-245.55,269.42c-5.49,6.03-13.21,9.54-21.37,9.73-.23,0-.46,0-.69,0Z"/></g><g><path class="tp-word" d="M92.48,517.27v20.21h-34.16v93.95h-24.01v-93.95H0v-20.21h92.48Z"/><path class="tp-word" d="M96.12,556.15c5.83-7.44,15.85-11.15,30.05-11.15,9.24,0,17.45,1.83,24.63,5.5,7.18,3.67,10.77,10.59,10.77,20.76v38.73c0,2.69.05,5.94.15,9.76.15,2.89.59,4.85,1.32,5.89.72,1.03,1.81,1.89,3.25,2.56v3.25h-24.01c-.67-1.7-1.14-3.3-1.39-4.8-.26-1.5-.46-3.2-.62-5.11-3.05,3.31-6.56,6.12-10.53,8.44-4.75,2.74-10.12,4.1-16.11,4.1-7.64,0-13.95-2.18-18.94-6.54-4.98-4.36-7.47-10.55-7.47-18.55,0-10.38,4-17.89,12-22.54,4.39-2.53,10.84-4.34,19.36-5.42l7.51-.93c4.08-.52,7-1.16,8.75-1.94,3.15-1.34,4.72-3.43,4.72-6.27,0-3.46-1.2-5.85-3.6-7.16-2.4-1.32-5.92-1.97-10.57-1.97-5.22,0-8.91,1.29-11.08,3.87-1.55,1.91-2.58,4.49-3.1,7.75h-21.3c.46-7.38,2.53-13.45,6.2-18.2ZM112.54,615.48c2.06,1.7,4.59,2.56,7.59,2.56,4.75,0,9.13-1.39,13.13-4.18,4-2.79,6.08-7.87,6.23-15.26v-8.21c-1.39.88-2.8,1.59-4.22,2.13-1.42.54-3.37,1.05-5.85,1.51l-4.96.93c-4.65.83-7.98,1.83-9.99,3.02-3.41,2.01-5.11,5.14-5.11,9.37,0,3.77,1.06,6.48,3.18,8.13Z"/><path class="tp-word" d="M239.32,550.88c6.61,4.23,10.4,11.52,11.39,21.84h-22.07c-.31-2.84-1.11-5.09-2.4-6.74-2.43-2.99-6.56-4.49-12.39-4.49-4.8,0-8.22.75-10.26,2.25-2.04,1.5-3.06,3.25-3.06,5.27,0,2.53,1.08,4.36,3.25,5.5,2.17,1.19,9.84,3.23,23,6.12,8.78,2.07,15.36,5.19,19.75,9.37,4.34,4.23,6.51,9.53,6.51,15.88,0,8.37-3.11,15.19-9.33,20.49-6.22,5.29-15.84,7.94-28.85,7.94s-23.07-2.8-29.39-8.4c-6.33-5.6-9.49-12.74-9.49-21.41h22.38c.46,3.92,1.47,6.71,3.02,8.36,2.74,2.94,7.8,4.41,15.18,4.41,4.34,0,7.78-.64,10.34-1.94,2.56-1.29,3.83-3.23,3.83-5.81s-1.03-4.36-3.1-5.65c-2.07-1.29-9.73-3.51-23-6.66-9.55-2.37-16.29-5.34-20.21-8.91-3.92-3.51-5.89-8.57-5.89-15.18,0-7.8,3.06-14.5,9.18-20.1,6.12-5.6,14.73-8.4,25.83-8.4s19.13,2.09,25.79,6.27Z"/><path class="tp-word" d="M346.83,631.43h-26.64l-20.21-36.09-9.14,9.53v26.57h-21.69v-113.78h21.69v61.5l27.5-31.75h27.34l-29.51,32.3,30.67,51.74Z"/><path class="tp-word" d="M407.86,590.38h-24.24v41.05h-23.7v-114.16h49.72c11.46,0,20.6,2.94,27.42,8.83,6.82,5.89,10.22,15,10.22,27.34,0,13.48-3.41,23-10.22,28.58-6.82,5.58-16.55,8.37-29.2,8.37ZM419.01,566.6c3.1-2.74,4.65-7.07,4.65-13.01s-1.56-10.17-4.69-12.7c-3.12-2.53-7.5-3.8-13.13-3.8h-22.23v33.61h22.23c5.63,0,10.02-1.37,13.17-4.11Z"/><path class="tp-word" d="M533.79,557.7c7.13,8.93,10.69,19.49,10.69,31.68s-3.56,22.99-10.69,31.79c-7.13,8.8-17.94,13.21-32.45,13.21s-25.33-4.4-32.45-13.21c-7.13-8.8-10.69-19.4-10.69-31.79s3.56-22.74,10.69-31.68,17.94-13.4,32.45-13.4,25.33,4.47,32.45,13.4ZM501.27,562.96c-6.45,0-11.42,2.28-14.91,6.85-3.48,4.57-5.23,11.09-5.23,19.56s1.74,15,5.23,19.6c3.49,4.6,8.45,6.89,14.91,6.89s11.41-2.3,14.87-6.89c3.46-4.6,5.19-11.13,5.19-19.6s-1.73-14.99-5.19-19.56c-3.46-4.57-8.42-6.85-14.87-6.85Z"/><path class="tp-word" d="M602.73,567.38c-8.88,0-14.85,2.89-17.89,8.68-1.7,3.25-2.56,8.26-2.56,15.03v40.35h-22.23v-84.42h21.07v14.72c3.41-5.63,6.38-9.48,8.91-11.54,4.13-3.46,9.5-5.19,16.11-5.19.41,0,.76.01,1.05.04.28.03.92.07,1.9.12v22.62c-1.39-.16-2.63-.26-3.72-.31-1.08-.05-1.96-.08-2.63-.08Z"/><path class="tp-word" d="M660.66,615.71v16.5l-10.46.39c-10.43.36-17.56-1.45-21.38-5.42-2.48-2.53-3.72-6.43-3.72-11.7v-51.97h-11.77v-15.72h11.77v-23.54h21.84v23.54h13.71v15.72h-13.71v44.61c0,3.46.44,5.62,1.32,6.47.88.85,3.56,1.28,8.05,1.28.67,0,1.38-.01,2.13-.04.75-.03,1.48-.06,2.21-.12Z"/></g></g></svg>';
 
 // ---- portfolio grouping (accounts may have an optional parent portfolio/company) ----
-function parentList(){ const seen=[]; DB.accounts.forEach(a=>{ const p=a.parent||''; if(p && !seen.includes(p)) seen.push(p); }); return seen; }
+function parentList(){ const seen=[]; DB.accounts.forEach(a=>{ const p=a.group||''; if(p && !seen.includes(p)) seen.push(p); }); return seen; }
 const PARENT_HEX={'Global TekMed':'#4C82C4','ZRM Holdings':'#3DAE6E','Javi Companies':'#D4A15A'};
 const PARENT_PALETTE=['#4C82C4','#3DAE6E','#D4A15A','#9B7BE8','#E8935B','#2FB0A6','#D06AA0'];
 function parentHex(p){ if(!p) return '#8A8E97'; if(!PARENT_HEX[p]){ let h=0;for(let i=0;i<p.length;i++)h=(h*31+p.charCodeAt(i))>>>0; PARENT_HEX[p]=PARENT_PALETTE[h%PARENT_PALETTE.length]; } return PARENT_HEX[p]; }
@@ -1383,7 +1466,7 @@ function parentHex(p){ if(!p) return '#8A8E97'; if(!PARENT_HEX[p]){ let h=0;for(
 const GREYS=['#5A5F67','#676C74','#72777F','#7D838D','#888E98','#9198A2','#9CA2AC','#61666E','#787E88','#8E949E','#555A62'];
 const COORD_SHADE={};
 function coordShade(name){ if(!name) return '#8A8E97'; if(!COORD_SHADE[name]){ let h=0;for(let i=0;i<name.length;i++)h=(h*31+name.charCodeAt(i))>>>0; COORD_SHADE[name]=GREYS[h%GREYS.length]; } return COORD_SHADE[name]; }
-function coordinators(){ const s=[]; DB.accounts.forEach(a=>{ if(a.coordinator && !s.includes(a.coordinator)) s.push(a.coordinator); }); return s.sort(); }
+function coordinators(){ const s=[]; DB.accounts.forEach(a=>{ const c=coordName(a); if(c && !s.includes(c)) s.push(c); }); return s.sort(); }
 const FN_COLOR = {
   'Website':'var(--website)','Automations':'var(--auto)',
   'Social Engagement':'var(--social-eng)','Social/Assets':'var(--social-assets)','Email':'var(--email)'
@@ -1425,7 +1508,6 @@ const MASTER = [
   {id:'jlmz',name:'JLMZ Properties',abbr:'JLMZ',parent:'Legacy & Veteran',color:'#B865C8',coordinator:'Josue',roles:{'Website':['Avelino'],'Email':['Ivy']}},
   {id:'rethink',name:'ReThink Realty',abbr:'RTR',parent:'Legacy & Veteran',color:'#DA5B6E',coordinator:'Josue',roles:{'Website':['Alex'],'Paid Media':['Tyler'],'Social Media':['Avelino','Melisa'],'Email':['Ivy']}},
   {id:'vetink',name:'Vet Ink',abbr:'VI',parent:'Legacy & Veteran',color:'#6E7BD8',coordinator:'Tyler',roles:{'Social/Assets':['Tyler'],'Website':['Michele'],'Email':['Ivy']}},
-  {id:'legacy-comments',name:'Legacy Comments (all)',abbr:'LEG',parent:'Legacy & Veteran',color:'#5B8FF0',coordinator:'Tyler',roles:{'Social Engagement':['Avelino']}},
   // Growth & Brand — oversight Michele
   {id:'bcoffee',name:'Bismarck Coffee',abbr:'BC',parent:'Growth & Brand',color:'#B07A4E',coordinator:'Liz',roles:{'Social/Assets':['Liz'],'Website':['Michele'],'Email':['Liz']}},
   {id:'n906',name:'906',abbr:'906',parent:'Growth & Brand',color:'#7AAE6E',coordinator:'Michele',roles:{'Website':['Michele'],'Social/Assets':['Michele']}},
@@ -1444,7 +1526,7 @@ const MASTER = [
 const COMPANY_OF = {
   vrs:'Global TekMed', aff:'Global TekMed', vetvantage:'Global TekMed', vme:'Global TekMed',
   v2v:'Global TekMed', mortgage:'Global TekMed', afv:'Global TekMed', jlmz:'Global TekMed',
-  vetink:'Global TekMed', 'legacy-comments':'Global TekMed', valor:'Global TekMed',
+  vetink:'Global TekMed', valor:'Global TekMed',
   bcoffee:'ZRM Holdings', n906:'ZRM Holdings', bin:'ZRM Holdings', pav:'ZRM Holdings',
   fpp:'ZRM Holdings', did:'ZRM Holdings', oak:'ZRM Holdings', ice:'ZRM Holdings', woody:'ZRM Holdings',
   rethink:'Javi Companies', manifest:'Javi Companies'
@@ -1471,7 +1553,7 @@ function profileFor(name){
 // seed tasks that ship with a claimed profile (only Avelino gets the daily legacy sweep)
 function profileTasks(name){
   if(name!=='Avelino') return [];
-  return [{id:uid(),title:'Legacy comment sweep — all accounts (Hootsuite)',accountId:'legacy-comments',fn:'Social Engagement',
+  return [{id:uid(),title:'Legacy comment sweep — all accounts (Hootsuite)',accountId:'aff',fn:'Social Engagement',
     status:'To Do',priority:'High',due:todayISO(),repeat:'daily',lastDone:null,
     notes:'Work every legacy account\'s comments in Hootsuite. Tyler has answers for niche/eligibility questions.',
     subtasks:[],links:[{id:uid(),url:'https://hootsuite.com',label:'Hootsuite'}],created:todayISO()}];
@@ -1488,31 +1570,153 @@ function effStatus(t){ if(taskDone(t)) return 'Done'; if(isRecurring(t)) return 
 function effectiveDue(t){ if(!isRecurring(t)) return t.due; const today=todayISO(); if(t.repeat==='daily') return taskDone(t)? addInterval(today,'daily') : today; let d=t.due||today; let g=0; while(d<today&&g<500){ d=addInterval(d,t.repeat); g++; } if(taskDone(t)) d=addInterval(d,t.repeat); return d; }
 function isOverdue(t){ return !isRecurring(t) && !taskDone(t) && t.due && t.due<todayISO(); }
 
-// ============================ STORE (per-user) ============================
-// Each signed-in account gets its OWN localStorage bucket, so one person's data
-// can never appear in another person's console.
-const KEY_BASE='taskport_v2';
-function storeKey(){ return fb.uid ? KEY_BASE+'_'+fb.uid : KEY_BASE+'_local'; }
-const CLAIM_KEY='taskport_claimed';
-function claimedNames(){ try{ return JSON.parse(localStorage.getItem(CLAIM_KEY)||'[]'); }catch(e){ return []; } }
-function claimName(n){ const c=claimedNames(); if(!c.includes(n)){ c.push(n); try{ localStorage.setItem(CLAIM_KEY,JSON.stringify(c)); }catch(e){} } }
+// ============================ STORE (shared accounts) ============================
+// Accounts and tasks are SHARED objects. A person joins an account with its code,
+// then picks their own functions. Your personal views show only your own tasks;
+// the account view shows everyone's.
+const SHARED_KEY='taskport_shared_v1';   // local-mode stand-in for the shared collections
+const PROFILE_BASE='taskport_profile';   // per-person profile (name, onboarded)
+const uid = ()=> Math.random().toString(36).slice(2,9);
+
+// --- who am I ---
+let ME = null;
+function myId(){ return fb.uid || localId(); }
+function localId(){
+  let v=null; try{ v=localStorage.getItem('taskport_localid'); }catch(e){}
+  if(!v){ v='local_'+uid(); try{ localStorage.setItem('taskport_localid',v); }catch(e){} }
+  return v;
+}
+function profileKey(){ return PROFILE_BASE+'_'+myId(); }
+
+// --- shared store (local mirror; Firestore when signed in) ---
+function readShared(){
+  try{ const r=localStorage.getItem(SHARED_KEY); if(r){ const d=JSON.parse(r); if(d&&d.accounts) return d; } }catch(e){}
+  return {accounts:{},tasks:{}};
+}
+function writeShared(s){ try{ localStorage.setItem(SHARED_KEY, JSON.stringify(s)); }catch(e){} }
+
 function emptyDB(){ return { user:{name:'',onboarded:false}, accounts:[], tasks:[] }; }
 let DB = emptyDB();
 
-function load(){
-  try{ const raw=localStorage.getItem(storeKey()); if(raw){ const d=JSON.parse(raw); if(d&&d.accounts){ migrate(d); return d; } } }catch(e){}
-  return emptyDB();
+// membership helpers
+function members(a){ return a && a.members ? a.members : {}; }
+function isMember(a,id){ return !!(a && a.members && a.members[id||myId()]); }
+function myRole(a){ return (a&&a.members&&a.members[myId()])||null; }
+function myFunctions(a){ const r=myRole(a); return r? (r.functions||[]) : []; }
+function coordinatorOf(a){
+  const m=members(a); const k=Object.keys(m).find(k=>m[k].coordinator);
+  return k? {id:k, ...m[k]} : null;
 }
-function migrate(d){
-  if(!d.user) d.user={name:'',onboarded:true};
-  d.accounts.forEach(a=>{ if(!a.color)a.color='#8A8E97'; if(!a.notes)a.notes={}; if(!a.subDone)a.subDone=[]; if(!('parent'in a))a.parent=''; if(!a.functions)a.functions=[]; });
-  (d.tasks||[]).forEach(t=>{ if(!t.subtasks)t.subtasks=[]; if(!t.repeat)t.repeat='none'; if(!t.links)t.links=[]; if(t.repeat!=='none'&&t.lastDone===undefined) t.lastDone = t.status==='Done'?(t.completed||todayISO()):null; });
+function coordName(a){ const c=coordinatorOf(a); return c? c.name : ((a&&a.coordPlaceholder)||''); }
+function coordIsPlaceholder(a){ return !coordinatorOf(a) && !!(a&&a.coordPlaceholder); }
+function iCoordinate(a){ const r=myRole(a); return !!(r&&r.coordinator); }
+// with no coordinator, any member may edit the account
+function canEditAccount(a){ return iCoordinate(a) || (!coordinatorOf(a) && isMember(a)); }
+function canCloseTask(t){
+  const a=acct(t.accountId);
+  return iCoordinate(a) || (t.assignees||[]).includes(myId());
 }
-function save(){ try{ localStorage.setItem(storeKey(), JSON.stringify(DB)); }catch(e){} if(CLOUD && fb.uid) cloudSaveDebounced(); }
-// The owner's console always carries his original book of business.
+function assignedToMe(t){ return (t.assignees||[]).includes(myId()); }
+function nameFor(a,id){
+  const m=members(a); if(m[id]&&m[id].name) return m[id].name;
+  if(a&&a.names&&a.names[id]) return a.names[id];
+  return 'Former member';
+}
+function assigneeNames(t){
+  const a=acct(t.accountId);
+  return (t.assignees||[]).map(id=>nameFor(a,id));
+}
+// any member may remove any other member
+function removeMember(a,id){
+  a.names=a.names||{};
+  if(a.members&&a.members[id]) a.names[id]=a.members[id].name;
+  delete a.members[id];
+  putAccount(a);
+}
+function pending(a){ return (a&&a.pending)||{}; }
+function myPendingIds(){ return allSharedAccounts().filter(a=>pending(a)[myId()]).map(a=>a.id); }
+function requestJoin(a,name){
+  a.pending=a.pending||{};
+  if(Object.keys(members(a)).length===0){ // nobody to approve — first one in just joins
+    a.members=a.members||{}; a.members[myId()]={name:name||DB.user.name||'You',functions:[],coordinator:false};
+    putAccount(a); return 'joined';
+  }
+  a.pending[myId()]={name:name||DB.user.name||'You', at:todayISO()};
+  putAccount(a); return 'requested';
+}
+function approveJoin(a,id){
+  const p=pending(a)[id]; if(!p) return;
+  a.members=a.members||{}; a.members[id]={name:p.name,functions:[],coordinator:false};
+  a.names=a.names||{}; a.names[id]=p.name;
+  delete a.pending[id]; putAccount(a);
+}
+function denyJoin(a,id){ if(a.pending) delete a.pending[id]; putAccount(a); }
+// every request waiting on accounts I'm already in
+function inboxRequests(){
+  const out=[];
+  DB.accounts.forEach(a=>{ Object.entries(pending(a)).forEach(([id,p])=>out.push({a,id,p})); });
+  return out;
+}
+function newCode(){ const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s=''; for(let i=0;i<6;i++) s+=c[Math.floor(Math.random()*c.length)]; return s; }
+// roster names already taken by someone on this device
+const CLAIM_KEY='taskport_claimed';
+function claimedNames(){ try{ return JSON.parse(localStorage.getItem(CLAIM_KEY)||'[]'); }catch(e){ return []; } }
+function claimName(n){ const c=claimedNames(); if(!c.includes(n)){ c.push(n); try{ localStorage.setItem(CLAIM_KEY,JSON.stringify(c)); }catch(e){} } }
+
+// --- load / save ---
+function loadProfile(){
+  try{ const r=localStorage.getItem(profileKey()); if(r){ const p=JSON.parse(r); if(p&&p.user) return p; } }catch(e){}
+  return {user:{name:'',onboarded:false}};
+}
+function saveProfile(){
+  try{ localStorage.setItem(profileKey(), JSON.stringify({user:DB.user})); }catch(e){}
+  if(CLOUD && fb.uid) cloudSaveProfile();
+}
+// rebuild DB.accounts / DB.tasks from the shared store, scoped to my memberships
+function hydrate(){
+  const s=readShared();
+  const me=myId();
+  DB.accounts=Object.values(s.accounts).filter(a=>isMember(a,me)).map(a=>{ migrateAccount(a); return a; });
+  const ids=DB.accounts.map(a=>a.id);
+  DB.tasks=Object.values(s.tasks).filter(t=>ids.includes(t.accountId)).map(t=>{ migrateTask(t); return t; });
+}
+function migrateAccount(a){
+  if(!a.color)a.color='#8A8E97'; if(!a.notes)a.notes={}; if(!a.subDone)a.subDone=[];
+  if(!('group'in a)) a.group=a.parent||''; if(!a.members)a.members={}; if(!a.code)a.code=newCode();
+}
+function migrateTask(t){
+  if(!t.subtasks)t.subtasks=[]; if(!t.repeat)t.repeat='none'; if(!t.links)t.links=[];
+  if(!t.assignees) t.assignees=[myId()];
+  if(t.repeat!=='none'&&t.lastDone===undefined) t.lastDone = t.status==='Done'?(t.completed||todayISO()):null;
+}
+// write one shared account / task through
+function putAccount(a){
+  const s=readShared(); s.accounts[a.id]=a; writeShared(s); hydrate();
+  if(CLOUD && fb.uid) cloudPut('accounts',a);
+}
+function putTask(t){
+  const s=readShared(); s.tasks[t.id]=t; writeShared(s); hydrate();
+  if(CLOUD && fb.uid) cloudPut('tasks',t);
+}
+function dropAccount(id){
+  const s=readShared(); delete s.accounts[id];
+  Object.values(s.tasks).forEach(t=>{ if(t.accountId===id) delete s.tasks[t.id]; });
+  writeShared(s); hydrate();
+  if(CLOUD && fb.uid) cloudDel('accounts',id);
+}
+function dropTask(id){
+  const s=readShared(); delete s.tasks[id]; writeShared(s); hydrate();
+  if(CLOUD && fb.uid) cloudDel('tasks',id);
+}
+// find any account by code, across the whole shared store (not just mine)
+function accountByCode(code){
+  const s=readShared(); const c=(code||'').trim().toUpperCase();
+  return Object.values(s.accounts).find(a=>(a.code||'').toUpperCase()===c)||null;
+}
+function allSharedAccounts(){ return Object.values(readShared().accounts); }
+
+function save(){ saveProfile(); }
 const OWNER_EMAIL = 'avelinocortinaiv@mac.com';
-function ownerDB(){ return { user:{name:'Avelino', onboarded:true}, accounts: profileFor('Avelino'), tasks: profileTasks('Avelino') }; }
-const uid = ()=> Math.random().toString(36).slice(2,9);
 const acct = id => DB.accounts.find(a=>a.id===id);
 
 /* ============================ AUTH / CLOUD ============================ */
@@ -1545,40 +1749,215 @@ async function initFirebase(){
     signUp: authMod.createUserWithEmailAndPassword,
     signOut: authMod.signOut,
     onAuth: authMod.onAuthStateChanged,
-    doc: fsMod.doc, getDoc: fsMod.getDoc, setDoc: fsMod.setDoc
+    doc: fsMod.doc, getDoc: fsMod.getDoc, setDoc: fsMod.setDoc,
+    collection: fsMod.collection, getDocs: fsMod.getDocs, deleteDoc: fsMod.deleteDoc
   };
 }
 async function cloudLoad(){
-  const ref = fb.api.doc(fb.db, 'consoles', fb.uid);
   const email = ((fb.auth.currentUser && fb.auth.currentUser.email) || '').toLowerCase();
-  const isOwner = email === OWNER_EMAIL;
-  let snap=null;
-  try{ snap = await fb.api.getDoc(ref); }catch(e){}
+  // profile
+  let prof=null;
+  try{ const s=await fb.api.getDoc(fb.api.doc(fb.db,'consoles',fb.uid)); if(s.exists()) prof=s.data(); }catch(e){}
+  DB.user = (prof&&prof.user) ? prof.user : {name:'',onboarded:false};
 
-  const cloud = (snap && snap.exists()) ? snap.data() : null;
-  if(cloud && Array.isArray(cloud.accounts) && (cloud.accounts.length || cloud.user)){
-    DB = cloud; migrate(DB);
-  } else {
-    // Brand new account. NEVER inherit whatever happened to be in this browser.
-    DB = isOwner ? ownerDB() : emptyDB();
+  await pullShared();
+  seedMasterPool();
+
+  hydrate();
+
+  // --- migrate anything stored under the OLD private model ---
+  // old shape: consoles/{uid} = {user, accounts:[...], tasks:[...]}
+  if(prof && Array.isArray(prof.accounts) && prof.accounts.length){
+    const sh=readShared();
+    prof.accounts.forEach(a=>{
+      const id=a.id||('a'+uid());
+      let ex=sh.accounts[id];
+      if(!ex){
+        ex={id,name:a.name,abbr:a.abbr,group:a.group||a.parent||'',color:a.color||'#8A8E97',
+            code:a.code||newCode(),notes:a.notes||{},subDone:a.subDone||[],subbrands:a.subbrands,members:{}};
+        sh.accounts[id]=ex;
+      }
+      ex.members=ex.members||{};
+      if(!ex.members[myId()]) ex.members[myId()]={name:DB.user.name||'You',functions:(a.functions||[]).slice(),coordinator:false};
+    });
+    (prof.tasks||[]).forEach(t=>{
+      const id=t.id||uid();
+      if(!sh.tasks[id]) sh.tasks[id]={...t,id,assignees:(t.assignees&&t.assignees.length)?t.assignees:[myId()]};
+    });
+    writeShared(sh);
+    for(const k of Object.keys(sh.accounts)) if(CLOUD&&fb.uid) cloudPut('accounts',sh.accounts[k]);
+    for(const k of Object.keys(sh.tasks)) if(CLOUD&&fb.uid) cloudPut('tasks',sh.tasks[k]);
+    hydrate();
   }
-  if(isOwner){
-    // the owner keeps his original book and skips the setup walkthrough
-    if(!DB.accounts.length) DB = ownerDB();
-    DB.user = DB.user || {};
-    DB.user.name = DB.user.name || 'Avelino';
-    DB.user.onboarded = true;
+
+  // --- the owner always ends up with his book ---
+  if(email===OWNER_EMAIL){
+    if(!DB.user.name) DB.user.name='Avelino';
+    DB.user.onboarded=true;
+    if(!DB.accounts.length){ seedOwnerAccounts(); hydrate(); }
+    importPlanner();
   }
-  save();
-  try{ await fb.api.setDoc(ref, DB); }catch(e){}
+  saveProfile();
 }
-let _cloudTimer=null;
-function cloudSaveDebounced(){
-  clearTimeout(_cloudTimer);
-  _cloudTimer=setTimeout(async()=>{
-    try{ await fb.api.setDoc(fb.api.doc(fb.db,'consoles',fb.uid), DB); }
-    catch(e){ toast('Cloud save failed — kept locally'); }
-  }, 900);
+// Pre-seed the full book from the assignment sheet so anyone can find and join.
+// Idempotent: only creates accounts that don't already exist, never overwrites.
+function backfillFromMaster(){
+  const s=readShared(); let touched=0;
+  MASTER.forEach(m=>{
+    const a=s.accounts[m.id]; if(!a) return;
+    const realCoord=Object.values(a.members||{}).some(v=>v.coordinator);
+    const want=(m.coordinator&&!m.coordinator.startsWith('To be'))?m.coordinator:'';
+    if(!realCoord && want && !a.coordPlaceholder){ a.coordPlaceholder=want; touched++; }
+    if(!a.suggested||!Object.keys(a.suggested).length){
+      const sug={};
+      Object.entries(m.roles||{}).forEach(([fn,people])=>{
+        const list=(people||[]).filter(p=>p&&!p.startsWith('To be'));
+        if(list.length) sug[fn]=list;
+      });
+      if(Object.keys(sug).length){ a.suggested=sug; touched++; }
+    }
+    if(!a.group && m.parent){ a.group=m.parent; touched++; }
+  });
+  // fold the old Legacy Comments bucket into Affiliates
+  const legacy=s.accounts['legacy-comments'];
+  if(legacy){
+    const aff=s.accounts['aff'];
+    if(aff){
+      Object.entries(legacy.members||{}).forEach(([id,r])=>{
+        aff.members=aff.members||{};
+        if(!aff.members[id]) aff.members[id]={name:r.name,functions:r.functions||[],coordinator:false};
+      });
+      Object.values(s.tasks).forEach(t=>{ if(t.accountId==='legacy-comments') t.accountId='aff'; });
+      delete s.accounts['legacy-comments'];
+      touched++;
+      if(CLOUD && fb.uid){ cloudDel('accounts','legacy-comments'); }
+    }
+  }
+  if(touched){ writeShared(s); hydrate(); if(CLOUD&&fb.uid){ Object.values(s.accounts).forEach(a=>cloudPut('accounts',a)); Object.values(s.tasks).forEach(t=>cloudPut('tasks',t)); } }
+  return touched;
+}
+function seedMasterPool(){
+  const s=readShared(); let added=0;
+  MASTER.forEach(m=>{
+    if(s.accounts[m.id]) return;
+    const suggested={};
+    Object.entries(m.roles||{}).forEach(([fn,people])=>{
+      const list=(people||[]).filter(p=>p && !p.startsWith('To be'));
+      if(list.length) suggested[fn]=list;
+    });
+    s.accounts[m.id]={
+      id:m.id, name:m.name, abbr:m.abbr, group:m.parent||'', color:m.color,
+      code:newCode(), notes:{}, subDone:[], subbrands:m.subbrands,
+      coordPlaceholder:(m.coordinator&&!m.coordinator.startsWith('To be'))?m.coordinator:'',
+      suggested, members:{}, names:{}
+    };
+    added++;
+  });
+  if(added){
+    writeShared(s); hydrate();
+    if(CLOUD && fb.uid) Object.values(s.accounts).forEach(a=>cloudPut('accounts',a));
+  }
+  backfillFromMaster();
+  return added;
+}
+
+// One-time migration of Avelino's live Planner board.
+const PLANNER_V='planner-2026-08-25';
+const PLANNER_TASKS=[
+  {t:'Order banners for events — get with Sam on what\'s needed', a:'oak',      fn:'Social/Assets',    due:'2026-08-14', pri:'Medium', st:'To Do'},
+  {t:'Weddings trifold',                                           a:'oak',      fn:'Social/Assets',    due:'2026-08-19', pri:'Medium', st:'Awaiting Feedback', n:'Awaiting feedback from Telegraph.'},
+  {t:'Advice for Veterans site redesign',                          a:'afv',      fn:'Website',          due:'2026-08-26', pri:'High',   st:'In Progress'},
+  {t:'Blogs update',                                               a:'afv',      fn:'Website',          due:'2026-08-28', pri:'Medium', st:'To Do'},
+  {t:'September content calendar',                                 a:'vme',      fn:'Calendar',         due:'2026-08-28', pri:'Medium', st:'To Do'},
+  {t:'Get JLMZ logo approval / selection from Heather',            a:'jlmz',     fn:'Website',          due:'2026-08-28', pri:'Low',    st:'To Do'},
+  {t:'Veteran Ratings site optimization',                          a:'vrs',      fn:'Website',          due:'2026-09-02', pri:'Medium', st:'To Do'},
+  {t:'Peptide email blast',                                        a:'valor',    fn:'Email',            due:'2026-09-05', pri:'Medium', st:'To Do'},
+  {t:'Monthly newsletter',                                         a:'valor',    fn:'Email',            due:'2026-09-06', pri:'Medium', st:'To Do', rep:'monthly'}
+];
+function importPlanner(force){
+  if(!force && DB.user && DB.user.plannerImport===PLANNER_V) return 0;
+  const s=readShared(); let added=0;
+  PLANNER_TASKS.forEach(p=>{
+    const a=s.accounts[p.a]; if(!a) return;
+    // make sure I'm on the account, and that the function is listed against me
+    a.members=a.members||{};
+    const r=a.members[myId()]||{name:DB.user.name||'Avelino',functions:[],coordinator:false};
+    r.functions=r.functions||[];
+    if(p.fn && !r.functions.includes(p.fn)) r.functions.push(p.fn);
+    a.members[myId()]=r;
+    // skip if a task with this title already exists on the account
+    const dupe=Object.values(s.tasks).some(t=>t.accountId===p.a && t.title.toLowerCase()===p.t.toLowerCase());
+    if(dupe) return;
+    const id=uid();
+    s.tasks[id]={id, accountId:p.a, title:p.t, fn:p.fn,
+      status:p.rep?'To Do':p.st, priority:p.pri, due:p.due,
+      repeat:p.rep||'none', lastDone:p.rep?null:undefined,
+      notes:p.n||'', subtasks:[], links:[], assignees:[myId()], created:todayISO()};
+    added++;
+  });
+  writeShared(s); hydrate();
+  if(DB.user){ DB.user.plannerImport=PLANNER_V; saveProfile(); }
+  if(CLOUD && fb.uid){
+    DB.accounts.forEach(a=>cloudPut('accounts',a));
+    DB.tasks.forEach(t=>cloudPut('tasks',t));
+  }
+  return added;
+}
+
+// turn the master roster into shared accounts with Avelino as a member
+function seedOwnerAccounts(){
+  const s=readShared();
+  profileFor('Avelino').forEach(a=>{
+    const existing=s.accounts[a.id];
+    if(existing){ existing.members=existing.members||{}; existing.members[myId()]={name:'Avelino',functions:a.functions,coordinator:existing.members[myId()]?existing.members[myId()].coordinator:false}; }
+    else {
+      const mm=MASTER.find(x=>x.id===a.id)||{};
+      s.accounts[a.id]={id:a.id,name:a.name,abbr:a.abbr,group:a.parent||'',color:a.color,code:newCode(),
+        notes:{},subDone:[],subbrands:a.subbrands,
+        coordPlaceholder:(mm.coordinator&&!mm.coordinator.startsWith('To be'))?mm.coordinator:'',
+        members:{[myId()]:{name:'Avelino',functions:a.functions,coordinator:false}}};
+    }
+  });
+  writeShared(s);
+  const sh=readShared();
+  profileTasks('Avelino').forEach(t=>{ t.assignees=[myId()]; sh.tasks[t.id]=t; });
+  writeShared(sh); hydrate();
+  if(CLOUD && fb.uid){
+    Object.values(readShared().accounts).forEach(a=>{ if(isMember(a)) cloudPut('accounts',a); });
+    Object.values(readShared().tasks).forEach(t=>{ if(assignedToMe(t)) cloudPut('tasks',t); });
+  }
+}
+// pull every shared account + task down into the local mirror
+let SHARED_ERR='';
+async function pullShared(){
+  if(!(CLOUD&&fb.uid)) return false;
+  try{
+    const s=readShared();
+    const accSnap = await fb.api.getDocs(fb.api.collection(fb.db,'accounts'));
+    accSnap.forEach(d=>{ const a=d.data(); if(a&&a.id) s.accounts[a.id]=a; });
+    const tSnap = await fb.api.getDocs(fb.api.collection(fb.db,'tasks'));
+    tSnap.forEach(d=>{ const t=d.data(); if(t&&t.id) s.tasks[t.id]=t; });
+    writeShared(s); hydrate(); SHARED_ERR='';
+    return true;
+  }catch(e){
+    SHARED_ERR = (e&&e.code==='permission-denied')
+      ? 'Your Firestore rules are blocking the shared accounts. Update them and reload.'
+      : 'Could not reach the shared accounts.';
+    return false;
+  }
+}
+async function cloudPut(coll,obj){
+  try{ await fb.api.setDoc(fb.api.doc(fb.db,coll,obj.id), obj); }catch(e){ toast('Cloud save failed — kept locally'); }
+}
+async function cloudDel(coll,id){
+  try{ await fb.api.deleteDoc(fb.api.doc(fb.db,coll,id)); }catch(e){}
+}
+let _profTimer=null;
+function cloudSaveProfile(){
+  clearTimeout(_profTimer);
+  _profTimer=setTimeout(async()=>{
+    try{ await fb.api.setDoc(fb.api.doc(fb.db,'consoles',fb.uid), {user:DB.user}); }catch(e){}
+  }, 700);
 }
 
 /* ============================ HELPERS ============================ */
@@ -1657,7 +2036,7 @@ function subProgress(x){
 function completeTask(t){ if(!taskDone(t)) toggleDone(t); }
 function uncompleteTask(t){ if(taskDone(t)) toggleDone(t); }
 
-let UI = { view:'dashboard', pipeRange:'1m', filters:{company:'',account:'',coord:'',status:'',fn:'',q:''} };
+let UI = { view:'dashboard', acctId:null, acctPerson:'', pipeRange:'1m', filters:{company:'',account:'',coord:'',status:'',fn:'',q:''} };
 const PIPE_RANGES = [['1w','1 week',7],['2w','2 weeks',14],['1m','1 month',30],['6m','6 months',182],['all','All',null]];
 
 /* ============================ ROUTER ============================ */
@@ -1678,14 +2057,15 @@ function render(){
   }
   else if(UI.view==='tasks') { v.innerHTML=Tasks(); wireTasks(); }
   else if(UI.view==='schedule') { v.innerHTML=Schedule(); wireSchedule(); }
-  else if(UI.view==='accounts') { v.innerHTML=Accounts(); wireAccounts(); }
+  else if(UI.view==='accounts') { v.innerHTML=Accounts(); wireAccounts(); wireRequests(); }
+  else if(UI.view==='account') { v.innerHTML=AccountView(); wireAccountView(); }
   else if(UI.view==='settings') { v.innerHTML=Settings(); wireSettings(); }
   if(UI.view==='dashboard') requestAnimationFrame(animateBars);
 }
 
 /* ============================ DASHBOARD ============================ */
 function Dashboard(){
-  const t=DB.tasks;
+  const t=DB.tasks.filter(assignedToMe);
   const open = t.filter(x=>!taskDone(x));
   const inProg = t.filter(x=>effStatus(x)==='In Progress').length;
   const blocked = t.filter(x=>effStatus(x)==='Blocked').length;
@@ -1718,7 +2098,7 @@ function Dashboard(){
 
   // by coordinator
   const byCoord={};
-  open.forEach(x=>{ const a=acct(x.accountId); if(a&&a.coordinator){ byCoord[a.coordinator]=(byCoord[a.coordinator]||0)+1; } });
+  open.forEach(x=>{ const a=acct(x.accountId); const c=coordName(a); if(c){ byCoord[c]=(byCoord[c]||0)+1; } });
   const coordMax=Math.max(1,...Object.values(byCoord),1);
 
   // pipeline scoped to a duration window (overdue always counts as in-window)
@@ -1926,11 +2306,11 @@ function weekStrip(){
   const now=new Date(); now.setHours(0,0,0,0);
   const days=[];
   for(let i=0;i<7;i++){ const d=new Date(now); d.setDate(now.getDate()+i); days.push(d); }
-  const open=DB.tasks.filter(x=>!taskDone(x)).map(x=>({x,due:effectiveDue(x)})).filter(o=>o.due);
+  const open=DB.tasks.filter(x=>assignedToMe(x)&&!taskDone(x)).map(x=>({x,due:effectiveDue(x)})).filter(o=>o.due);
   return `<div class="week">${days.map((d,i)=>{
     const iso=d.toISOString().slice(0,10);
     const items=open.filter(o=>o.due===iso).map(o=>o.x);
-    const overdueBucket = i===0 ? DB.tasks.filter(isOverdue) : [];
+    const overdueBucket = i===0 ? DB.tasks.filter(t=>assignedToMe(t)&&isOverdue(t)) : [];
     const all=[...overdueBucket, ...items];
     return `<div class="day ${i===0?'today':''}">
       <div class="d-top"><span class="d-name">${d.toLocaleDateString('en',{weekday:'short'})}</span><span class="d-num serif">${d.getDate()}</span></div>
@@ -1944,10 +2324,10 @@ function weekStrip(){
 /* ============================ TASKS ============================ */
 function Tasks(){
   const f=UI.filters;
-  let list=DB.tasks.slice();
-  if(f.company) list=list.filter(x=>{const a=acct(x.accountId);return a&&a.parent===f.company;});
+  let list=DB.tasks.filter(assignedToMe);
+  if(f.company) list=list.filter(x=>{const a=acct(x.accountId);return a&&a.group===f.company;});
   if(f.account) list=list.filter(x=>x.accountId===f.account);
-  if(f.coord) list=list.filter(x=>{const a=acct(x.accountId);return a&&a.coordinator===f.coord;});
+  if(f.coord) list=list.filter(x=>{const a=acct(x.accountId);return a&&coordName(a)===f.coord;});
   if(f.status) list=list.filter(x=>effStatus(x)===f.status);
   if(f.fn) list=list.filter(x=>x.fn===f.fn);
   if(f.q){ const q=f.q.toLowerCase(); list=list.filter(x=>x.title.toLowerCase().includes(q)||(x.notes||'').toLowerCase().includes(q)); }
@@ -1965,12 +2345,12 @@ function Tasks(){
   const accOptions=DB.accounts.map(a=>`<option value="${a.id}" ${f.account===a.id?'selected':''}>${esc(a.name)}</option>`).join('');
   const parents=parentList();
   const coords=coordinators();
-  const openCount=DB.tasks.filter(x=>!taskDone(x)).length;
+  const openCount=list.filter(x=>!taskDone(x)).length;
 
   return `
   <div class="head">
     <div>
-      <div class="eyebrow" style="margin-bottom:10px">${DB.tasks.length} tracked · ${openCount} open</div>
+      <div class="eyebrow" style="margin-bottom:10px">${DB.tasks.filter(assignedToMe).length} tracked · ${openCount} open</div>
       <h1>Tasks</h1>
     </div>
     <button class="btn-primary" onclick="openTaskModal()">
@@ -2001,7 +2381,7 @@ function taskRow(x){
   const coHex=a?a.color:'#8A8E97';
   const edue=effectiveDue(x);
   const dc=isOverdue(x)?'over':dueClass(edue, done?'Done':x.status);
-  const coordName=a?a.coordinator:'';
+  const coordNm=a?coordName(a):'';
   const statusCell = isRecurring(x)
     ? `<span class="cadence-pill" title="Repeats ${REPEATS[x.repeat].toLowerCase()} — resets each period">↻ ${REPEAT_SHORT[x.repeat]}</span>`
     : `<select class="status-select" data-status-id="${x.id}" style="color:${STATUS_HEX[x.status]};background:${STATUS_HEX[x.status]}1f;border-color:${STATUS_HEX[x.status]}55">${STATUSES.map(s=>`<option value="${s}" ${x.status===s?'selected':''}>${s}</option>`).join('')}</select>`;
@@ -2009,7 +2389,7 @@ function taskRow(x){
     <button class="check ${done?'on':''}" data-act="toggle" data-id="${x.id}" aria-label="Toggle done">${CHECK_SVG}</button>
     <div class="tt" data-act="edit" data-id="${x.id}">${esc(x.title)}${isRecurring(x)?` <span class="rep" title="Repeats ${REPEATS[x.repeat].toLowerCase()}">↻ ${REPEAT_SHORT[x.repeat]}</span>`:''}${subProgress(x)}${linkBadge(x)}${x.notes?`<div class="sub">${esc(x.notes.slice(0,60))}${x.notes.length>60?'…':''}</div>`:''}</div>
     <div class="acct-tag" data-act="edit" data-id="${x.id}"><span class="sw" style="background:${coHex}"></span>${a?esc(a.abbr):'—'}</div>
-    <div>${coordName?`<span class="coord-cell" style="color:${coordShade(coordName)}"><span class="dot" style="background:${coordShade(coordName)}"></span>${esc(coordName)}</span>`:'<span style="color:var(--faint)">—</span>'}</div>
+    <div>${coordNm?`<span class="coord-cell" style="color:${coordShade(coordNm)}"><span class="dot" style="background:${coordShade(coordNm)}"></span>${esc(coordNm)}</span>`:'<span style="color:var(--faint)">—</span>'}</div>
     <div><span class="urg" data-act="edit" data-id="${x.id}" style="color:${done?'var(--faint)':PRI_HEX[x.priority]}"><span class="dot" style="background:${done?'var(--faint)':PRI_HEX[x.priority]}"></span>${x.priority}</span></div>
     <div>${x.fn?`<span class="fn-tag" style="color:${fnHex(x.fn)};background:${fnHex(x.fn)}1f">${x.fn.replace('Social ','S. ').replace('Engagement','Eng')}</span>`:'<span style="color:var(--faint)">—</span>'}</div>
     <div>${statusCell}</div>
@@ -2026,32 +2406,33 @@ function wireTasks(){
   // status dropdowns
   $('#view').querySelectorAll('[data-status-id]').forEach(sel=>{
     sel.onclick=e=>e.stopPropagation();
-    sel.onchange=()=>{ const t=DB.tasks.find(x=>x.id===sel.dataset.statusId); if(!t) return; t.status=sel.value; if(t.status==='Done')t.completed=todayISO(); save(); render(); };
+    sel.onchange=()=>{ const t=DB.tasks.find(x=>x.id===sel.dataset.statusId); if(!t) return; t.status=sel.value; if(t.status==='Done')t.completed=todayISO(); putTask(t); render(); };
   });
 
   $('#view').querySelectorAll('[data-act]').forEach(node=>{
     const act=node.dataset.act, id=node.dataset.id;
     node.onclick=(ev)=>{
       ev.stopPropagation();
-      if(act==='toggle'){ const t=DB.tasks.find(x=>x.id===id); toggleDone(t); save(); render(); if(taskDone(t)&&isRecurring(t)) toast('Done for '+(t.repeat==='daily'?'today':'this '+REPEAT_SHORT[t.repeat].toLowerCase())+' · resets next period'); }
+      if(act==='toggle'){ const t=DB.tasks.find(x=>x.id===id); if(!canCloseTask(t)){ toast('Only the assignee or coordinator can close this'); return; } toggleDone(t); putTask(t); render(); if(taskDone(t)&&isRecurring(t)) toast('Done for '+(t.repeat==='daily'?'today':'this '+REPEAT_SHORT[t.repeat].toLowerCase())+' · resets next period'); }
       else if(act==='edit'){ openTaskModal(id); }
-      else if(act==='del'){ DB.tasks=DB.tasks.filter(x=>x.id!==id); save(); render(); toast('Task deleted'); }
+      else if(act==='del'){ dropTask(id); render(); toast('Task deleted'); }
     };
   });
 }
 
 /* ============================ TASK MODAL ============================ */
 let modalDraft=null;
-function openTaskModal(id, presetDue){
+function openTaskModal(id, presetDue, opts){
   if(!DB.accounts.length){ toast('Add an account first'); go('accounts'); return; }
   const editing = id ? DB.tasks.find(x=>x.id===id) : null;
-  modalDraft = editing ? {...editing} : {id:null,title:'',accountId:DB.accounts[0].id,fn:'',status:'To Do',priority:'Medium',due:presetDue||'',notes:'',repeat:'none',subtasks:[]};
+  modalDraft = editing ? {...editing} : {id:null,title:'',accountId:(opts&&opts.acct)||DB.accounts[0].id,fn:'',status:'To Do',priority:'Medium',due:presetDue||'',notes:'',repeat:'none',subtasks:[],assignees:[myId()]};
   if(!modalDraft.repeat) modalDraft.repeat='none';
   modalDraft.subtasks = (modalDraft.subtasks||[]).map(s=>({...s}));
   modalDraft.links = (modalDraft.links||[]).map(l=>({...l}));
+  modalDraft.assignees = (modalDraft.assignees||[myId()]).slice();
   modalDraft._origStatus = editing ? editing.status : null;
   const a=acct(modalDraft.accountId);
-  const fnOpts=(a?a.functions:Object.keys(FN_COLOR));
+  const fnOpts=(a?myFunctions(a):Object.keys(FN_COLOR));
   $('#modal').innerHTML=`
     <div class="modal-head">
       <div class="eyebrow">${editing?'Edit task':'New task'}</div>
@@ -2073,6 +2454,10 @@ function openTaskModal(id, presetDue){
       <div class="field"><label>Status</label>
         <div class="seg" id="m_status">${STATUSES.map(s=>`<button data-s="${s}" class="${modalDraft.status===s?'on':''}"><span class="dot" style="background:${STATUS_HEX[s]}"></span> ${s}</button>`).join('')}</div>
       </div>
+      <div class="field"><label>Assigned to</label>
+        <div class="assignees" id="m_assignees"></div>
+        <div class="set-hint">Up to two people. They'll see it in their own console.</div>
+      </div>
       <div class="field"><label>Notes</label><textarea id="m_notes" placeholder="Context, links, blockers…">${esc(modalDraft.notes)}</textarea></div>
       <div class="field"><label>Checklist</label>
         <div class="checklist" id="m_sublist"></div>
@@ -2089,6 +2474,7 @@ function openTaskModal(id, presetDue){
       </div>
     </div>`;
   syncFnOptions();
+  renderAssignees();
   renderSublist();
   renderLinklist();
   openModal();
@@ -2101,21 +2487,37 @@ function openTaskModal(id, presetDue){
   $('#m_linkadd').onclick=linkAdd;
   $('#m_linkinput').onkeydown=e=>{ if(e.key==='Enter'){ e.preventDefault(); linkAdd(); } };
 
-  $('#m_account').onchange=e=>{ modalDraft.accountId=e.target.value; syncFnOptions(); };
+  $('#m_account').onchange=e=>{ modalDraft.accountId=e.target.value; syncFnOptions(); renderAssignees(); };
   $('#m_pri').querySelectorAll('button').forEach(b=>b.onclick=()=>{ modalDraft.priority=b.dataset.p; $('#m_pri').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b)); });
   $('#m_status').querySelectorAll('button').forEach(b=>b.onclick=()=>{ modalDraft.status=b.dataset.s; $('#m_status').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b)); });
   $('#m_cancel').onclick=closeOverlays;
-  if(editing) $('#m_delete').onclick=()=>{ DB.tasks=DB.tasks.filter(x=>x.id!==id); save(); closeOverlays(); render(); toast('Task deleted'); };
+  if(editing) $('#m_delete').onclick=()=>{ dropTask(id); closeOverlays(); render(); toast('Task deleted'); };
   $('#m_save').onclick=saveTask;
   setTimeout(()=>$('#m_title').focus(),120);
   $('#m_title').onkeydown=e=>{ if(e.key==='Enter') saveTask(); };
 }
 function syncFnOptions(){
   const a=acct(modalDraft.accountId);
-  const opts=(a&&a.functions.length?a.functions:Object.keys(FN_COLOR));
+  const opts=(a&&myFunctions(a).length?myFunctions(a):Object.keys(FN_COLOR));
   if(!opts.includes(modalDraft.fn)) modalDraft.fn=opts[0];
   $('#m_fn').innerHTML=opts.map(o=>`<option value="${o}" ${modalDraft.fn===o?'selected':''}>${o}</option>`).join('');
   $('#m_fn').onchange=e=>modalDraft.fn=e.target.value;
+}
+function renderAssignees(){
+  const box=$('#m_assignees'); if(!box) return;
+  const a=acct(modalDraft.accountId); const mem=members(a);
+  const ids=Object.keys(mem);
+  if(!ids.length){ box.innerHTML='<div class="cl-empty">Just you on this account.</div>'; return; }
+  box.innerHTML=ids.map(id=>{
+    const on=modalDraft.assignees.includes(id);
+    return `<button class="asg ${on?'on':''}" data-asg="${id}"><span class="rav" style="background:${coordShade(mem[id].name)}">${esc((mem[id].name||'?')[0])}</span>${esc(mem[id].name||'Someone')}${id===myId()?' (you)':''}</button>`;
+  }).join('');
+  box.querySelectorAll('[data-asg]').forEach(b=>b.onclick=()=>{
+    const id=b.dataset.asg; const i=modalDraft.assignees.indexOf(id);
+    if(i>-1) modalDraft.assignees.splice(i,1);
+    else { if(modalDraft.assignees.length>=2){ toast('Two people max'); return; } modalDraft.assignees.push(id); }
+    renderAssignees();
+  });
 }
 function renderSublist(){
   const box=$('#m_sublist'); if(!box) return;
@@ -2153,12 +2555,13 @@ function saveTask(){
   const orig=modalDraft._origStatus; const newStatus=modalDraft.status;
   delete modalDraft._origStatus;
   let t;
-  if(modalDraft.id){ const i=DB.tasks.findIndex(x=>x.id===modalDraft.id); DB.tasks[i]={...DB.tasks[i],...modalDraft}; t=DB.tasks[i]; }
-  else { modalDraft.id=uid(); modalDraft.created=todayISO(); DB.tasks.push(modalDraft); t=modalDraft; }
+  if(modalDraft.id){ const cur=DB.tasks.find(x=>x.id===modalDraft.id)||{}; t={...cur,...modalDraft}; }
+  else { modalDraft.id=uid(); modalDraft.created=todayISO(); t=modalDraft; }
+  if(!t.assignees||!t.assignees.length) t.assignees=[myId()];
   delete t._origStatus;
   if(isRecurring(t) && t.status==='Done'){ t.lastDone=todayISO(); }
   if(t.status==='Done' && !t.completed) t.completed=todayISO();
-  save(); closeOverlays(); render(); toast(modalDraft.id?'Task saved':'Task added');
+  putTask(t); closeOverlays(); render(); toast('Task saved');
 }
 
 /* ============================ SCHEDULE ============================ */
@@ -2176,10 +2579,10 @@ function Schedule(){
 
   // map effective due date -> tasks
   const byDate={};
-  DB.tasks.forEach(t=>{ const d=effectiveDue(t); if(d){ (byDate[d]=byDate[d]||[]).push(t); } });
+  DB.tasks.filter(assignedToMe).forEach(t=>{ const d=effectiveDue(t); if(d){ (byDate[d]=byDate[d]||[]).push(t); } });
 
   // overdue open tasks (non-recurring)
-  const overdue=DB.tasks.filter(isOverdue).sort((a,b)=>a.due<b.due?-1:1);
+  const overdue=DB.tasks.filter(t=>assignedToMe(t)&&isOverdue(t)).sort((a,b)=>a.due<b.due?-1:1);
 
   // 6 rows x 7 = 42 cells
   const cells=[];
@@ -2195,7 +2598,7 @@ function Schedule(){
   // trim trailing empty week if fully out-of-month
   let weeks=6; if(startDow+dim<=35) weeks=5;
 
-  const monthTaskCount=DB.tasks.filter(t=>t.due&&t.due.slice(0,7)===`${y}-${String(m+1).padStart(2,'0')}`).length;
+  const monthTaskCount=DB.tasks.filter(t=>assignedToMe(t)&&t.due&&t.due.slice(0,7)===`${y}-${String(m+1).padStart(2,'0')}`).length;
 
   return `
   <div class="head">
@@ -2255,7 +2658,7 @@ function calPopup(t){
   const edue=effectiveDue(t);
   const rows=[];
   rows.push(['Account', a?esc(a.name):'—', col]);
-  if(a&&a.coordinator) rows.push(['Coordinator', esc(a.coordinator), coordShade(a.coordinator)]);
+  const cN=a?coordName(a):''; if(cN) rows.push(['Coordinator', esc(cN), coordShade(cN)]);
   if(t.fn) rows.push(['Function', esc(t.fn), fnHex(t.fn)]);
   rows.push(['Urgency', t.priority, PRI_HEX[t.priority]]);
   rows.push([isRecurring(t)?'Cadence':'Status', isRecurring(t)?REPEATS[t.repeat]:st, isRecurring(t)?'#9B7BE8':STATUS_HEX[st]]);
@@ -2286,26 +2689,29 @@ function wireSchedule(){
 }
 
 /* ============================ ACCOUNTS ============================ */
+function groupList(){ const s=[]; DB.accounts.forEach(a=>{ const g=a.group||''; if(g&&!s.includes(g)) s.push(g); }); return s; }
 function Accounts(){
-  const parents=parentList();
-  const ungrouped=DB.accounts.filter(a=>!a.parent);
-  const buckets=[...parents.map(p=>({name:p,list:DB.accounts.filter(a=>a.parent===p),hex:parentHex(p)}))];
-  if(ungrouped.length) buckets.push({name:parents.length?'Other accounts':'Your accounts', list:ungrouped, hex:'#8A8E97'});
+  const groups=groupList();
+  const ungrouped=DB.accounts.filter(a=>!a.group);
+  const buckets=[...groups.map(g=>({name:g,list:DB.accounts.filter(a=>a.group===g),hex:parentHex(g)}))];
+  if(ungrouped.length) buckets.push({name:groups.length?'Other accounts':'Your accounts', list:ungrouped, hex:'#8A8E97'});
 
   const card=a=>{
     const openCt=DB.tasks.filter(t=>t.accountId===a.id&&!taskDone(t)).length;
+    const mem=Object.keys(members(a)).length;
+    const co=coordName(a);
     return `<div class="acct-card" data-id="${a.id}">
       <div class="accent" style="background:${a.color}"></div>
-      <div class="abbr">${esc(a.abbr)}</div>
+      <div class="abbr">${esc(a.abbr)}${iCoordinate(a)?' · <span style="color:var(--accent)">coordinator</span>':''}</div>
       <div class="nm serif">${esc(a.name)}</div>
-      <div class="fns">${a.functions.map(f=>`<span class="fn-tag" style="color:${fnHex(f)};background:${fnHex(f)}1f">${esc(f)}</span>`).join('')}</div>
+      <div class="fns">${myFunctions(a).map(f=>`<span class="fn-tag" style="color:${fnHex(f)};background:${fnHex(f)}1f">${esc(f)}</span>`).join('')||'<span class="fn-tag" style="color:var(--faint);background:var(--panel-2)">no functions yet</span>'}</div>
       <div class="meta">
-        <span class="coord"><span class="dot" style="background:${coordShade(a.coordinator)}"></span>${esc(a.coordinator||'—')}</span>
-        <span class="taskcount">${openCt} open</span>
+        <span class="coord"><span class="dot" style="background:${coordShade(co)}"></span>${co?esc(co):'no coordinator'}</span>
+        <span class="taskcount">${mem} member${mem!==1?'s':''} · ${openCt} open</span>
       </div>
     </div>`;
   };
-  const groups=buckets.filter(b=>b.list.length).map(b=>`<div class="acct-group">
+  const groupsHtml=buckets.filter(b=>b.list.length).map(b=>`<div class="acct-group">
       <div class="acct-group-head">
         <div class="bar" style="background:${b.hex}"></div>
         <h2>${esc(b.name)}</h2><span class="ct">${b.list.length} account${b.list.length!==1?'s':''}</span>
@@ -2316,17 +2722,345 @@ function Accounts(){
   return `
   <div class="head">
     <div>
-      <div class="eyebrow" style="margin-bottom:10px">Your book of business</div>
+      <div class="eyebrow" style="margin-bottom:10px">Shared with your team</div>
       <h1>Accounts</h1>
     </div>
-    <button class="btn-primary" onclick="openAccountEditor()">
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 2v10M2 7h10"/></svg>New account
-    </button>
+    <div style="display:flex;gap:10px">
+      <button class="btn-ghost" onclick="openBrowseModal()">Find accounts</button>
+      <button class="btn-primary" onclick="openAccountEditor()">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 2v10M2 7h10"/></svg>New account
+      </button>
+    </div>
   </div>
-  ${DB.accounts.length? groups : `<div class="tasks-empty"><div class="big serif">No accounts yet.</div><div class="sm">Add your first account to start organizing your work.</div></div>`}`;
+  ${reqBanner()}
+  ${myPendingBanner()}
+  ${DB.accounts.length? groupsHtml : `<div class="tasks-empty"><div class="big serif">No accounts yet.</div><div class="sm">Find an account to join, or create one.</div></div>`}`;
 }
 function wireAccounts(){
-  $('#view').querySelectorAll('.acct-card').forEach(c=> c.onclick=()=>openDrawer(c.dataset.id));
+  $('#view').querySelectorAll('.acct-card').forEach(c=> c.onclick=()=>{ UI.acctId=c.dataset.id; go('account'); });
+}
+
+/* ============================ ACCOUNT VIEW (shared) ============================ */
+function AccountView(){
+  const a=acct(UI.acctId);
+  if(!a) return `<div class="tasks-empty"><div class="big serif">Account not found.</div><div class="sm">It may have been deleted.</div></div>`;
+  const all=DB.tasks.filter(t=>t.accountId===a.id);
+  const open=all.filter(x=>!taskDone(x));
+  const overdue=all.filter(isOverdue);
+  const mem=members(a);
+  const memIds=Object.keys(mem);
+  const co=coordinatorOf(a);
+  const canEdit=canEditAccount(a);
+
+  // per-person load
+  const byPerson=memIds.map(id=>({id, name:nameFor(a,id), fns:mem[id].functions||[], coord:mem[id].coordinator,
+    open:open.filter(t=>(t.assignees||[]).includes(id)).length,
+    late:overdue.filter(t=>(t.assignees||[]).includes(id)).length})).sort((x,y)=>y.open-x.open);
+  const loadMax=Math.max(1,...byPerson.map(p=>p.open));
+  const statusData=STATUSES.map(s=>({label:s,value:all.filter(x=>effStatus(x)===s).length,color:STATUS_HEX[s]})).filter(d=>d.value>0);
+
+  return `
+  <div class="acct-hero" style="--brand:${a.color}">
+    <button class="back-btn" onclick="go('accounts')">← All accounts</button>
+    <div class="ah-top">
+      <div>
+        <div class="eyebrow">${esc(a.abbr)}${a.group?' · '+esc(a.group):''}</div>
+        <h1 class="serif">${esc(a.name)}</h1>
+        <div class="ah-sub">
+          <span class="ah-co"><span class="dot" style="background:${coordShade(coordName(a))}"></span>${co?esc(co.name)+' coordinates':(coordIsPlaceholder(a)?esc(a.coordPlaceholder)+' coordinates <em class="ph-tag">not joined yet</em>':'No coordinator')}</span>
+          <span class="ah-dot">·</span><span>${memIds.length} member${memIds.length!==1?'s':''}</span>
+          <span class="ah-dot">·</span><span class="code-chip" id="ah_code" title="Click to copy">Code ${esc(a.code)}</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end">
+        <button class="btn-ghost" onclick="openTaskModal(null,'',{acct:'${a.id}'})">+ Task</button>
+        ${canEdit?`<button class="btn-ghost" onclick="openAccountEditor('${a.id}')">Edit</button>`:''}
+        <button class="btn-ghost" id="ah_leave">Leave</button>
+      </div>
+    </div>
+  </div>
+
+  ${overdue.length?`<div class="overdue-banner" style="margin-bottom:16px">
+    <span class="tag">${overdue.length} overdue</span>
+    <div class="items">${overdue.slice(0,6).map(t=>`<span class="od-chip" data-open-task="${t.id}"><span class="sw" style="background:${a.color}"></span>${esc(t.title)}<span class="dt">${assigneeNames(t).join(', ')||'—'}</span></span>`).join('')}</div>
+  </div>`:''}
+
+  <div class="stats" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+    ${statCard('Open', open.length, STATUS_COLOR['In Progress'], `${all.filter(x=>effStatus(x)==='In Progress').length} in progress`, STATUS_HEX['In Progress'])}
+    ${statCard('Overdue', overdue.length, STATUS_COLOR['Blocked'], overdue.length?'needs a nudge':'all clear', STATUS_HEX['Blocked'])}
+    ${statCard('Team', memIds.length, '#7E86D9', `${byPerson.filter(p=>p.open>0).length} with open work`, '#7E86D9')}
+    ${statCard('Done', all.filter(taskDone).length, STATUS_COLOR['Done'], `${all.length} tracked`, STATUS_HEX['Done'])}
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="eyebrow">Who's on this account</div>
+      <h3>Team &amp; roles</h3>
+      <div class="roster">
+        ${byPerson.map(p=>`<div class="rost ${p.id===myId()?'me':''}">
+          <span class="rav" style="background:${coordShade(p.name)}">${esc((p.name||'?')[0])}</span>
+          <div class="rmid">
+            <div class="rname">${esc(p.name||'Someone')}${p.id===myId()?' <span class="you">you</span>':''}${p.coord?' <span class="cotag">coordinator</span>':''}</div>
+            <div class="rfns">${p.fns.length?p.fns.map(f=>`<span class="fn-tag" style="color:${fnHex(f)};background:${fnHex(f)}1f">${esc(f)}</span>`).join(''):'<span class="rnone">no functions set</span>'}</div>
+          </div>
+          <div class="rload"><span class="rl-n">${p.open}</span>${p.late?`<span class="rl-late">${p.late} late</span>`:''}</div>
+          <button class="rm-x" data-remove="${p.id}" title="${p.id===myId()?'Leave this account':'Remove from account'}">×</button>
+        </div>`).join('')}
+      </div>
+      ${(a.suggested&&Object.keys(a.suggested).length)?`<div class="sugg">
+        <div class="eyebrow" style="margin-bottom:9px">From the assignment sheet <span class="opt">reference only</span></div>
+        ${Object.entries(a.suggested).map(([fn,people])=>`<div class="sugg-row"><span class="fn-tag" style="color:${fnHex(fn)};background:${fnHex(fn)}1f">${esc(fn)}</span><span class="sugg-p">${people.map(esc).join(', ')}</span></div>`).join('')}
+      </div>`:''}
+      <div class="role-edit">
+        <div class="eyebrow" style="margin-bottom:9px">Your role here</div>
+        <div class="fn-edit" id="avFns">
+          ${myFunctions(a).map(f=>`<span class="fn-tag editable" style="color:${fnHex(f)};background:${fnHex(f)}1f">${esc(f)}<button class="fn-x" data-avfn-del="${esc(f)}">×</button></span>`).join('')}
+          <button class="fn-add-btn" id="avAdd">+ Add function</button>
+        </div>
+        <div class="fn-picker" id="avPicker" style="display:none">
+          <input type="text" id="avInput" placeholder="Function name…" list="avSuggest">
+          <datalist id="avSuggest">${[...Object.keys(FN_COLOR),...FN_SUGGESTED].filter(f=>!myFunctions(a).includes(f)).map(f=>`<option value="${esc(f)}"></option>`).join('')}</datalist>
+          <button class="sub-add-btn" id="avConfirm">Add</button>
+        </div>
+        <label class="ob-toggle" style="margin:14px 0 0">
+          <input type="checkbox" id="avCoord" ${iCoordinate(a)?'checked':''} ${co&&!iCoordinate(a)?'disabled':''}>
+          I'm the account coordinator${co&&!iCoordinate(a)?` — claimed by ${esc(co.name)}`:(coordIsPlaceholder(a)?` — replaces ${esc(a.coordPlaceholder)}`:'')}
+        </label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="eyebrow">Status</div>
+      <h3>All work on this account <span class="sm">${all.length} total</span></h3>
+      ${all.length? donut(statusData) : '<div class="empty-note">No tasks on this account yet.</div>'}
+      ${byPerson.length?`<div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line)">
+        <div class="eyebrow" style="margin-bottom:13px">Open work by person</div>
+        <div class="bars">${byPerson.map(p=>barRow(p.name||'Someone', p.open, loadMax, coordShade(p.name), `<span class="sw" style="width:8px;height:8px;border-radius:2px;background:${coordShade(p.name)}"></span>`)).join('')}</div>
+      </div>`:''}
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="ac-cal-head">
+      <div><div class="eyebrow">Everyone's work</div><h3 style="margin-bottom:0">${MONTHS[CAL.m]} ${CAL.y}</h3></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <div class="filter"><span class="lb">Person</span><select id="acPerson"><option value="">Everyone</option>${byPerson.map(p=>`<option value="${p.id}" ${UI.acctPerson===p.id?'selected':''}>${esc(p.name||'Someone')}</option>`).join('')}</select></div>
+        <button class="nav-btn" id="acPrev"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 3L5 8l5 5"/></svg></button>
+        <button class="nav-btn" id="acNext"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3l5 5-5 5"/></svg></button>
+        <button class="today-btn" id="acToday">Today</button>
+      </div>
+    </div>
+    ${accountCalendar(a)}
+  </div>
+
+  <div class="card">
+    <div class="eyebrow">Shared notes</div>
+    <h3>Account knowledge</h3>
+    ${NOTE_FIELDS.map(([k,lbl])=>`<div class="d-section">
+      <div class="eyebrow">${lbl}</div>
+      <textarea class="d-note av-note" data-note="${k}" placeholder="${notePlaceholder(k)}">${esc((a.notes||{})[k]||'')}</textarea>
+    </div>`).join('')}
+  </div>`;
+}
+
+function accountCalendar(a){
+  const y=CAL.y,m=CAL.m, todayStr=todayISO();
+  const first=new Date(y,m,1), startDow=first.getDay();
+  const dim=new Date(y,m+1,0).getDate(), prevDim=new Date(y,m,0).getDate();
+  let list=DB.tasks.filter(t=>t.accountId===a.id);
+  if(UI.acctPerson) list=list.filter(t=>(t.assignees||[]).includes(UI.acctPerson));
+  const byDate={}; list.forEach(t=>{ const d=effectiveDue(t); if(d) (byDate[d]=byDate[d]||[]).push(t); });
+  const mem=members(a);
+  const cells=[];
+  for(let i=0;i<42;i++){
+    let dayNum,cy=y,cm=m,out=false; const idx=i-startDow;
+    if(idx<0){ out=true; dayNum=prevDim+idx+1; cm=m-1; if(cm<0){cm=11;cy=y-1;} }
+    else if(idx>=dim){ out=true; dayNum=idx-dim+1; cm=m+1; if(cm>11){cm=0;cy=y+1;} }
+    else dayNum=idx+1;
+    const iso=`${cy}-${String(cm+1).padStart(2,'0')}-${String(dayNum).padStart(2,'0')}`;
+    cells.push({iso,dayNum,out,today:iso===todayStr});
+  }
+  const weeks=(startDow+dim<=35)?5:6;
+  return `<div class="cal-grid" style="margin-top:14px">
+    <div class="cal-dow">${DOW.map(d=>`<span>${d}</span>`).join('')}</div>
+    <div class="cal-weeks">
+      ${cells.slice(0,weeks*7).map(c=>{
+        const items=(byDate[c.iso]||[]).slice().sort((p,q)=>(taskDone(p)?1:0)-(taskDone(q)?1:0));
+        return `<div class="cal-cell ${c.out?'out':''} ${c.today?'today':''}">
+          <div style="display:flex;justify-content:space-between"><span class="cd">${c.dayNum}</span></div>
+          ${items.slice(0,3).map(t=>{
+            const who=(t.assignees||[])[0]; const nm=who?nameFor(a,who):'—';
+            const col=coordShade(nm);
+            return `<div class="cal-ev ${taskDone(t)?'done':''}" style="border-left-color:${col}" data-edit="${t.id}" data-ev="${t.id}"><span class="cal-ev-t">${isRecurring(t)?'<span class="rc">↻</span> ':''}${esc(t.title)}</span><span class="cal-ev-co" style="color:${col}">${esc(assigneeNames(t).join(', ')||'—')}</span></div>`;
+          }).join('')}
+          ${items.length>3?`<div class="cal-more">+${items.length-3} more</div>`:''}
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+function wireAccountView(){
+  const a=acct(UI.acctId); if(!a) return;
+  const code=$('#ah_code'); if(code) code.onclick=()=>{ navigator.clipboard&&navigator.clipboard.writeText(a.code); toast('Code '+a.code+' copied'); };
+  $('#acPrev').onclick=()=>{ CAL.m--; if(CAL.m<0){CAL.m=11;CAL.y--;} render(); };
+  $('#acNext').onclick=()=>{ CAL.m++; if(CAL.m>11){CAL.m=0;CAL.y++;} render(); };
+  $('#acToday').onclick=()=>{ const d=new Date(); CAL={y:d.getFullYear(),m:d.getMonth()}; render(); };
+  $('#acPerson').onchange=e=>{ UI.acctPerson=e.target.value; render(); };
+  $('#view').querySelectorAll('[data-edit]').forEach(n=>n.onclick=e=>{ e.stopPropagation(); openTaskModal(n.dataset.edit); });
+  $('#view').querySelectorAll('[data-open-task]').forEach(n=>n.onclick=()=>openTaskModal(n.dataset.openTask));
+
+  // my functions on this account
+  const setRole=(fn)=>{ const r=myRole(a)||{name:DB.user.name,functions:[],coordinator:false}; fn(r); a.members[myId()]=r; putAccount(a); render(); };
+  $('#view').querySelectorAll('[data-avfn-del]').forEach(b=>b.onclick=()=>setRole(r=>{ r.functions=(r.functions||[]).filter(f=>f!==b.dataset.avfnDel); }));
+  const addBtn=$('#avAdd'); if(addBtn) addBtn.onclick=()=>{ $('#avPicker').style.display='flex'; addBtn.style.display='none'; $('#avInput').focus(); };
+  const conf=()=>{ const v=$('#avInput').value.trim(); if(!v) return; setRole(r=>{ r.functions=r.functions||[]; if(!r.functions.includes(v)) r.functions.push(v); }); };
+  if($('#avConfirm')){ $('#avConfirm').onclick=conf; $('#avInput').onkeydown=e=>{ if(e.key==='Enter'){e.preventDefault();conf();} }; }
+  const cc=$('#avCoord'); if(cc) cc.onchange=()=>{
+    const had=a.coordPlaceholder;
+    if(cc.checked){
+      Object.keys(a.members).forEach(k=>a.members[k].coordinator=false);
+      a.coordPlaceholder='';                       // your name replaces the placeholder
+    }
+    setRole(r=>{ r.coordinator=cc.checked; });
+    toast(cc.checked
+      ? (had? `You replaced ${had} as coordinator` : 'You now coordinate this account')
+      : 'Coordinator role released');
+  };
+  // shared notes
+  $('#view').querySelectorAll('.av-note').forEach(t=>{
+    t.oninput=()=>{ a.notes=a.notes||{}; a.notes[t.dataset.note]=t.value; clearTimeout(t._d); t._d=setTimeout(()=>putAccount(a),600); };
+  });
+  $('#view').querySelectorAll('[data-remove]').forEach(b=>b.onclick=(e)=>{
+    e.stopPropagation();
+    const id=b.dataset.remove; const nm=nameFor(a,id);
+    if(id===myId()){
+      if(!confirm(`Leave ${a.name}? Your tasks stay on the account.`)) return;
+      removeMember(a,id); go('accounts'); toast('Left '+a.name); return;
+    }
+    const theirOpen=DB.tasks.filter(t=>t.accountId===a.id&&!taskDone(t)&&(t.assignees||[]).includes(id)).length;
+    if(!confirm(`Remove ${nm} from ${a.name}?${theirOpen?`\n\nThey have ${theirOpen} open task${theirOpen>1?'s':''} here — those stay on the account, still showing their name.`:''}`)) return;
+    removeMember(a,id); render(); toast(nm+' removed');
+  });
+  $('#ah_leave').onclick=()=>{
+    if(!confirm(`Leave ${a.name}? Your tasks on it stay with the account.`)) return;
+    delete a.members[myId()]; putAccount(a); go('accounts'); toast('Left '+a.name);
+  };
+}
+
+/* ============================ JOIN REQUESTS ============================ */
+function reqBanner(){
+  const reqs=inboxRequests(); if(!reqs.length) return '';
+  return `<div class="req-banner">
+    <div class="rb-head"><span class="tag">${reqs.length} join request${reqs.length>1?'s':''}</span><span class="rb-sub">Anyone on the account can approve</span></div>
+    ${reqs.map(({a,id,p})=>`<div class="rb-row">
+      <span class="rav" style="background:${coordShade(p.name)}">${esc((p.name||'?')[0])}</span>
+      <div class="rb-mid"><b>${esc(p.name||'Someone')}</b> wants to join <b>${esc(a.name)}</b></div>
+      <div class="rb-act">
+        <button class="btn-ghost sm" data-deny="${a.id}|${id}">Decline</button>
+        <button class="btn-primary sm" data-approve="${a.id}|${id}">Approve</button>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+function myPendingBanner(){
+  const mine=allSharedAccounts().filter(a=>pending(a)[myId()]);
+  if(!mine.length) return '';
+  return `<div class="pend-banner">
+    <span class="tag">Waiting for approval</span>
+    <div class="items">${mine.map(a=>`<span class="od-chip" style="cursor:default"><span class="sw" style="background:${a.color}"></span>${esc(a.name)}</span>`).join('')}</div>
+  </div>`;
+}
+function wireRequests(){
+  $('#view').querySelectorAll('[data-approve]').forEach(b=>b.onclick=()=>{
+    const [aid,uid_]=b.dataset.approve.split('|'); const a=acct(aid); if(!a) return;
+    const nm=pending(a)[uid_]?pending(a)[uid_].name:'They';
+    approveJoin(a,uid_); render(); toast(nm+' added to '+a.name);
+  });
+  $('#view').querySelectorAll('[data-deny]').forEach(b=>b.onclick=()=>{
+    const [aid,uid_]=b.dataset.deny.split('|'); const a=acct(aid); if(!a) return;
+    denyJoin(a,uid_); render(); toast('Request declined');
+  });
+}
+
+/* ============================ BROWSE / SEARCH ACCOUNTS ============================ */
+let browseQ='';
+function openBrowseModal(){
+  browseQ='';
+  $('#acctModal').innerHTML=`
+    <div class="modal-head"><div class="eyebrow">Find an account</div><h2 class="serif">Join your team's accounts</h2></div>
+    <div class="modal-body">
+      <div class="field" style="display:flex;gap:8px">
+        <input type="text" id="br_q" placeholder="Search accounts…" autocomplete="off" style="flex:1">
+        <button class="sub-add-btn" id="br_refresh" title="Check for new accounts">Refresh</button>
+      </div>
+      <div class="login-err" id="br_err" style="text-align:left"></div>
+      <div class="browse-list" id="br_list"></div>
+    </div>
+    <div class="modal-foot"><span></span><div style="display:flex;gap:10px">
+      <button class="btn-ghost" onclick="closeAcctModal()">Done</button>
+    </div></div>`;
+  const draw=()=>{
+    const q=browseQ.toLowerCase();
+    const list=allSharedAccounts().filter(a=>!q||a.name.toLowerCase().includes(q)||(a.abbr||'').toLowerCase().includes(q)||(a.group||'').toLowerCase().includes(q));
+    // (empty query shows everything)
+    const box=$('#br_list');
+    if(!list.length){ box.innerHTML='<div class="cl-empty">No accounts match. Ask a teammate to create it, or make it yourself.</div>'; return; }
+    box.innerHTML=list.map(a=>{
+      const mine=isMember(a), pend=!!pending(a)[myId()];
+      const mem=Object.keys(members(a)).length;
+      return `<div class="br-row">
+        <span class="sw" style="background:${a.color}"></span>
+        <div class="br-mid"><div class="br-nm">${esc(a.name)}</div><div class="br-sub">${a.group?esc(a.group)+' · ':''}${mem} member${mem!==1?'s':''}${coordName(a)?' · '+esc(coordName(a)):''}</div></div>
+        ${mine?'<span class="br-tag on">Joined</span>':pend?'<span class="br-tag">Requested</span>':`<button class="btn-primary sm" data-req="${a.id}">Request</button>`}
+      </div>`;
+    }).join('');
+    box.querySelectorAll('[data-req]').forEach(b=>b.onclick=()=>{
+      const a=allSharedAccounts().find(x=>x.id===b.dataset.req); if(!a) return;
+      const r=requestJoin(a);
+      draw(); render();
+      toast(r==='joined'?('Joined '+a.name):('Request sent to '+a.name));
+    });
+  };
+  const showErr=()=>{ const e=$('#br_err'); if(e) e.textContent=SHARED_ERR||''; };
+  draw(); showErr();
+  $('#br_refresh').onclick=async()=>{ $('#br_refresh').textContent='…'; await pullShared(); $('#br_refresh').textContent='Refresh'; draw(); showErr(); render(); };
+  $('#br_q').oninput=e=>{ browseQ=e.target.value; draw(); };
+  $('#scrim').classList.add('on'); $('#acctModal').classList.add('on');
+  setTimeout(()=>$('#br_q').focus(),120);
+}
+
+/* ============================ JOIN BY CODE ============================ */
+function openJoinModal(){
+  $('#acctModal').innerHTML=`
+    <div class="modal-head"><div class="eyebrow">Join an account</div><h2 class="serif">Enter the code</h2></div>
+    <div class="modal-body">
+      <div class="field"><label>Account code</label>
+        <input type="text" id="jn_code" placeholder="e.g. K7QM2P" maxlength="8" style="text-transform:uppercase;letter-spacing:.25em;font-family:var(--f-mono);text-align:center;font-size:19px">
+        <div class="set-hint">Anyone already on the account can share its code — it's shown at the top of the account page.</div>
+      </div>
+      <div class="login-err" id="jn_err"></div>
+    </div>
+    <div class="modal-foot"><span></span><div style="display:flex;gap:10px">
+      <button class="btn-ghost" onclick="closeAcctModal()">Cancel</button>
+      <button class="btn-primary" id="jn_go">Join</button>
+    </div></div>`;
+  const go_=()=>{
+    const c=$('#jn_code').value.trim().toUpperCase();
+    const err=$('#jn_err');
+    if(!c){ err.textContent='Enter a code.'; return; }
+    const a=accountByCode(c);
+    if(!a){ err.textContent="No account with that code."; return; }
+    if(isMember(a)){ err.textContent='You\'re already on '+a.name+'.'; return; }
+    const r=requestJoin(a);
+    closeAcctModal();
+    if(r==='joined'){ UI.acctId=a.id; go('account'); toast('Joined '+a.name); }
+    else { go('accounts'); toast('Request sent to '+a.name); }
+  };
+  $('#jn_go').onclick=go_;
+  $('#jn_code').onkeydown=e=>{ if(e.key==='Enter'){e.preventDefault();go_();} };
+  $('#scrim').classList.add('on'); $('#acctModal').classList.add('on');
+  setTimeout(()=>$('#jn_code').focus(),120);
 }
 
 /* ============================ ACCOUNT EDITOR (add / edit / delete) ============================ */
@@ -2334,9 +3068,10 @@ const PALETTE=['#4C82C4','#3DAE6E','#E8935B','#D06AA0','#9B7BE8','#2FB0A6','#D4A
 let acctDraft=null;
 function openAccountEditor(id){
   const editing = id ? acct(id) : null;
-  acctDraft = editing ? {...editing, functions:(editing.functions||[]).slice()} 
-    : {id:null,name:'',abbr:'',parent:'',coordinator:'',color:PALETTE[DB.accounts.length%PALETTE.length],functions:[],shared:'',notes:{},subDone:[]};
-  const parents=parentList();
+  acctDraft = editing ? {...editing, members:JSON.parse(JSON.stringify(editing.members||{}))}
+    : {id:null,name:'',abbr:'',group:'',color:PALETTE[DB.accounts.length%PALETTE.length],notes:{},subDone:[],members:{}};
+  acctDraft._fns = editing ? myFunctions(editing).slice() : [];
+  const parents=groupList();
   $('#acctModal').innerHTML=`
     <div class="modal-head">
       <div class="eyebrow">${editing?'Edit account':'New account'}</div>
@@ -2348,22 +3083,28 @@ function openAccountEditor(id){
         <div class="field"><label>Short code</label><input type="text" id="ae_abbr" value="${esc(acctDraft.abbr)}" placeholder="OAK" maxlength="6"></div>
       </div>
       <div class="grid-2b">
-        <div class="field"><label>Portfolio / parent <span class="opt">optional</span></label>
-          <input type="text" id="ae_parent" value="${esc(acctDraft.parent||'')}" placeholder="Most won't have one" list="parentSuggest">
+        <div class="field"><label>Group <span class="opt">optional</span></label>
+          <input type="text" id="ae_parent" value="${esc(acctDraft.group||'')}" placeholder="e.g. Growth &amp; Brand" list="parentSuggest">
           <datalist id="parentSuggest">${parents.map(p=>`<option value="${esc(p)}"></option>`).join('')}</datalist>
         </div>
-        <div class="field"><label>Coordinator <span class="opt">optional</span></label>
-          <input type="text" id="ae_coord" value="${esc(acctDraft.coordinator||'')}" placeholder="Who coordinates it" list="coordSuggest">
-          <datalist id="coordSuggest">${[...new Set([...ROSTER_NAMES,...coordinators()])].map(c=>`<option value="${esc(c)}"></option>`).join('')}</datalist>
+        <div class="field"><label>Account coordinator <span class="opt">${editing&&coordinatorOf(editing)?'claimed':'placeholder'}</span></label>
+          ${editing&&coordinatorOf(editing)
+            ? `<div class="set-static">${esc(coordinatorOf(editing).name)} — claimed in the account</div>`
+            : `<input type="text" id="ae_coord" value="${esc((acctDraft.coordPlaceholder)||'')}" placeholder="Who runs it, if they're not here yet">`}
         </div>
       </div>
-      <div class="field"><label>Color</label>
-        <div class="swatches" id="ae_swatches">
-          ${PALETTE.map(c=>`<button class="sw-btn ${acctDraft.color===c?'on':''}" data-color="${c}" style="background:${c}" aria-label="Color ${c}"></button>`).join('')}
-          <label class="sw-custom" title="Custom color"><input type="color" id="ae_color" value="${acctDraft.color}"><span style="background:${acctDraft.color}"></span></label>
+      <div class="grid-2b">
+        <div class="field"><label>Join code</label>
+          <div class="set-static" style="font-family:var(--f-mono);letter-spacing:.2em">${editing?esc(editing.code):'generated on create'}</div>
+        </div>
+        <div class="field"><label>Color</label>
+          <div class="swatches" id="ae_swatches">
+            ${PALETTE.map(c=>`<button class="sw-btn ${acctDraft.color===c?'on':''}" data-color="${c}" style="background:${c}" aria-label="Color ${c}"></button>`).join('')}
+            <label class="sw-custom" title="Custom color"><input type="color" id="ae_color" value="${acctDraft.color}"><span style="background:${acctDraft.color}"></span></label>
+          </div>
         </div>
       </div>
-      <div class="field"><label>My functions</label>
+      <div class="field"><label>My functions here</label>
         <div class="fn-edit" id="ae_fns"></div>
         <div class="sub-add" style="margin-top:8px"><input type="text" id="ae_fnInput" placeholder="Add a function…" list="fnSuggestA"><button class="sub-add-btn" id="ae_fnAdd">Add</button></div>
         <datalist id="fnSuggestA">${[...Object.keys(FN_COLOR),...FN_SUGGESTED].map(f=>`<option value="${esc(f)}"></option>`).join('')}</datalist>
@@ -2378,11 +3119,11 @@ function openAccountEditor(id){
     </div>`;
 
   const renderFns=()=>{
-    $('#ae_fns').innerHTML = (acctDraft.functions.length?acctDraft.functions:[]).map(f=>`<span class="fn-tag editable" style="color:${fnHex(f)};background:${fnHex(f)}1f">${esc(f)}<button class="fn-x" data-fn-del="${esc(f)}">×</button></span>`).join('') || '<span class="cl-empty" style="padding:2px 0">No functions yet.</span>';
-    $('#ae_fns').querySelectorAll('[data-fn-del]').forEach(b=>b.onclick=()=>{ acctDraft.functions=acctDraft.functions.filter(f=>f!==b.dataset.fnDel); renderFns(); });
+    $('#ae_fns').innerHTML = (acctDraft._fns.length?acctDraft._fns:[]).map(f=>`<span class="fn-tag editable" style="color:${fnHex(f)};background:${fnHex(f)}1f">${esc(f)}<button class="fn-x" data-fn-del="${esc(f)}">×</button></span>`).join('') || '<span class="cl-empty" style="padding:2px 0">No functions yet.</span>';
+    $('#ae_fns').querySelectorAll('[data-fn-del]').forEach(b=>b.onclick=()=>{ acctDraft._fns=acctDraft._fns.filter(f=>f!==b.dataset.fnDel); renderFns(); });
   };
   renderFns();
-  const addFn=()=>{ const v=$('#ae_fnInput').value.trim(); if(!v) return; if(!acctDraft.functions.includes(v)) acctDraft.functions.push(v); $('#ae_fnInput').value=''; renderFns(); $('#ae_fnInput').focus(); };
+  const addFn=()=>{ const v=$('#ae_fnInput').value.trim(); if(!v) return; if(!acctDraft._fns.includes(v)) acctDraft._fns.push(v); $('#ae_fnInput').value=''; renderFns(); $('#ae_fnInput').focus(); };
   $('#ae_fnAdd').onclick=addFn; $('#ae_fnInput').onkeydown=e=>{ if(e.key==='Enter'){ e.preventDefault(); addFn(); } };
 
   const setColor=c=>{ acctDraft.color=c; $('#acctModal').querySelectorAll('.sw-btn').forEach(b=>b.classList.toggle('on',b.dataset.color===c)); $('#ae_color').value=c; $('.sw-custom span').style.background=c; };
@@ -2397,21 +3138,30 @@ function openAccountEditor(id){
 function saveAccount(){
   const name=$('#ae_name').value.trim();
   if(!name){ $('#ae_name').focus(); $('#ae_name').style.borderColor='var(--blocked)'; return; }
+  const isNew=!acctDraft.id;
   acctDraft.name=name;
   acctDraft.abbr=($('#ae_abbr').value.trim()|| name.slice(0,4)).toUpperCase();
-  acctDraft.parent=$('#ae_parent').value.trim();
-  acctDraft.coordinator=$('#ae_coord').value.trim();
-  if(acctDraft.id){ const i=DB.accounts.findIndex(a=>a.id===acctDraft.id); DB.accounts[i]={...DB.accounts[i],...acctDraft}; }
-  else { acctDraft.id='a'+uid(); if(!acctDraft.notes)acctDraft.notes={}; if(!acctDraft.subDone)acctDraft.subDone=[]; DB.accounts.push(acctDraft); }
-  save(); closeAcctModal(); closeOverlays(); render(); toast(acctDraft.id?'Account saved':'Account added');
+  acctDraft.group=$('#ae_parent').value.trim();
+  const cIn=$('#ae_coord'); if(cIn) acctDraft.coordPlaceholder=cIn.value.trim();
+  const fns=acctDraft._fns.slice(); delete acctDraft._fns;
+  if(isNew){ acctDraft.id='a'+uid(); acctDraft.code=newCode(); acctDraft.members={}; }
+  acctDraft.members=acctDraft.members||{};
+  const prev=acctDraft.members[myId()]||{coordinator:false};
+  acctDraft.members[myId()]={name:DB.user.name||'You',functions:fns,coordinator:!!prev.coordinator};
+  putAccount(acctDraft);
+  closeAcctModal(); closeOverlays(); render();
+  toast(isNew?`Account added · code ${acctDraft.code}`:'Account saved');
 }
 function deleteAccount(id){
   const a=acct(id); if(!a) return;
+  if(!canEditAccount(a)){ toast('Only the coordinator can delete this account'); return; }
   const n=DB.tasks.filter(t=>t.accountId===id).length;
-  if(!confirm(`Delete "${a.name}"${n?` and its ${n} task${n>1?'s':''}`:''}? This can't be undone.`)) return;
-  DB.accounts=DB.accounts.filter(x=>x.id!==id);
-  DB.tasks=DB.tasks.filter(t=>t.accountId!==id);
-  save(); closeAcctModal(); closeOverlays(); render(); toast('Account deleted');
+  const others=Object.keys(members(a)).length-1;
+  const typed=prompt(`This deletes "${a.name}" for everyone${others>0?` (${others} other member${others>1?'s':''})`:''}${n?`, along with ${n} task${n>1?'s':''}`:''}.\n\nType the account name to confirm:`);
+  if(typed===null) return;
+  if(typed.trim()!==a.name){ toast('Name did not match — nothing deleted'); return; }
+  dropAccount(id);
+  closeAcctModal(); closeOverlays(); UI.view='accounts'; render(); toast('Account deleted');
 }
 function closeAcctModal(){ $('#acctModal').classList.remove('on'); if(!$('#drawer').classList.contains('on')&&!$('#modal').classList.contains('on')) $('#scrim').classList.remove('on'); }
 
@@ -2487,6 +3237,14 @@ function Settings(){
       <div class="eyebrow" style="color:var(--blocked)">Danger zone</div>
       <h3>Start over or step away</h3>
       <div class="set-row">
+        <div><div class="set-row-t">Import my Planner tasks</div><div class="set-hint">Adds the nine tasks migrated from your Planner board. Skips any that are already here.</div></div>
+        <button class="btn-ghost" id="st_planner">Import</button>
+      </div>
+      <div class="set-row">
+        <div><div class="set-row-t">Restore my roster accounts</div><div class="set-hint">Re-adds the accounts from the assignment sheet for your name, without touching anything that's already there.</div></div>
+        <button class="btn-ghost" id="st_restore">Restore</button>
+      </div>
+      <div class="set-row">
         <div><div class="set-row-t">Re-run setup</div><div class="set-hint">Clears your accounts and tasks, then walks you through setup again.</div></div>
         <button class="btn-danger" id="st_reset">Reset console</button>
       </div>
@@ -2517,6 +3275,26 @@ function wireSettings(){
   $('#st_export').onclick=()=>$('#exportBtn').click();
   $('#st_import').onclick=()=>$('#importFile').click();
 
+  $('#st_planner').onclick=()=>{
+    const n=importPlanner(true);
+    render(); toast(n?`${n} task${n>1?'s':''} imported`:'Already imported — nothing new');
+  };
+  $('#st_restore').onclick=()=>{
+    const nm=(DB.user&&DB.user.name)||'';
+    if(!ROSTER_NAMES.includes(nm)){ toast('No roster profile for "'+(nm||'you')+'"'); return; }
+    const sh=readShared(); let added=0;
+    profileFor(nm).forEach(a=>{
+      let ex=sh.accounts[a.id];
+      if(!ex){ ex={id:a.id,name:a.name,abbr:a.abbr,group:a.parent||'',color:a.color,code:newCode(),notes:{},subDone:[],subbrands:a.subbrands,members:{}}; sh.accounts[a.id]=ex; }
+      ex.members=ex.members||{};
+      if(!ex.members[myId()]){ ex.members[myId()]={name:nm,functions:a.functions,coordinator:false}; added++; }
+      else { const cur=ex.members[myId()]; const merged=new Set([...(cur.functions||[]),...a.functions]); cur.functions=[...merged]; }
+    });
+    profileTasks(nm).forEach(t=>{ if(!sh.tasks[t.id]){ t.assignees=[myId()]; sh.tasks[t.id]=t; } });
+    writeShared(sh); hydrate();
+    if(CLOUD&&fb.uid){ DB.accounts.forEach(a=>cloudPut('accounts',a)); DB.tasks.forEach(t=>cloudPut('tasks',t)); }
+    render(); toast(added?`Restored — ${added} account${added>1?'s':''} added`:'Everything was already there');
+  };
   $('#st_reset').onclick=()=>{
     if(!confirm('Reset this console? Your accounts and tasks will be cleared and setup will start over. This can\'t be undone.')) return;
     DB=emptyDB(); save(); go('dashboard'); startOnboard();
@@ -2529,7 +3307,8 @@ const NOTE_FIELDS=[
   ['stack','Stack & Hosting'],['ghl','GHL Sub-Account'],['approval','Approval Chain'],
   ['voice','Brand Voice Notes'],['gotchas','Gotchas'],['open','Open Items']
 ];
-function openDrawer(id){
+function openDrawer(id){ UI.acctId=id; go('account'); return; }
+function _oldDrawer(id){
   const a=acct(id); if(!a) return;
   if(!a.notes) a.notes={}; if(!a.subDone) a.subDone=[];
   const tasks=DB.tasks.filter(t=>t.accountId===id).sort((x,y)=>(taskDone(x)?1:0)-(taskDone(y)?1:0));
@@ -2696,7 +3475,7 @@ async function submitLogin(){
   const err=$('#loginErr'); const btn=$('#loginBtn');
   if(!CLOUD || localMode){
     const code=$('#li_code').value.trim();
-    if(code===PASSCODE){ fb.uid=null; DB=load(); render(); updateAuthBtn(); hideLogin(); }
+    if(code===PASSCODE){ fb.uid=null; DB.user=loadProfile().user; hydrate(); seedMasterPool(); render(); updateAuthBtn(); hideLogin(); }
     else { err.textContent='Incorrect passcode.'; $('#li_code').value=''; $('#li_code').focus(); }
     return;
   }
@@ -2773,9 +3552,9 @@ $('#importFile').onchange=e=>{
 };
 
 /* ============================ ONBOARDING ============================ */
-let obState={step:0, name:'', mode:'', accounts:[], hasParents:false};
-function maybeOnboard(){ if(!DB.user||!DB.user.onboarded){ startOnboard(); } }
-function startOnboard(){ obState={step:0,name:'',mode:'',accounts:[],hasParents:false}; $('#onboard').classList.remove('hidden'); renderOnboard(); }
+let obState={step:0, name:'', mode:'', accounts:[], hasParents:false, picks:[]};
+async function maybeOnboard(){ if(!DB.user||!DB.user.onboarded){ if(CLOUD&&fb.uid) await pullShared(); seedMasterPool(); startOnboard(); } }
+function startOnboard(){ obState={step:0,name:'',mode:'',accounts:[],hasParents:false,picks:[]}; $('#onboard').classList.remove('hidden'); renderOnboard(); }
 function finishOnboard(){ $('#onboard').classList.add('hidden'); }
 
 function renderOnboard(){
@@ -2784,84 +3563,105 @@ function renderOnboard(){
     el.innerHTML=`<div class="ob-card ob-welcome">
       <span class="ob-logo tp-logo">${LOGO_MARK}</span>
       <h1 class="serif">Welcome aboard.</h1>
-      <p>Let's set up your console. It takes about a minute — and everything's editable later.</p>
+      <p>Set your name and join the accounts you work on. Takes about a minute, and everything's editable later.</p>
       <button class="btn-primary ob-cta" id="ob_start">Get started</button>
     </div>`;
     $('#ob_start').onclick=()=>{ obState.step=1; renderOnboard(); };
+    return;
   }
-  else if(s===1){
-    const claimed=claimedNames();
-    const pool=ROSTER_NAMES.filter(n=>!claimed.includes(n));
-    el.innerHTML=`<div class="ob-card">
-      <div class="ob-step">Step 1 of 2</div>
-      <h1 class="serif">Are you on the team roster?</h1>
-      <p>Pick your name to load a prebuilt setup from the assignment sheet — accounts, coordinators, and your functions, ready to confirm.</p>
-      <div class="ob-names">${pool.map(n=>`<button class="ob-name" data-name="${esc(n)}"><span class="ob-av">${esc(n[0])}</span>${esc(n)}</button>`).join('')||'<div class="empty-note">All roster profiles have been claimed.</div>'}</div>
-      <div class="ob-or"><span>or</span></div>
-      <button class="btn-ghost ob-custom" id="ob_customBtn">I'll set it up myself</button>
-    </div>`;
-    el.querySelectorAll('[data-name]').forEach(b=>b.onclick=()=>{ obState.name=b.dataset.name; obState.mode='claim'; obState.step=2; renderOnboard(); });
-    $('#ob_customBtn').onclick=()=>{ obState.mode='custom'; obState.step=2; renderOnboard(); };
-  }
-  else if(s===2 && obState.mode==='claim'){
-    const accts=profileFor(obState.name);
-    const byParent={}; accts.forEach(a=>{ (byParent[a.parent||'Other']=byParent[a.parent||'Other']||[]).push(a); });
-    el.innerHTML=`<div class="ob-card">
-      <div class="ob-step">Step 2 of 2</div>
-      <h1 class="serif">Here's your setup, ${esc(obState.name)}.</h1>
-      <p>${accts.length} account${accts.length!==1?'s':''} across ${Object.keys(byParent).length} portfolio${Object.keys(byParent).length!==1?'s':''}. You can add, edit, or remove anything after.</p>
-      <div class="ob-review">
-        ${Object.entries(byParent).map(([p,list])=>`<div class="ob-grp"><div class="ob-grp-h"><span class="bar" style="background:${parentHex(p)}"></span>${esc(p)}</div>
-          ${list.map(a=>`<div class="ob-acct"><span class="sw" style="background:${a.color}"></span><span class="nm">${esc(a.name)}</span><span class="fns">${a.functions.join(' · ')}</span></div>`).join('')}</div>`).join('')}
-      </div>
-      <div class="ob-actions">
-        <button class="btn-ghost" id="ob_back">Back</button>
-        <button class="btn-primary" id="ob_confirm">Confirm &amp; enter</button>
-      </div>
-    </div>`;
-    $('#ob_back').onclick=()=>{ obState.step=1; renderOnboard(); };
-    $('#ob_confirm').onclick=()=>{
-      DB.user.name=obState.name; DB.user.onboarded=true;
-      DB.accounts=profileFor(obState.name); DB.tasks=profileTasks(obState.name);
-      claimName(obState.name); save(); finishOnboard(); UI.view='dashboard'; go('dashboard');
-      toast('Welcome, '+obState.name+'!');
-    };
-  }
-  else if(s===2 && obState.mode==='custom'){
-    el.innerHTML=`<div class="ob-card">
-      <div class="ob-step">Step 2 of 2</div>
-      <h1 class="serif">Let's build your book.</h1>
-      <div class="field" style="margin-bottom:16px"><label>Your name</label><input type="text" id="ob_name" value="${esc(obState.name)}" placeholder="What should we call you?"></div>
-      <label class="ob-toggle"><input type="checkbox" id="ob_parents" ${obState.hasParents?'checked':''}> I group my accounts under parent companies / portfolios</label>
-      <div class="ob-add">
-        <div class="eyebrow" style="margin-bottom:10px">Your accounts <span class="opt">add a few — or skip and do it later</span></div>
-        <div id="ob_list"></div>
-        <div class="ob-addrow">
-          <input type="text" id="ob_an" placeholder="Account name">
-          <input type="text" id="ob_ap" placeholder="Parent (optional)" class="ob-parent-in" style="display:${obState.hasParents?'block':'none'}">
-          <button class="sub-add-btn" id="ob_addAcct">Add</button>
-        </div>
-      </div>
-      <div class="ob-actions">
-        <button class="btn-ghost" id="ob_back">Back</button>
-        <button class="btn-primary" id="ob_finish">${obState.accounts.length?'Finish':'Skip & finish'}</button>
-      </div>
-    </div>`;
-    const renderList=()=>{ $('#ob_list').innerHTML=obState.accounts.map((a,i)=>`<div class="ob-acct"><span class="sw" style="background:${a.color}"></span><span class="nm">${esc(a.name)}</span>${a.parent?`<span class="fns">${esc(a.parent)}</span>`:''}<button class="fn-x" data-i="${i}" style="margin-left:auto">×</button></div>`).join(''); $('#ob_list').querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{ obState.accounts.splice(+b.dataset.i,1); renderList(); }); };
-    renderList();
-    $('#ob_name').oninput=e=>obState.name=e.target.value;
-    $('#ob_parents').onchange=e=>{ obState.hasParents=e.target.checked; $('.ob-parent-in').style.display=e.target.checked?'block':'none'; };
-    const addAcct=()=>{ const n=$('#ob_an').value.trim(); if(!n) return; const p=obState.hasParents?$('#ob_ap').value.trim():''; obState.accounts.push({name:n,parent:p,abbr:n.slice(0,4).toUpperCase(),color:PALETTE[obState.accounts.length%PALETTE.length],coordinator:'',functions:[]}); $('#ob_an').value=''; if($('#ob_ap'))$('#ob_ap').value=''; renderList(); $('#ob_an').focus(); };
-    $('#ob_addAcct').onclick=addAcct; $('#ob_an').onkeydown=e=>{ if(e.key==='Enter'){e.preventDefault();addAcct();} };
-    $('#ob_back').onclick=()=>{ obState.step=1; renderOnboard(); };
-    $('#ob_finish').onclick=()=>{
-      DB.user.name=obState.name||'there'; DB.user.onboarded=true;
-      DB.accounts=obState.accounts.map(a=>({id:'a'+uid(),name:a.name,abbr:a.abbr,parent:a.parent,coordinator:a.coordinator,color:a.color,functions:a.functions,shared:'',notes:{},subDone:[]}));
-      DB.tasks=[]; save(); finishOnboard(); UI.view='dashboard'; go('dashboard'); toast('You\'re all set!');
-    };
-  }
-}
 
+  el.innerHTML=`<div class="ob-card">
+    <div class="ob-step">Set up your console</div>
+    <h1 class="serif">Let's build your book.</h1>
+    <div class="field" style="margin-bottom:18px"><label>Your name</label>
+      <input type="text" id="ob_name" value="${esc(obState.name)}" placeholder="What should we call you?"></div>
+
+    <div class="ob-add" style="padding-top:18px">
+      <div class="eyebrow" style="margin-bottom:10px">Join your team's accounts <span class="opt">tick any you work on — you can skip and do it later</span></div>
+      <input type="text" id="ob_search" placeholder="Search accounts…" autocomplete="off" style="width:100%;background:var(--panel-2);border:1px solid var(--line-strong);border-radius:10px;padding:10px 12px;font-size:13.5px;outline:none;color:var(--text);margin-bottom:10px">
+      <div class="login-err" id="ob_err" style="text-align:left;min-height:0">${SHARED_ERR}</div>
+      <div class="browse-list" id="ob_results" style="max-height:210px"></div>
+    </div>
+
+    <div class="ob-add">
+      <div class="eyebrow" style="margin-bottom:10px">Or create a new one <span class="opt">optional</span></div>
+      <div id="ob_list"></div>
+      <div class="ob-addrow">
+        <input type="text" id="ob_an" placeholder="Account name">
+        <input type="text" id="ob_ap" placeholder="Group (optional)">
+        <button class="sub-add-btn" id="ob_addAcct">Add</button>
+      </div>
+    </div>
+
+    <div class="ob-actions">
+      <button class="btn-ghost" id="ob_back">Back</button>
+      <button class="btn-primary" id="ob_finish">Skip &amp; finish</button>
+    </div>
+  </div>`;
+
+  const updateFinish=()=>{
+    const btn=$('#ob_finish'); if(!btn) return;
+    const n=obState.picks.length+obState.accounts.length;
+    btn.textContent = n? `Finish${obState.picks.length?` · request ${obState.picks.length}`:''}` : 'Skip & finish';
+  };
+  const drawResults=()=>{
+    const q=(($('#ob_search')||{}).value||'').toLowerCase();
+    const box=$('#ob_results');
+    let list=allSharedAccounts();
+    if(q) list=list.filter(a=>a.name.toLowerCase().includes(q)||(a.abbr||'').toLowerCase().includes(q)||(a.group||'').toLowerCase().includes(q));
+    if(!list.length){ box.innerHTML=`<div class="cl-empty">${allSharedAccounts().length?'Nothing matches that search.':'No accounts in the system yet — create the first one below.'}</div>`; return; }
+    box.innerHTML=list.map(a=>{
+      const mine=isMember(a), pend=!!pending(a)[myId()], picked=obState.picks.includes(a.id);
+      const mem=Object.keys(members(a)).length; const dis=mine||pend;
+      return `<label class="br-row pick ${dis?'dis':''}" ${dis?'':`data-pick="${a.id}"`}>
+        <span class="pick-box ${picked?'on':''}">${picked?'✓':''}</span>
+        <span class="sw" style="background:${a.color}"></span>
+        <div class="br-mid"><div class="br-nm">${esc(a.name)}</div><div class="br-sub">${a.group?esc(a.group)+' · ':''}${mem} member${mem!==1?'s':''}${coordName(a)?' · '+esc(coordName(a)):''}</div></div>
+        ${mine?'<span class="br-tag on">Joined</span>':pend?'<span class="br-tag">Requested</span>':''}
+      </label>`;
+    }).join('');
+    box.querySelectorAll('[data-pick]').forEach(r=>r.onclick=(e)=>{
+      e.preventDefault();
+      const id=r.dataset.pick; const i=obState.picks.indexOf(id);
+      if(i>-1) obState.picks.splice(i,1); else obState.picks.push(id);
+      drawResults(); updateFinish();
+    });
+  };
+  const renderList=()=>{
+    $('#ob_list').innerHTML=obState.accounts.map((a,i)=>`<div class="ob-acct"><span class="sw" style="background:${a.color}"></span><span class="nm">${esc(a.name)}</span>${a.group?`<span class="fns">${esc(a.group)}</span>`:''}<button class="fn-x" data-i="${i}" style="margin-left:auto">×</button></div>`).join('');
+    $('#ob_list').querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{ obState.accounts.splice(+b.dataset.i,1); renderList(); updateFinish(); });
+  };
+
+  drawResults(); renderList(); updateFinish();
+  $('#ob_search').oninput=drawResults;
+  $('#ob_name').oninput=e=>obState.name=e.target.value;
+  const addAcct=()=>{
+    const n=$('#ob_an').value.trim(); if(!n) return;
+    obState.accounts.push({name:n, group:$('#ob_ap').value.trim(), abbr:n.slice(0,4).toUpperCase(), color:PALETTE[obState.accounts.length%PALETTE.length]});
+    $('#ob_an').value=''; $('#ob_ap').value=''; renderList(); updateFinish(); $('#ob_an').focus();
+  };
+  $('#ob_addAcct').onclick=addAcct;
+  $('#ob_an').onkeydown=e=>{ if(e.key==='Enter'){e.preventDefault();addAcct();} };
+  $('#ob_back').onclick=()=>{ obState.step=0; renderOnboard(); };
+  $('#ob_finish').onclick=()=>{
+    DB.user.name=(obState.name||'').trim()||'there';
+    DB.user.onboarded=true; saveProfile();
+    let reqCount=0;
+    obState.picks.forEach(id=>{ const a=allSharedAccounts().find(x=>x.id===id); if(a && requestJoin(a,DB.user.name)==='requested') reqCount++; });
+    const sh=readShared();
+    obState.accounts.forEach(a=>{
+      const id='a'+uid();
+      sh.accounts[id]={id,name:a.name,abbr:a.abbr,group:a.group||'',color:a.color,code:newCode(),notes:{},subDone:[],
+        members:{[myId()]:{name:DB.user.name,functions:[],coordinator:false}}};
+    });
+    writeShared(sh); hydrate();
+    if(CLOUD&&fb.uid){ DB.accounts.forEach(a=>cloudPut('accounts',a)); }
+    finishOnboard();
+    const landed = (reqCount||obState.accounts.length)?'accounts':'dashboard';
+    UI.view=landed; go(landed);
+    toast(reqCount?`${reqCount} request${reqCount>1?'s':''} sent — a teammate will approve`:'You\'re all set!');
+  };
+}
 
 /* ============================ BOOT ============================ */
 (function setLogos(){
